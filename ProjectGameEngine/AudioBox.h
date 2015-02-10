@@ -63,6 +63,7 @@ public:
 	// general
 	int  volume(int vol = -1, int channel = -1);
 	void stopAllSound();
+	bool changeQuality(int freq, int chunksize = 1024, int channels = 32);
 
 	// static load functions
 	static Sound*	loadSound(const std::string& path);
