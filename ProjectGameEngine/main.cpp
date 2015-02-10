@@ -28,14 +28,26 @@ int main( int argc, char ** argv )
 	if( window == nullptr )
 	{
 		std::cout << "SDL_CreateWindow error: " << SDL_GetError();
+		SDL_DestroyWindow( window );
 		SDL_Quit();
 		return 1;
 	}
 
 
 	// Enter program loop / do something else.
-	// E.g. wait for 5 seconds.
-	SDL_Delay( 5000 );
+	while( true )
+	{
+		SDL_Event e;
+		while( SDL_PollEvent( &e ) )
+		{
+			if( e.type == SDL_KEYUP )
+			{
+				SDL_DestroyWindow( window );
+				SDL_Quit();
+				return 1;
+			}
+		}
+	}
 
 
 	// Leave program when done.
