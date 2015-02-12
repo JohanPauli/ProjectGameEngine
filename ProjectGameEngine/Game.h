@@ -1,0 +1,63 @@
+#ifndef __GAME_H__
+#define __GAME_H__
+
+#include <SDL.h>
+
+#include "Timer.h"
+#include "AudioBox.h"
+#include "Window.h"
+#include "RenderBox.h"
+
+class Game {
+private:
+	const static long MS_PER_UPDATE = 8;	// how many milliseconds should be between each call of update()
+
+	Timer		timer;
+	Window*		window = nullptr;
+	RenderBox*	renderer = nullptr;
+	AudioBox*	audio = nullptr;
+
+
+	// settings
+	char* windowTitle = "Window Title";
+	int  windowWidth = 1024;
+	int  windowHeight = 768;
+	bool running = true;
+
+
+	//// test stuff
+	Surface* bg = nullptr;
+	Surface* bird1 = nullptr;
+	Rect bird1Pos = Rect(0, 0, 64, 64);
+
+private:
+	// release resources and stuff game ends
+	void cleanup();
+
+	void processEvents();
+
+	// handle any user input
+	void processInput(const SDL_Event& e);	// SDL_Event needs blackboxing
+
+	// run game logic
+	void update();
+
+	// render the graphics
+	void render();
+
+	// current time in milliseconds
+	long long currentTime();
+
+public:
+	Game(int argc, char ** argv);
+
+	bool init();
+
+	// start the game loop
+	void run();
+
+};
+
+
+
+#endif

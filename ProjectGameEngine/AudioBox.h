@@ -36,14 +36,19 @@ public:
 };
 
 
-
 /*
 wrapper for audio playing
 */
 class AudioBox {
+private:
+	bool initialized = false;
+
 public:
-	AudioBox();
 	~AudioBox();
+
+	// initialise
+	bool init(int channels = 2, int freq = 44100, int chunkSize = 1024);
+	bool isInitialized() const;
 
 	// sound
 	int  playSound(Sound* sound, int loop = 0, int channel = -1);
@@ -63,11 +68,10 @@ public:
 	// general
 	int  volume(int vol = -1, int channel = -1);
 	void stopAllSound();
-	bool changeQuality(int freq, int chunksize = 1024, int channels = 32);
 
 	// static load functions
-	static Sound*	loadSound(const std::string& path);
-	static Music*	loadMusic(const std::string& path);
+	Sound*	loadSound(const std::string& path);
+	Music*	loadMusic(const std::string& path);
 };
 
 #endif

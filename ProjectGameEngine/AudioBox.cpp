@@ -10,7 +10,9 @@ Sound::Sound(Mix_Chunk* chunk)
 Sound::~Sound() { Mix_FreeChunk(chunk); }
 
 
-Mix_Chunk* Sound::getChunk() const	{ return chunk; }
+Mix_Chunk* Sound::getChunk() const	{
+	return chunk;
+}
 
 
 
@@ -25,29 +27,44 @@ Music::~Music() { Mix_FreeMusic(music); }
 
 
 
-Mix_Music* Music::getMusic() const	{ return music; }
-
-
-
-AudioBox::AudioBox() {
-	// open 44.1KHz, signed 16bit, system byte order,
-	// stereo audio, using 1024 byte chunks
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
-		printf("Mix_OpenAudio: %s\n", Mix_GetError());
-	}
-
-	// load support for the OGG and MOD sample/music formats
-	int flags = MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD;
-	int init = Mix_Init(flags);
-	if (init && flags != flags) {
-		printf("Mix_Init: Failed to init required ogg and mod support!\n");
-		printf("Mix_Init: %s\n", Mix_GetError());
-	}
+Mix_Music* Music::getMusic() const	{
+	return music;
 }
+
+
+
+// ---- AudioBox ----
 
 AudioBox::~AudioBox() {
 	Mix_CloseAudio();
 }
+
+
+bool AudioBox::init(int channels, int frequency, int chunkSize) {
+	if (Mix_OpenAudio(frequency, MIX_DEFAULT_FORMAT, channels, chunkSize) == -1) {
+		printf("Mix_OpenAudio: %s\n", Mix_GetError());
+		return false;
+	}
+
+
+	// maybe move format support to a seperate function
+	// load support for the OGG and MOD sample/music formats
+	int flags = MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD;
+	int init = Mix_Init(flags);
+	if (init && flags != flags) {
+		printf("Mix_Init: Failed to init required ogg, mod, and mp3 support!\n");
+		printf("Mix_Init: %s\n", Mix_GetError());
+		return false;
+	}
+	initialized = true;
+	return true;
+}
+
+bool AudioBox::isInitialized() const {
+	return initialized;
+}
+
+
 /*
 returns channel that sound is played on
 if sound is null, returns -1
@@ -57,7 +74,7 @@ int AudioBox::playSound(Sound* sound, int loops, int channel) {
 		printf("Failed to play sound: null");
 		return -1;
 	}
-	Mix_PlayChannel(channel, sound->getChunk(), loops);
+	return Mix_PlayChannel(channel, sound->getChunk(), loops);
 }
 
 
@@ -149,28 +166,6 @@ void AudioBox::stopAllSound() {
 	stopMusic();
 	stopSound();
 }
-
-bool AudioBox::changeQuality(int freq, int chunk, int channels) {
-	Mix_CloseAudio();
-
-	// open 44.1KHz, signed 16bit, system byte order,
-	// stereo audio, using 1024 byte chunks
-	if (Mix_OpenAudio(freq, MIX_DEFAULT_FORMAT, channels, chunk) == -1) {
-		printf("Mix_OpenAudio: %s\n", Mix_GetError());
-		return false;
-	}
-
-	// load support for the OGG and MOD sample/music formats
-	int flags = MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD;
-	int init = Mix_Init(flags);
-	if (init && flags != flags) {
-		printf("Mix_Init: Failed to init required ogg and mod support!\n");
-		printf("Mix_Init: %s\n", Mix_GetError());
-		return false;
-	}
-	return true;
-}
-
 
 
 
