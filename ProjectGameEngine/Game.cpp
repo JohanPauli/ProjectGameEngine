@@ -124,11 +124,3 @@ void Game::render() {
 	// TODO: render stuff
 
 }
-
-
-// time since epoch in milliseconds
-long long Game::currentTime() {
-	return std::chrono::duration_cast<std::chrono::milliseconds>(
-		std::chrono::high_resolution_clock::now().time_since_epoch())
-		.count();
-}

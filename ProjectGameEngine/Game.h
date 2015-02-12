@@ -45,9 +45,6 @@ private:
 	// render the graphics
 	void render();
 
-	// current time in milliseconds
-	long long currentTime();
-
 public:
 	Game(int argc, char ** argv);
 

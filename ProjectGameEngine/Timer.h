@@ -7,8 +7,8 @@ class Timer {
 private:
 	long long	gameTime = 0;
 	long long	previous = 0;
-	long long	current = 0;
-	long long	elapsed = 0;
+	long long	current =  0;
+	long long	elapsed =  0;
 	long long	updateLag = 0;
 	bool		paused = true;
 
