@@ -2,7 +2,7 @@
 #define __RENDER_BOX_H__
 
 #include <SDL.h>
-
+#include <SDL_image.h>
 #include "Window.h"
 
 class Rect {

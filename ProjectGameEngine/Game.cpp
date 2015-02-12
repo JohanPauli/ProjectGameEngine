@@ -16,7 +16,6 @@ bool Game::init() {
 	}
 
 	// initialise variables
-
 	if ((window = new Window(windowTitle, windowWidth, windowHeight)) == nullptr) {
 		return false;
 	}
@@ -33,7 +32,7 @@ bool Game::init() {
 
 	// test variables
 	bg = new Surface("textures\\bg.bmp");
-	bird1 = new Surface("textures\\bird.bmp");
+	bird = new Surface("textures\\bird.PNG");
 
 	return true;
 }
@@ -45,7 +44,7 @@ void Game::cleanup() {
 		renderer,
 		window;
 
-	delete bg, bird1; // test vars
+	delete bg, bird; // test vars
 
 	// TODO: move the following to a lower level
 	SDL_Quit();
@@ -73,7 +72,7 @@ void Game::run() {
 		// ensure game state updates at a constant rate, unaffected by the speed of the game loop
 		while (timer.getUpdateLag() >= MS_PER_UPDATE) {
 			update();
-			timer.trimLag(MS_PER_UPDATE);
+			timer.trimUpdateLag(MS_PER_UPDATE);
 		}
 
 		render();
@@ -98,16 +97,16 @@ void Game::processEvents() {
 void Game::processInput(const SDL_Event& e) {
 	switch (e.key.keysym.sym) {
 	case SDLK_LEFT:
-		*bird1Pos.x() -= 4;
+		*birdPos.x() -= 4;
 		break;
 	case SDLK_RIGHT:
-		*bird1Pos.x() += 4;
+		*birdPos.x() += 4;
 		break;
 	case SDLK_UP:
-		*bird1Pos.y() -= 4;
+		*birdPos.y() -= 4;
 		break;
 	case SDLK_DOWN:
-		*bird1Pos.y() += 4;
+		*birdPos.y() += 4;
 		break;
 	default:break;
 	}
@@ -117,7 +116,7 @@ void Game::update() {
 	// TODO: game logic
 
 	renderer->blit(bg);
-	renderer->blit(bird1, &bird1Pos);
+	renderer->blit(bird, &birdPos);
 	renderer->update();
 }
 

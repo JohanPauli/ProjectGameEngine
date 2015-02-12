@@ -27,8 +27,8 @@ private:
 
 	//// test stuff
 	Surface* bg = nullptr;
-	Surface* bird1 = nullptr;
-	Rect bird1Pos = Rect(0, 0, 64, 64);
+	Surface* bird = nullptr;
+	Rect birdPos = Rect(0, 0, 64, 64);
 
 private:
 	// release resources and stuff game ends

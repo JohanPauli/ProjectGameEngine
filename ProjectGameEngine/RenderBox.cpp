@@ -9,14 +9,17 @@ Rect::Rect(int x, int y, int width, int height) {
 	rect.h = height;
 }
 
+
 SDL_Rect* Rect::getRect() {
 	return &rect;
 }
+
 
 int* Rect::x()		{ return &rect.x; }
 int* Rect::y()		{ return &rect.y; }
 int* Rect::width()	{ return &rect.w; }
 int* Rect::height()	{ return &rect.h; }
+
 
 
 // ---- Surface ----
@@ -27,15 +30,18 @@ Surface::Surface(Window* window) {
 	}
 }
 
+
 Surface::Surface(std::string path) {
-	if ((surface = SDL_LoadBMP(path.c_str())) == nullptr) {
+	if ((surface = IMG_Load(path.c_str())) == nullptr) {
 		printf("Unable to load image \"%s\". SDL error: %s", path, SDL_GetError());
 	}
 }
 
+
 Surface::~Surface() {
 	SDL_FreeSurface(surface);
 }
+
 
 SDL_Surface* Surface::getSurface() const {
 	return surface;
@@ -47,6 +53,7 @@ SDL_Surface* Surface::getSurface() const {
 
 RenderBox::RenderBox(Window* window) 
 	: window(window) {}
+
 
 RenderBox::~RenderBox() { 
 	SDL_DestroyRenderer(renderer); 
@@ -65,14 +72,17 @@ bool RenderBox::init() {
 	return true;
 }
 
+
 bool RenderBox::isInitialized() const { 
 	return (renderer != nullptr)
 		&& (windowSurface != nullptr); 
 }
 
+
 void RenderBox::update() {
 	SDL_UpdateWindowSurface(window->getWindow());
 }
+
 
 void RenderBox::blit(Surface* surface, Rect* rect) {
 	SDL_BlitSurface(surface->getSurface(),
