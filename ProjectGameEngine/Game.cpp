@@ -1,6 +1,5 @@
 #include "Game.h"
 
-#include <chrono>
 
 
 Game::Game(int argc, char ** argv) {
@@ -34,6 +33,12 @@ bool Game::init() {
 	bg = new Surface("textures\\bg.bmp");
 	bird = new Surface("textures\\bird.PNG");
 
+
+	// init timers
+	timer = new Timer();
+	updateTimer = new UpdateTimer(timer, MS_PER_UPDATE);
+
+
 	return true;
 }
 
@@ -52,7 +57,7 @@ void Game::cleanup() {
 
 
 void Game::run() {
-	timer.start();
+	timer->start();
 
 	/*
 	start game loop
@@ -65,14 +70,14 @@ void Game::run() {
 	for example 300 fps would be wasteful on a 60 hertz monitor
 	*/
 	while (running) {
-		timer.update();
+		timer->update();
 
 		processEvents();
 
 		// ensure game state updates at a constant rate, unaffected by the speed of the game loop
-		while (timer.getUpdateLag() >= MS_PER_UPDATE) {
+		while (updateTimer->isTimeToUpdate()) {
 			update();
-			timer.trimUpdateLag(MS_PER_UPDATE);
+			updateTimer->updated();
 		}
 
 		render();

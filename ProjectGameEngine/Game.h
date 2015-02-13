@@ -12,7 +12,8 @@ class Game {
 private:
 	const static long MS_PER_UPDATE = 8;	// how many milliseconds should be between each call of update()
 
-	Timer		timer;
+	Timer*		timer = nullptr;		// general timer for the game
+	UpdateTimer* updateTimer = nullptr;	// tracks when to run game logic
 	Window*		window = nullptr;
 	RenderBox*	renderer = nullptr;
 	AudioBox*	audio = nullptr;

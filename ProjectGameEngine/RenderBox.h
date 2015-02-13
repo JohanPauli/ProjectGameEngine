@@ -33,7 +33,6 @@ public:
 };
 
 
-
 class RenderBox {
 private:
 	Window* window = nullptr;

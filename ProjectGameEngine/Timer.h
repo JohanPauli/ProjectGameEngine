@@ -3,74 +3,67 @@
 
 #include <chrono>
 
+/*
+	General timer for keeping track of game time
+*/
 class Timer {
 private:
+	friend class UpdateTimer;
+
 	long long	gameTime = 0;
 	long long	previous = 0;
 	long long	current =  0;
 	long long	elapsed =  0;
-	long long	updateLag = 0;
 	bool		paused = true;
 
+private:
+	long long getRealTime() const;
+	long long getElapsed() const;	// time elapsed for last loop
 
 public:
-	// start the timer
-	void start() {
-		if (paused) {
-			paused = false;
 
-			current = realTime();
-			previous = current;
-		}
-	}
+	// start the timer
+	void start();
 
 	// update the timer
-	void update() {
-		if (!paused) {
-			paused = false;
-			current = realTime();
-			elapsed = current - previous;
-			previous = current;
-			updateLag += elapsed;
-			gameTime += elapsed;
-
-		}
-	}
+	void update();
 
 	// pause the timer
-	void pause() {
-		if (!paused) {
-			update();
-			paused = true;
-		}
-	}
+	void pause();
 
 	// resume the timer
-	void resume() {
-		start();
-	}
+	void resume();
 
 	// time since game started
-	long long getGameTime() const {
-		return gameTime;
-	}
+	long long getGameTime() const;
+};
+
+
+/*
+	Timer for keeping track of when to update things
+*/
+class UpdateTimer {
+private:
+	Timer*		timer;
+	int			timePerUpdate;		// update frequency in milliseconds
+	long long	updateLag = 0;		// how far behind the update is in milliseconds
+	long long	lastUpdateTime = -1;// last time this class invoked its own update()
+
+private:
+	// attempt to update the updateLag variable
+	void update();
+
+public:
+	UpdateTimer(Timer*timer, int timePerUpdate);
 
 	// milliseconds since last update
-	long long getUpdateLag() const {
-		return updateLag;
-	}
+	long long getUpdateLag();
+
+	// check if timePerUpdate exceeds updateLag
+	bool isTimeToUpdate();
 
 	// ms to trim off of updateLag, use after each update
-	void trimUpdateLag(int ms) {
-		updateLag -= ms;
-	}
-
-	// milliseconds since epoch 
-	static long long realTime() {
-		return std::chrono::duration_cast<std::chrono::milliseconds>(
-			std::chrono::high_resolution_clock::now().time_since_epoch())
-			.count();
-	}
+	void updated();
 };
 
 
