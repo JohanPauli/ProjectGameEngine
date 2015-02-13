@@ -47,7 +47,9 @@ void Game::cleanup() {
 	delete
 		audio,
 		renderer,
-		window;
+		window,
+		timer,
+		updateTimer;
 
 	delete bg, bird; // test vars
 
