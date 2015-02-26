@@ -135,7 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioBox.h" />
-    <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="RenderBox.h" />
     <ClInclude Include="Timer.h" />

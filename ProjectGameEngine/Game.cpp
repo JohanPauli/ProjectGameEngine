@@ -24,14 +24,14 @@ bool Game::init() {
 		return false;
 	}
 
-	audio = new AudioBox();
-	if (!audio->init()) {
-		return false;
-	}
+	// init audio
+	AudioBox::get().init(6, 44100, 1024);
+
 
 	// test variables
 	bg = new Surface("textures\\bg.bmp");
 	bird = new Surface("textures\\bird.PNG");
+	sound = AudioBox::loadSound("sound\\fanfare.wav");
 
 
 	// init timers
@@ -45,11 +45,11 @@ bool Game::init() {
 
 void Game::cleanup() {
 	delete
-		audio,
 		renderer,
 		window,
 		timer,
-		updateTimer;
+		updateTimer,
+		sound;
 
 	delete bg, bird; // test vars
 
@@ -122,12 +122,12 @@ void Game::processInput(const SDL_Event& e) {
 void Game::update() {
 	// TODO: game logic
 
-	renderer->blit(bg);
-	renderer->blit(bird, &birdPos);
-	renderer->update();
 }
 
 void Game::render() {
 	// TODO: render stuff
 
+	renderer->blit(bg);
+	renderer->blit(bird, &birdPos);
+	renderer->update();
 }

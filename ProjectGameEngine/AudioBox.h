@@ -42,12 +42,15 @@ public:
 
 /*
 	encapsulates SDL_mixer's audio functionality
+	singleton pattern with lazy initialization
 */
 class AudioBox {
 private:
 	bool initialized = false;
-
-
+private:
+	AudioBox();
+	AudioBox(const AudioBox&)			= delete;
+	AudioBox operator=(const AudioBox&) = delete;
 public:
 	const static int VOLUME_MAX = MIX_MAX_VOLUME;
 	const static Uint8 DISTANCE_MAX = 255;
@@ -56,8 +59,11 @@ public:
 public:
 	~AudioBox();
 
+	static AudioBox& get();
+
+
 	// initialise
-	bool init(int channels = 2, int freq = 44100, int chunkSize = 1024);
+	bool init(int channels, int freq, int chunkSize);
 	bool isInitialized() const;
 
 	// sound
@@ -82,8 +88,8 @@ public:
 	void stopAllSound() const;
 
 	// static load functions
-	Sound*	loadSound(const std::string& path) const;
-	Music*	loadMusic(const std::string& path) const;
+	static Sound*	loadSound(const std::string& path);
+	static Music*	loadMusic(const std::string& path);
 };
 
 #endif

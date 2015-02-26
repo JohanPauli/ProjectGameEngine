@@ -1,5 +1,6 @@
 #include "AudioBox.h"
 
+#include "Debug.h"
 
 // ---- SoundEffect ----
 
@@ -37,12 +38,20 @@ Mix_Music* Music::getMusic() const	{
 
 // ---- AudioBox ----
 
+AudioBox::AudioBox() {}
+
 AudioBox::~AudioBox() {
 	Mix_CloseAudio();
 }
 
+AudioBox& AudioBox::get() {
+	static AudioBox instance;
+	return instance;
+}
+
 
 bool AudioBox::init(int channels, int frequency, int chunkSize) {
+	assert(channels > 0); assert(frequency > 0); assert(chunkSize > 0);
 	if (Mix_OpenAudio(frequency, MIX_DEFAULT_FORMAT, channels, chunkSize) == -1) {
 		printf("Mix_OpenAudio: %s\n", Mix_GetError());
 		return false;
@@ -54,8 +63,7 @@ bool AudioBox::init(int channels, int frequency, int chunkSize) {
 	int flags = MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD;
 	int init = Mix_Init(flags);
 	if (init && flags != flags) {
-		printf("Mix_Init: Failed to init required ogg, mod, and mp3 support!\n");
-		printf("Mix_Init: %s\n", Mix_GetError());
+		LOG(__FILE__, __LINE__, Mix_GetError());
 		return false;
 	}
 	initialized = true;
@@ -69,13 +77,9 @@ bool AudioBox::isInitialized() const {
 
 /*
 returns channel that sound is played on
-if sound is null, returns -1
 */
 int AudioBox::playSound(Sound* sound, int loops, int channel) const {
-	if (sound == nullptr) {
-		printf("Failed to play sound: null");
-		return -1;
-	}
+	assert(sound != nullptr);
 	return Mix_PlayChannel(channel, sound->getChunk(), loops);
 }
 
@@ -83,13 +87,9 @@ int AudioBox::playSound(Sound* sound, int loops, int channel) const {
 /*
 returns volume ( previous, not the one being set)
 if volume is -1 or unspecified, doesnt change volume, but returns current volume
-if sound is null, returns -1
 */
 int AudioBox::soundVolume(Sound* sound, int vol) const {
-	if (sound == nullptr) {
-		printf("Failed to change volume: Sound is null");
-		return -1;
-	}
+	assert(sound != nullptr);
 	return Mix_VolumeChunk(sound->getChunk(), vol);
 }
 
@@ -105,19 +105,13 @@ void AudioBox::stopSound(int channel) const {
 
 
 void AudioBox::playMusic(Music* music, int loops) const {
-	if (music == nullptr) {
-		printf("Failed to play music: null");
-		return;
-	}
+	assert(music != nullptr);
 	Mix_PlayMusic(music->getMusic(), loops);
 }
 
 
 void AudioBox::fadeInMusic(Music* music, int ms, int loops) const {
-	if (music == nullptr) {
-		printf("Failed to fade-in music: null");
-		return;
-	}
+	assert(music != nullptr);
 	Mix_FadeInMusic(music->getMusic(), loops, ms);
 }
 
@@ -188,11 +182,11 @@ void AudioBox::stopAllSound() const {
 
 
 
-Sound* AudioBox::loadSound(const std::string& path) const {
+Sound* AudioBox::loadSound(const std::string& path) {
+	assert(path != "");
 	auto chunk = Mix_LoadWAV(path.c_str());
 	if (chunk == nullptr) {
-		printf("Unable to load chunk path: %s", path.c_str());
-		printf("Mix error: %s", Mix_GetError());
+		LOG(__FILE__, __LINE__, "path: ", path.c_str(), ", error: ", Mix_GetError());
 		return nullptr;
 	}
 
@@ -200,11 +194,11 @@ Sound* AudioBox::loadSound(const std::string& path) const {
 }
 
 
-Music* AudioBox::loadMusic(const std::string& path) const {
+Music* AudioBox::loadMusic(const std::string& path) {
+	assert(path != "");
 	auto mus = Mix_LoadMUS(path.c_str());
 	if (mus == nullptr) {
-		printf("Unable to load music path: %s", path.c_str());
-		printf("Mix error: %s", Mix_GetError());
+		LOG(__FILE__, __LINE__, "path: ", path.c_str(), ", error: ", Mix_GetError());
 		return nullptr;
 	}
 
