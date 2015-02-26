@@ -53,7 +53,7 @@ AudioBox& AudioBox::get() {
 bool AudioBox::init(int channels, int frequency, int chunkSize) {
 	assert(channels > 0); assert(frequency > 0); assert(chunkSize > 0);
 	if (Mix_OpenAudio(frequency, MIX_DEFAULT_FORMAT, channels, chunkSize) == -1) {
-		printf("Mix_OpenAudio: %s\n", Mix_GetError());
+		LOG(Mix_GetError());
 		return false;
 	}
 
@@ -63,7 +63,7 @@ bool AudioBox::init(int channels, int frequency, int chunkSize) {
 	int flags = MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD;
 	int init = Mix_Init(flags);
 	if (init && flags != flags) {
-		LOG(__FILE__, __LINE__, Mix_GetError());
+		LOG(Mix_GetError());
 		return false;
 	}
 	initialized = true;
@@ -186,7 +186,7 @@ Sound* AudioBox::loadSound(const std::string& path) {
 	assert(path != "");
 	auto chunk = Mix_LoadWAV(path.c_str());
 	if (chunk == nullptr) {
-		LOG(__FILE__, __LINE__, "path: ", path.c_str(), ", error: ", Mix_GetError());
+		LOG("path: " << path.c_str() << ", error: " << Mix_GetError());
 		return nullptr;
 	}
 
@@ -198,7 +198,7 @@ Music* AudioBox::loadMusic(const std::string& path) {
 	assert(path != "");
 	auto mus = Mix_LoadMUS(path.c_str());
 	if (mus == nullptr) {
-		LOG(__FILE__, __LINE__, "path: ", path.c_str(), ", error: ", Mix_GetError());
+		LOG("path: " << path.c_str() << ", error: " << Mix_GetError());
 		return nullptr;
 	}
 
