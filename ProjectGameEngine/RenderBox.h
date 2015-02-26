@@ -4,20 +4,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Window.h"
+#include "Rect.h"
 
-class Rect {
-private:
-	SDL_Rect rect;
-
-public:
-	Rect(int x, int y, int width, int height);
-	SDL_Rect* getRect(); 
-
-	int* x();
-	int* y();
-	int* width();
-	int* height();
-};
 
 
 class Surface {

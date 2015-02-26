@@ -1,26 +1,5 @@
 #include "RenderBox.h"
 
-// ---- Rect ----
-
-Rect::Rect(int x, int y, int width, int height) {
-	rect.x = x;
-	rect.y = y;
-	rect.w = width;
-	rect.h = height;
-}
-
-
-SDL_Rect* Rect::getRect() {
-	return &rect;
-}
-
-
-int* Rect::x()		{ return &rect.x; }
-int* Rect::y()		{ return &rect.y; }
-int* Rect::width()	{ return &rect.w; }
-int* Rect::height()	{ return &rect.h; }
-
-
 
 // ---- Surface ----
 

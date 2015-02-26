@@ -101,19 +101,20 @@ void Game::processEvents() {
 }
 
 
+
 void Game::processInput(const SDL_Event& e) {
 	switch (e.key.keysym.sym) {
 	case SDLK_LEFT:
-		*birdPos.x() -= 4;
+		birdPos.adjustX(-4);
 		break;
 	case SDLK_RIGHT:
-		*birdPos.x() += 4;
+		birdPos.adjustX(4);
 		break;
 	case SDLK_UP:
-		*birdPos.y() -= 4;
+		birdPos.adjustY(-4);
 		break;
 	case SDLK_DOWN:
-		*birdPos.y() += 4;
+		birdPos.adjustY(4);
 		break;
 	default:break;
 	}
