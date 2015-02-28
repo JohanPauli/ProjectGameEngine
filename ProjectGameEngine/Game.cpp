@@ -7,36 +7,26 @@ Game::Game(int argc, char ** argv) {
 }
 
 bool Game::init() {
-	// TODO: move the following to a lower level
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
-	{
-		printf("SDL_Init error: %s", SDL_GetError());
-		return false;
-	}
-
+	
 	// initialise variables
-	if ((window = new Window(windowTitle, windowWidth, windowHeight)) == nullptr) {
+	if ((_window = new Window(_windowTitle, _windowWidth, _windowHeight)) == nullptr)
 		return false;
-	}
-
-	renderer = new RenderBox(window);
-	if (!renderer->init()) {
-		return false;
-	}
+	
 
 	// init audio
 	AudioBox::get().init(6, 44100, 1024);
 
+	// init timers
+	_timer = new Timer();
+	_updateTimer = new UpdateTimer(_timer, MS_PER_UPDATE);
+
+
 
 	// test variables
-	bg = new Surface("textures\\bg.bmp");
-	bird = new Surface("textures\\bird.PNG");
-	sound = AudioBox::loadSound("sound\\fanfare.wav");
-
-
-	// init timers
-	timer = new Timer();
-	updateTimer = new UpdateTimer(timer, MS_PER_UPDATE);
+	auto renderer = _window->getRenderer();
+	bg = renderer->loadTexture("textures\\bg.bmp");
+	bird = renderer->loadTexture("textures\\bird.PNG");
+	sound = AudioBox::get().loadSound("sound\\fanfare.wav");
 
 
 	return true;
@@ -45,21 +35,20 @@ bool Game::init() {
 
 void Game::cleanup() {
 	delete
-		renderer,
-		window,
-		timer,
-		updateTimer,
-		sound;
+		_window,
+		_timer,
+		_updateTimer;
+		
 
-	delete bg, bird; // test vars
+	delete bg, bird, sound; // test vars
 
-	// TODO: move the following to a lower level
+	// TODO: move SDL_Quit() to a lower level
 	SDL_Quit();
 }
 
 
 void Game::run() {
-	timer->start();
+	_timer->start();
 
 	/*
 	start game loop
@@ -71,15 +60,15 @@ void Game::run() {
 	per second to run render() so we don't have higher fps than the monitor can handle
 	for example 300 fps would be wasteful on a 60 hertz monitor
 	*/
-	while (running) {
-		timer->update();
+	while (_running) {
+		_timer->update();
 
 		processEvents();
 
 		// ensure game state updates at a constant rate, unaffected by the speed of the game loop
-		while (updateTimer->isTimeToUpdate()) {
+		while (_updateTimer->isTimeToUpdate()) {
 			update();
-			updateTimer->updated();
+			_updateTimer->updated();
 		}
 
 		render();
@@ -92,7 +81,7 @@ void Game::processEvents() {
 	while (SDL_PollEvent(&e)) {
 		switch (e.type) {
 		case SDL_QUIT:
-			running = false; break;
+			_running = false; break;
 		case SDL_KEYDOWN:
 			processInput(e);
 		default: break;
@@ -127,8 +116,10 @@ void Game::update() {
 
 void Game::render() {
 	// TODO: render stuff
+	Rect rect = Rect(0, 0, bg->getWidth(), bg->getHeight());
 
-	renderer->blit(bg);
-	renderer->blit(bird, &birdPos);
-	renderer->update();
+	auto renderer = _window->getRenderer();
+	renderer->render(bg, &rect);
+	renderer->render(bird, &birdPos);
+	_window->update();
 }

@@ -131,7 +131,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="RenderBox.cpp" />
+    <ClCompile Include="Rendering.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -141,9 +141,8 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Rect.h" />
-    <ClInclude Include="RenderBox.h" />
+    <ClInclude Include="Rendering.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

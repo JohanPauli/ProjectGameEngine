@@ -88,8 +88,8 @@ public:
 	void stopAllSound() const;
 
 	// static load functions
-	static Sound*	loadSound(const std::string& path);
-	static Music*	loadMusic(const std::string& path);
+	Sound*	loadSound(const std::string& path);
+	Music*	loadMusic(const std::string& path);
 };
 
 #endif

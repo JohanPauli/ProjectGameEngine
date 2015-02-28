@@ -52,6 +52,11 @@ AudioBox& AudioBox::get() {
 
 bool AudioBox::init(int channels, int frequency, int chunkSize) {
 	assert(channels > 0); assert(frequency > 0); assert(chunkSize > 0);
+	if (SDL_Init(SDL_INIT_AUDIO < 0)) {
+		LOG("SDL_Init failed on SDL_INIT_AUDIO: " << SDL_GetError());
+		return false;
+	}
+
 	if (Mix_OpenAudio(frequency, MIX_DEFAULT_FORMAT, channels, chunkSize) == -1) {
 		LOG(Mix_GetError());
 		return false;

@@ -5,30 +5,28 @@
 
 #include "Timer.h"
 #include "AudioBox.h"
-#include "Window.h"
-#include "RenderBox.h"
+#include "Rendering.h"
 
 class Game {
 private:
 	const static long MS_PER_UPDATE = 8;	// how many milliseconds should be between each call of update()
 
-	Timer*		 timer = nullptr;		// general timer for the game
-	UpdateTimer* updateTimer = nullptr;	// game logic timer
-	Window*		 window = nullptr;
-	RenderBox*	 renderer = nullptr;
+	Timer*		 _timer = nullptr;		// general timer for the game
+	UpdateTimer* _updateTimer = nullptr;	// game logic timer
+	Window*		 _window = nullptr;
 
 
 
 	// settings
-	char* windowTitle = "Window Title";
-	int   windowWidth = 1024;
-	int   windowHeight = 768;
-	bool  running = true;
+	char* _windowTitle = "Window Title";
+	int   _windowWidth = 1024;
+	int   _windowHeight = 768;
+	bool  _running = true;
 
 
 	//// test stuff
-	Surface* bg = nullptr;
-	Surface* bird = nullptr;
+	Texture* bg = nullptr;
+	Texture* bird = nullptr;
 	Rect	 birdPos = Rect(0, 0, 64, 64);
 	Sound*	 sound = nullptr;
 
