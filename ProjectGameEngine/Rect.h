@@ -12,6 +12,12 @@ private:
 	SDL_Rect rect;
 
 public:
+	Rect() {
+		rect.x = 0;
+		rect.y = 0;
+		rect.w = 0;
+		rect.h = 0;
+	}
 	Rect(int x, int y, int width, int height) {
 		rect.x = x;
 		rect.y = y;

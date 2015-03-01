@@ -12,16 +12,16 @@
 // various renderer related enumerators
 
 enum class BlendMode {
-	NONE = SDL_BLENDMODE_NONE,
-	BLEND = SDL_BLENDMODE_BLEND,
-	ADD = SDL_BLENDMODE_ADD,
-	MOD = SDL_BLENDMODE_MOD
+	NONE,
+	BLEND,
+	ADD,
+	MOD
 };
 
 enum class RenderFlip {
-	NONE = SDL_FLIP_NONE,
-	HORIZONTAL = SDL_FLIP_HORIZONTAL,
-	VERTICAL = SDL_FLIP_VERTICAL
+	NONE,
+	HORIZONTAL,
+	VERTICAL,
 };
 
 
@@ -76,10 +76,20 @@ public:
 	// deallocate the renderer
 	~Renderer();
 
-	// render a texture
+	/* 
+		render a texture
+
+		texture:	the texture to be rendered
+		pos:		the position on screen to render the texture
+		texPos:		what part of the texture should be rendered (optional)
+		angle:		angle the texture should be rendered in (optional)
+		center:		the center around which the texture should be turned (optional)
+		flip:		flip the texture (optional)
+	*/
 	void render(
 		Texture*	texture,
-		Rect*		rect,
+		Rect*		pos,
+		Rect*		texPos = nullptr,
 		double		angle = 0.0,
 		Point*		center = nullptr,
 		RenderFlip	flip = RenderFlip::NONE) const;
@@ -101,6 +111,7 @@ private:
 
 public:
 	Window(std::string title, int width, int height);
+	// deallocation
 	~Window();
 
 	// draw the window

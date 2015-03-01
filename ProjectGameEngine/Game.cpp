@@ -25,7 +25,11 @@ bool Game::init() {
 	// test variables
 	auto renderer = _window->getRenderer();
 	bg = renderer->loadTexture("textures\\bg.bmp");
-	bird = renderer->loadTexture("textures\\bird.PNG");
+	bird = renderer->loadTexture("textures\\BirdAnimation.png");
+	birdAnimation[0] = Rect(0, 0, 18, 12);	// each animation is 18x12
+	birdAnimation[1] = Rect(18, 0, 18, 12);
+	birdAnimation[2] = Rect(36, 0, 18, 12);
+	birdPos = Rect(100, 100, 90, 60);
 	sound = AudioBox::get().loadSound("sound\\fanfare.wav");
 
 
@@ -120,6 +124,6 @@ void Game::render() {
 
 	auto renderer = _window->getRenderer();
 	renderer->render(bg, &rect);
-	renderer->render(bird, &birdPos);
+	renderer->render(bird, &birdPos, &birdAnimation[1]);
 	_window->update();
 }

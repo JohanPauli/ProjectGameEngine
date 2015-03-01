@@ -28,14 +28,10 @@ void Texture::setColor(Uint8 red, Uint8 green, Uint8 blue) {
 void Texture::setBlendMode(BlendMode blending) {
 	SDL_BlendMode sdlBlend;
 	switch (blending) {
-	case BlendMode::NONE:
-		sdlBlend = SDL_BLENDMODE_NONE; break;
-	case BlendMode::ADD:
-		sdlBlend = SDL_BLENDMODE_ADD; break;
-	case BlendMode::BLEND:
-		sdlBlend = SDL_BLENDMODE_BLEND; break;
-	case BlendMode::MOD:
-		sdlBlend = SDL_BLENDMODE_MOD; break;
+	case BlendMode::NONE:	sdlBlend = SDL_BLENDMODE_NONE; break;
+	case BlendMode::ADD:	sdlBlend = SDL_BLENDMODE_ADD; break;
+	case BlendMode::BLEND:	sdlBlend = SDL_BLENDMODE_BLEND; break;
+	case BlendMode::MOD:	sdlBlend = SDL_BLENDMODE_MOD; break;
 	}
 	SDL_SetTextureBlendMode(_texture, sdlBlend);
 }
@@ -78,19 +74,19 @@ angle: the rotation of the object in degrees
 point: the point to rotate around
 flip: whether to flip the sprite texture or not
 */
-void Renderer::render(Texture* texture, Rect* rect, double angle, Point* center, RenderFlip flip) const {
-	assert(rect != nullptr);
+void Renderer::render(Texture* texture, Rect* pos, Rect* texPos, double angle, Point* center, RenderFlip flip) const {
+	assert(texture != nullptr); assert(pos != nullptr);
 	SDL_RendererFlip sdlFlip;
 	switch (flip) {
-	case RenderFlip::NONE:		sdlFlip = SDL_FLIP_NONE; break;
-	case RenderFlip::HORIZONTAL:sdlFlip = SDL_FLIP_HORIZONTAL; break;
-	case RenderFlip::VERTICAL:	sdlFlip = SDL_FLIP_VERTICAL; break;
+		case RenderFlip::NONE:		sdlFlip = SDL_FLIP_NONE; break;
+		case RenderFlip::HORIZONTAL:sdlFlip = SDL_FLIP_HORIZONTAL; break;
+		case RenderFlip::VERTICAL:	sdlFlip = SDL_FLIP_VERTICAL; break;
 	}
 	SDL_RenderCopyEx(
 		_renderer,
 		texture->getTexture(),
-		nullptr,
-		rect->getRect(),
+		texPos->getRect(),
+		pos->getRect(),
 		angle,
 		center->getPoint(),
 		sdlFlip);
