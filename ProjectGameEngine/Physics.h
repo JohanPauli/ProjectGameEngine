@@ -26,6 +26,8 @@ public:
 	PhysicsEntity(int xa, int ya, int xv, int yv, int xp, int yp, int h, int w) :
 		xAcceleration(xa), yAcceleration(ya), xVelocity(xv), yVelocity(yv),
 		xPosition(xp), yPosition(yp), height(h), width(w) {}
+	virtual ~PhysicsEntity() {}
+
 	//getters
 	int getXAcceleration() const { return xAcceleration; }
 	int getYAcceleration() const { return yAcceleration; }
@@ -101,6 +103,7 @@ private:
 class Resolver
 {
 public:
+	virtual ~Resolver() {}
 	virtual void resolve(PhysicsEntity *pe, int xv, int yv) = 0;
 };
 

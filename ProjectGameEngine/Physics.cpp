@@ -73,13 +73,13 @@ void PhysicsEngine::addStaticEntity(StaticEntity *se)
 
 void PhysicsEngine::update()
 {
-	for (auto it = dEntities.begin(); it != dEntities.end(); it++)
+	for (auto it : dEntities)
 	{
-		(*it)->update(0);
+		it->update(0);
 	}
-	for (auto it = sEntities.begin(); it != sEntities.end(); it++)
+	for (auto it : sEntities)
 	{
-		(*it)->update(0);
+		it->update(0);
 	}
 }
 
@@ -106,16 +106,14 @@ void PhysicsEngine::detectColissions()
 		StaticEntity *se;
 		int deXpos, deYpos, deH, deW;
 		int seXpos, seYpos, seH, seW;
-		for (auto d = dEntities.begin(); d != dEntities.end(); d++)
+		for (auto de : dEntities)
 		{
-			de = (*d);
 			deXpos = de->getXPosition();
 			deYpos = de->getYPosition();
 			deH = de->getHeight();
 			deW = de->getWidth();
-			for (auto s = sEntities.begin(); s != sEntities.end(); s++)
+			for (auto se : sEntities)
 			{
-				se = (*s);
 				seXpos = se->getXPosition();
 				seYpos = se->getYPosition();
 				seH = se->getHeight();
