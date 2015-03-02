@@ -6,6 +6,8 @@
 #include "Timer.h"
 #include "AudioBox.h"
 #include "Rendering.h"
+#include "Physics.h"
+#include "Entity.h"
 
 class Game {
 private:
@@ -25,10 +27,11 @@ private:
 
 
 	//// test stuff
-	Texture* bg = nullptr;
+	PhysicsEngine*	phyEng = nullptr;
+	Player*			player = nullptr;
+	Texture*		bg = nullptr;
+
 	Texture* bird = nullptr;
-	Rect	 birdPos;
-	Rect	 birdAnimation[3]; // down, neutral, up
 	Sound*	 sound = nullptr;
 
 private:

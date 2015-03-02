@@ -20,17 +20,20 @@ bool Game::init() {
 	_timer = new Timer();
 	_updateTimer = new UpdateTimer(_timer, MS_PER_UPDATE);
 
-
-
 	// test variables
+	phyEng = new PhysicsEngine();
+	auto playerPhy = new DynamicPhysics(0, 0, 0, 0, 100, 100, 60, 90);
+	phyEng->addDynamicEntity(playerPhy);
+
 	auto renderer = _window->getRenderer();
 	bg = renderer->loadTexture("textures\\bg.bmp");
 	bird = renderer->loadTexture("textures\\BirdAnimation.png");
-	birdAnimation[0] = Rect(0, 0, 18, 12);	// each animation is 18x12
-	birdAnimation[1] = Rect(18, 0, 18, 12);
-	birdAnimation[2] = Rect(36, 0, 18, 12);
-	birdPos = Rect(100, 100, 90, 60);
-	sound = AudioBox::get().loadSound("sound\\fanfare.wav");
+
+	player = new Player(playerPhy, bird);
+
+
+
+	//sound = AudioBox::get().loadSound("sound\\fanfare.wav");
 
 
 	return true;
@@ -44,7 +47,7 @@ void Game::cleanup() {
 		_updateTimer;
 		
 
-	delete bg, bird, sound; // test vars
+	delete bg, bird, sound, phyEng, player; // test vars
 
 	// TODO: move SDL_Quit() to a lower level
 	SDL_Quit();
@@ -98,16 +101,13 @@ void Game::processEvents() {
 void Game::processInput(const SDL_Event& e) {
 	switch (e.key.keysym.sym) {
 	case SDLK_LEFT:
-		birdPos.adjustX(-4);
 		break;
 	case SDLK_RIGHT:
-		birdPos.adjustX(4);
 		break;
 	case SDLK_UP:
-		birdPos.adjustY(-4);
+		player->jump();
 		break;
 	case SDLK_DOWN:
-		birdPos.adjustY(4);
 		break;
 	default:break;
 	}
@@ -115,15 +115,18 @@ void Game::processInput(const SDL_Event& e) {
 
 void Game::update() {
 	// TODO: game logic
-
+	phyEng->update();
+	player->update();
 }
 
 void Game::render() {
 	// TODO: render stuff
-	Rect rect = Rect(0, 0, bg->getWidth(), bg->getHeight());
+	Rect bgPos = Rect(0, 0, bg->getWidth(), bg->getHeight());
 
 	auto renderer = _window->getRenderer();
-	renderer->render(bg, &rect);
-	renderer->render(bird, &birdPos, &birdAnimation[1]);
+
+	renderer->render(bg, &bgPos);
+	player->render(renderer);
+
 	_window->update();
 }
