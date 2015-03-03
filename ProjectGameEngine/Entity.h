@@ -39,13 +39,13 @@ public:
 		_animation[2] = Rect(36, 0, 18, 12); 
 	}
 
-	virtual void update() {
+	virtual void update() override {
 		_updates++;
 		if (_updates % 20 == 0)
 			_aniIdx = (_aniIdx + 1) % 3;
 	}
 
-	virtual void render(Renderer* renderer) {
+	virtual void render(Renderer* renderer) override {
 		// maybe physics should return a Rect
 		Rect pos = Rect(_physics->getXPosition(), _physics->getYPosition(), _physics->getWidth(), _physics->getHeight());
 		double angle = double(_updates % 360);
@@ -54,7 +54,7 @@ public:
 	}
 
 	virtual void jump() {
-		_physics->jump();
+		_physics->setYVelocity(-4);
 	}
 };
 

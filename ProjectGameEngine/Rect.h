@@ -12,20 +12,14 @@ private:
 	SDL_Rect rect;
 
 public:
-	Rect() {
-		rect.x = 0;
-		rect.y = 0;
-		rect.w = 0;
-		rect.h = 0;
-	}
-	Rect(int x, int y, int width, int height) {
-		rect.x = x;
-		rect.y = y;
-		rect.w = width;
-		rect.h = height;
-	}
+	Rect() 
+		: rect({rect.x = 0, rect.y = 0, rect.w = 0, rect.h = 0}) {}
+	Rect(int x, int y, int width, int height) 
+		: rect({ rect.x = x, rect.y = y, rect.w = width, rect.h = height }) {}
 
-	SDL_Rect* getRect() { return &rect; }
+	SDL_Rect* getRect()  { return &rect; }
+	SDL_Rect* getRekt()	 { return getRect(); }
+	SDL_Rect* getShrekt(){ return getRect(); }
 
 	int getX() const		{ return rect.x; }
 	int getY() const		{ return rect.y; }
