@@ -44,22 +44,23 @@ public:
 	encapsulates SDL_mixer's audio functionality
 	singleton pattern with lazy initialization
 */
-class AudioBox {
+class Audio {
 private:
 	bool initialized = false;
+
 private:
-	AudioBox();
-	AudioBox(const AudioBox&)			= delete;
-	AudioBox operator=(const AudioBox&) = delete;
+	Audio();
+	Audio(const Audio&)			= delete;
+	Audio operator=(const Audio&) = delete;
+
 public:
 	const static int VOLUME_MAX = MIX_MAX_VOLUME;
 	const static Uint8 DISTANCE_MAX = 255;
 
-
 public:
-	~AudioBox();
+	~Audio();
 
-	static AudioBox& get();
+	static Audio& get();
 
 
 	// initialise
