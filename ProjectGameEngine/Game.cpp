@@ -26,7 +26,7 @@ bool Game::init() {
 	phyEng->addDynamicPhysics(playerPhy);
 
 	auto renderer = _window->getRenderer();
-	bird = renderer->loadTexture("textures\\BirdAnimation.png");
+	bird = renderer->loadTexture("assets\\sprites\\bird_ani_sheet.png");
 
 	player = new Player(playerPhy, bird);
 

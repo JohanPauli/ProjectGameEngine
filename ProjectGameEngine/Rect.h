@@ -4,8 +4,27 @@
 #include <SDL.h>
 
 
-// forward declaration
-class Point;
+/*
+Black box for SDL_Point
+don't know where to put this class
+*/
+class Point {
+private:
+	SDL_Point point;
+public:
+	Point(int x, int y);
+
+	int getX() const	{ return point.x; }
+	int getY() const	{ return point.y; }
+
+	void setX(int x)	{ point.x = x; }
+	void setY(int y)	{ point.y = y; }
+
+	void adjustX(int value)	{ point.x += value; }
+	void adjustY(int value)	{ point.y += value; }
+
+	SDL_Point* getPoint()	{ return &point; }
+};
 
 
 
@@ -52,26 +71,6 @@ public:
 	void adjustHeight(int value){ rect.h += value; }
 };
 
-/*
-	Black box for SDL_Point
-	don't know where to put this class
-*/
-class Point {
-private:
-	SDL_Point point;
-public:
-	Point(int x, int y);
 
-	int getX() const	{ return point.x; }
-	int getY() const	{ return point.y; }
-
-	void setX(int x)	{ point.x = x; }
-	void setY(int y)	{ point.y = y; }
-
-	void adjustX(int value)	{ point.x += value; }
-	void adjustY(int value)	{ point.y += value; }
-
-	SDL_Point* getPoint()	{ return &point; }
-};
 
 #endif
