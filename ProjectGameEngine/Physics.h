@@ -2,157 +2,98 @@
 #define PHYSICS_H
 
 #include <vector>
+#include "Resolver.h"
 
 using std::vector;
 
 enum SIDES { TOP, BOTTOM, LEFT, RIGHT };
 
-class PhysicsEntity
+//General physics entity
+class Physics
 {
 protected:
-	int xAcceleration;
-	int yAcceleration;
+	float xAcceleration;
+	float yAcceleration;
 
-	int xVelocity;
-	int yVelocity;
+	float xVelocity;
+	float yVelocity;
 
-	int xPosition;
-	int yPosition;
+	float xPosition;
+	float yPosition;
 
-	int height;
-	int width;
+	float height;
+	float width;
 public:
 	//Constructor
-	PhysicsEntity(int xa, int ya, int xv, int yv, int xp, int yp, int h, int w) :
-		xAcceleration(xa), yAcceleration(ya), xVelocity(xv), yVelocity(yv),
-		xPosition(xp), yPosition(yp), height(h), width(w) {}
-	virtual ~PhysicsEntity() {}
+	Physics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width) :
+		xAcceleration(_xAcceleration), yAcceleration(_yAcceleration), xVelocity(_yAcceleration), yVelocity(_yVelocity),
+		xPosition(_xPosition), yPosition(_yPosition), height(_height), width(_width) {}
+	virtual ~Physics() {}
 
 	//getters
-	int getXAcceleration() const { return xAcceleration; }
-	int getYAcceleration() const { return yAcceleration; }
-	int getXVelocity() const { return xVelocity; }
-	int getYVelocity() const { return yVelocity; }
-	int getXPosition() const { return xPosition; }
-	int getYPosition() const { return yPosition; }
-	int getWidth() const { return width; }
-	int getHeight() const { return height; }
+	float getXAcceleration() const { return xAcceleration; }
+	float getYAcceleration() const { return yAcceleration; }
+	float getXVelocity() const { return xVelocity; }
+	float getYVelocity() const { return yVelocity; }
+	float getXPosition() const { return xPosition; }
+	float getYPosition() const { return yPosition; }
+	float getWidth() const { return width; }
+	float getHeight() const { return height; }
 
 	//setters
-	void setXAcceleration(int xa) { xAcceleration = xa; }
-	void setYAcceleration(int ya) { yAcceleration = ya; }
-	void setXVelocity(int xv)  { xVelocity = xv; }
-	void setYVelocity(int yv) { yVelocity = yv; }
-	void setXPosition(int xp) { xPosition = xp; }
-	void setYPosition(int yp) { yPosition = yp; }
+	void setXAcceleration(float _xAcceleration) { xAcceleration = _xAcceleration; }
+	void setYAcceleration(float _yAcceleration) { yAcceleration = _yAcceleration; }
+	void setXVelocity(float _xVelocity)  { xVelocity = _xVelocity; }
+	void setYVelocity(float _yVelocity) { yVelocity = _yVelocity; }
+	void setXPosition(float _xPosition) { xPosition = _xPosition; }
+	void setYPosition(float _yPosition) { yPosition = _yPosition; }
 
 	//Pure virtual update function
 	virtual void update(int elapsed) = 0;
 
 
 };
-
-class DynamicEntity : public PhysicsEntity
+//Dynamic entity used by moving objects in the game
+class DynamicPhysics : public Physics
 {
 public:
-	DynamicEntity(int xa, int ya, int xv, int yv, int xp, int yp, int h, int w) : PhysicsEntity(xa, ya, xv, yv, xp, yp, h, w){}
+	DynamicPhysics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width) : Physics(_xAcceleration, _yAcceleration, _xVelocity, _yVelocity, _xPosition, _yPosition, _height, _width){}
 	void jump();
 	virtual void update(int elapsed);
-	void resolveCollision(int collVelocity, SIDES);
+	void resolveCollision(float collVelocity, SIDES);
 
 };
 
-class StaticEntity : public PhysicsEntity
+//Static entity used by  non moving objects in the game
+class StaticPhysics : public Physics
 {
 public:
-	StaticEntity(int xa, int ya, int xv, int yv, int xp, int yp, int h, int w) : PhysicsEntity(xa, ya, xv, yv, xp, yp, h, w){}
+	StaticPhysics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width) : Physics(_xAcceleration, _yAcceleration, _xVelocity, _yVelocity, _xPosition, _yPosition, _height, _width){}
 	virtual void update(int elapsed);
 };
 
+//Resolver class is used to resolve collision between objects
 class Resolver;
 
-class ResolverFactory
-{
-public:
-	Resolver* createResolver(bool top, bool bottom, bool left, bool right);
 
-};
-
+//The physics engine updates the physicts objects, and detects collisions
 class PhysicsEngine
 {
 public:
 	~PhysicsEngine();
 	void update();
 	void detectColissions();
-	void collision(DynamicEntity *, PhysicsEntity *);
-	void addDynamicEntity(DynamicEntity *de);
-	void addStaticEntity(StaticEntity *se);
+	void collision(DynamicPhysics *, Physics *);
+	void addDynamicPhysics(DynamicPhysics *de);
+	void addStaticPhysics(StaticPhysics *se);
 	void setResolver(Resolver *res);
 
 private:
-	vector<DynamicEntity*> dEntities;
-	vector<StaticEntity*> sEntities;
+	vector<DynamicPhysics*> dEntities;
+	vector<StaticPhysics*> sEntities;
 	ResolverFactory rFactory;
 	Resolver *resolver;
 
-};
-
-
-/*Resolver classes*/
-
-class Resolver
-{
-public:
-	virtual ~Resolver() {}
-	virtual void resolve(PhysicsEntity *pe, int xv, int yv) = 0;
-};
-
-class TopLeftResolver : public Resolver
-{
-public:
-	virtual void resolve(PhysicsEntity *pe, int xv, int yv);
-};
-
-class TopRightResolver : public Resolver
-{
-public:
-	virtual void resolve(PhysicsEntity *pe, int xv, int yv);
-};
-
-class BottomLeftResolver : public Resolver
-{
-public:
-	virtual void resolve(PhysicsEntity *pe, int xv, int yv);
-};
-
-class BottomRightResolver : public Resolver
-{
-public:
-	virtual void resolve(PhysicsEntity *pe, int xv, int yv);
-};
-
-class TopResolver : public Resolver
-{
-public:
-	virtual void resolve(PhysicsEntity *pe, int xv, int yv);
-};
-
-class BottomResolver : public Resolver
-{
-public:
-	virtual void resolve(PhysicsEntity *pe, int xv, int yv);
-};
-
-class LeftResolver : public Resolver
-{
-public:
-	virtual void resolve(PhysicsEntity *pe, int xv, int yv);
-};
-
-class RightResolver : public Resolver
-{
-public:
-	virtual void resolve(PhysicsEntity *pe, int xv, int yv);
 };
 
 

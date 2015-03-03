@@ -7,9 +7,9 @@
 
 #include "Debug.h"
 
-typedef PhysicsEntity	Physics;
-typedef StaticEntity	StaticPhysics;
-typedef DynamicEntity	DynamicPhysics;
+//typedef PhysicsEntity	Physics;
+//typedef StaticEntity	StaticPhysics;
+//typedef DynamicEntity	DynamicPhysics;
 
 class Entity {
 public:

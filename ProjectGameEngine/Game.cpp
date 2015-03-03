@@ -22,8 +22,8 @@ bool Game::init() {
 
 	// test variables
 	phyEng = new PhysicsEngine();
-	auto playerPhy = new DynamicPhysics(0, 0, 1, 0, 0, 100, 60, 90);
-	phyEng->addDynamicEntity(playerPhy);
+	auto playerPhy = new DynamicPhysics(0, 0.1, 1, 0, 0, 100, 60, 90);
+	phyEng->addDynamicPhysics(playerPhy);
 
 	auto renderer = _window->getRenderer();
 	bird = renderer->loadTexture("textures\\BirdAnimation.png");

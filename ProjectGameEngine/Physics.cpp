@@ -1,6 +1,6 @@
 #include "Physics.h"
 
-void PhysicsEntity::update(int number)
+void Physics::update(int number)
 {
 	//xVelocity += xAcceleration;
 	yVelocity += yAcceleration;
@@ -8,17 +8,17 @@ void PhysicsEntity::update(int number)
 	yPosition += yVelocity;
 }
 
-void DynamicEntity::jump()
+void DynamicPhysics::jump()
 {
 	yVelocity = -15;
 }
 
-void DynamicEntity::update(int number)
+void DynamicPhysics::update(int number)
 {
-	PhysicsEntity::update(number);
+	Physics::update(number);
 }
 
-void DynamicEntity::resolveCollision(int collVelocity, SIDES side)
+void DynamicPhysics::resolveCollision(float collVelocity, SIDES side)
 {
 	switch (side)
 	{
@@ -37,9 +37,9 @@ void DynamicEntity::resolveCollision(int collVelocity, SIDES side)
 	}
 }
 
-void StaticEntity::update(int number)
+void StaticPhysics::update(int number)
 {
-	PhysicsEntity::update(number);
+	Physics::update(number);
 }
 
 /*
@@ -49,26 +49,26 @@ PhysicsEngine::~PhysicsEngine()
 {
 	while (dEntities.size() > 0)
 	{
-		DynamicEntity *de = dEntities.back();
+		DynamicPhysics *dynamicPhysics = dEntities.back();
 		dEntities.pop_back();
-		delete de;
+		delete dynamicPhysics;
 	}
 	while (sEntities.size() > 0)
 	{
-		StaticEntity *se = sEntities.back();
+		StaticPhysics *staticPhysics = sEntities.back();
 		sEntities.pop_back();
-		delete se;
+		delete staticPhysics;
 	}
 }
 
-void PhysicsEngine::addDynamicEntity(DynamicEntity *de)
+void PhysicsEngine::addDynamicPhysics(DynamicPhysics *dynamicPhysics)
 {
-	dEntities.push_back(de);
+	dEntities.push_back(dynamicPhysics);
 }
 
-void PhysicsEngine::addStaticEntity(StaticEntity *se)
+void PhysicsEngine::addStaticPhysics(StaticPhysics *staticPhysics)
 {
-	sEntities.push_back(se);
+	sEntities.push_back(staticPhysics);
 }
 
 void PhysicsEngine::update()
@@ -102,31 +102,29 @@ void PhysicsEngine::detectColissions()
 	}
 	if (dEntities.size() > 0 && sEntities.size() > 0)
 	{
-		DynamicEntity *de;
-		StaticEntity *se;
-		int deXpos, deYpos, deH, deW;
-		int seXpos, seYpos, seH, seW;
-		for (auto de : dEntities)
+		float dynamicPhysicsXpos, dynamicPhysicsYpos, dynamicPhysicsH, dynamicPhysicsW;
+		float staticPhysicsXpos, staticPhysicsYpos, staticPhysicsH, staticPhysicsW;
+		for (auto dynamicPhysics : dEntities)
 		{
-			deXpos = de->getXPosition();
-			deYpos = de->getYPosition();
-			deH = de->getHeight();
-			deW = de->getWidth();
-			for (auto se : sEntities)
+			dynamicPhysicsXpos = dynamicPhysics->getXPosition();
+			dynamicPhysicsYpos = dynamicPhysics->getYPosition();
+			dynamicPhysicsH = dynamicPhysics->getHeight();
+			dynamicPhysicsW = dynamicPhysics->getWidth();
+			for (auto staticPhysics : sEntities)
 			{
-				seXpos = se->getXPosition();
-				seYpos = se->getYPosition();
-				seH = se->getHeight();
-				seW = se->getWidth();
-				if (deYpos + deH < seYpos || deYpos > seYpos + seH)
+				staticPhysicsXpos = staticPhysics->getXPosition();
+				staticPhysicsYpos = staticPhysics->getYPosition();
+				staticPhysicsH = staticPhysics->getHeight();
+				staticPhysicsW = staticPhysics->getWidth();
+				if (dynamicPhysicsYpos + dynamicPhysicsH < staticPhysicsYpos || dynamicPhysicsYpos > staticPhysicsYpos + staticPhysicsH)
 				{
 				}
-				else if (deXpos + deW < seXpos || deXpos > seXpos + seW)
+				else if (dynamicPhysicsXpos + dynamicPhysicsW < staticPhysicsXpos || dynamicPhysicsXpos > staticPhysicsXpos + staticPhysicsW)
 				{
 				}
 				else
 				{
-					collision(de, se);
+					collision(dynamicPhysics, staticPhysics);
 				}
 
 			}
@@ -135,168 +133,25 @@ void PhysicsEngine::detectColissions()
 
 }
 
-void PhysicsEngine::collision(DynamicEntity *de, PhysicsEntity *pe)
+void PhysicsEngine::collision(DynamicPhysics *dynamicPhysics, Physics *pe)
 {
 	bool left = false, right = false, top = false, bottom = false;
-	int deXpos = de->getXPosition(), deYpos = de->getYPosition(), deH = de->getHeight(), deW = de->getWidth();
-	int peXpos = pe->getXPosition(), peYpos = pe->getYPosition(), peH = pe->getHeight(), peW = pe->getWidth();
+	float dynamicPhysicsXpos = dynamicPhysics->getXPosition(), dynamicPhysicsYpos = dynamicPhysics->getYPosition(), dynamicPhysicsH = dynamicPhysics->getHeight(), dynamicPhysicsW = dynamicPhysics->getWidth();
+	float peXpos = pe->getXPosition(), peYpos = pe->getYPosition(), peH = pe->getHeight(), peW = pe->getWidth();
 	//Check corner collision
 
 
-	if ((deYpos + deH) >= peYpos && deYpos < peYpos)
+	if ((dynamicPhysicsYpos + dynamicPhysicsH) >= peYpos && dynamicPhysicsYpos < peYpos)
 		bottom = true;
-	else if (deYpos <= (peYpos + peH) && deYpos < peYpos)
+	else if (dynamicPhysicsYpos <= (peYpos + peH) && dynamicPhysicsYpos < peYpos)
 		top = true;
-	else if (deXpos <= peXpos + peW && deXpos > peXpos)
+	else if (dynamicPhysicsXpos <= peXpos + peW && dynamicPhysicsXpos > peXpos)
 		left = true;
-	else if (deXpos + deW >= peXpos && deXpos < peXpos)
+	else if (dynamicPhysicsXpos + dynamicPhysicsW >= peXpos && dynamicPhysicsXpos < peXpos)
 		right = true;
 
 	setResolver(rFactory.createResolver(top, bottom, left, right));
 
 	if (resolver != nullptr)
-		resolver->resolve(de, pe->getXVelocity(), pe->getYVelocity());
-}
-
-
-/*
-Resolvers
-*/
-
-//The factory
-Resolver* ResolverFactory::createResolver(bool top, bool bottom, bool left, bool right)
-{
-	if (top && left)
-		return new TopLeftResolver();
-	else if (top && right)
-		return new TopRightResolver();
-	else if (bottom && left)
-		return new BottomLeftResolver();
-	else if (bottom && right)
-		return new BottomRightResolver();
-	else if (left)
-		return new LeftResolver();
-	else if (right)
-		return new RightResolver();
-	else if (top)
-		return new TopResolver();
-	else if (bottom)
-		return new BottomResolver();
-	else
-		return nullptr;
-}
-
-//Resolvers
-void TopLeftResolver::resolve(PhysicsEntity *pe, int xv, int yv)
-{
-	if (yv > 0 && pe->getYVelocity() > 0)
-		pe->setYVelocity(yv + pe->getYVelocity());
-	else if (yv < 0 && pe->getYVelocity() < 0)
-		pe->setYVelocity(yv - pe->getYVelocity());
-	else
-		pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-	if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
-
-}
-
-void TopRightResolver::resolve(PhysicsEntity *pe, int xv, int yv)
-{
-	if (yv > 0 && pe->getYVelocity() > 0)
-		pe->setYVelocity(yv + pe->getYVelocity());
-	else if (yv < 0 && pe->getYVelocity() < 0)
-		pe->setYVelocity(yv - pe->getYVelocity());
-	else
-		pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-
-	if (xv > 0 && pe->getXVelocity() > 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv + pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
-}
-
-void BottomLeftResolver::resolve(PhysicsEntity *pe, int xv, int yv)
-{
-
-	if (yv < 0 && pe->getYVelocity() < 0)
-		pe->setYVelocity(yv + pe->getYVelocity());
-	else if (yv > 0 && pe->getYVelocity() > 0)
-		pe->setYVelocity(yv - pe->getYVelocity());
-	else
-		pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-
-	if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
-}
-
-void BottomRightResolver::resolve(PhysicsEntity *pe, int xv, int yv)
-{
-	if (yv < 0 && pe->getYVelocity() < 0)
-		pe->setYVelocity(yv + pe->getYVelocity());
-	else if (yv > 0 && pe->getYVelocity() > 0)
-		pe->setYVelocity(yv - pe->getYVelocity());
-	else
-		pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-
-	if (xv > 0 && pe->getXVelocity() > 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv + pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
-}
-
-void LeftResolver::resolve(PhysicsEntity *pe, int xv, int yv)
-{
-	if (xv > 0 && pe->getXVelocity() > 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv + pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
-}
-
-void RightResolver::resolve(PhysicsEntity *pe, int xv, int yv)
-{
-	if (xv > 0 && pe->getXVelocity() > 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv + pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
-}
-
-void TopResolver::resolve(PhysicsEntity *pe, int xv, int yv)
-{
-
-	if (yv > 0 && pe->getYVelocity() > 0)
-		pe->setYVelocity(yv + pe->getYVelocity());
-	else if (yv < 0 && pe->getYVelocity() < 0)
-		pe->setYVelocity(yv - pe->getYVelocity());
-	else
-		pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-
-	//pe->setYVelocity(1);
-}
-
-void BottomResolver::resolve(PhysicsEntity *pe, int xv, int yv)
-{
-	if (pe->getYVelocity() > 0)
-	{
-		if (yv < 0 && pe->getYVelocity() < 0)
-			pe->setYVelocity(yv + pe->getYVelocity());
-		else if (yv > 0 && pe->getYVelocity() > 0)
-			pe->setYVelocity(yv - pe->getYVelocity());
-		else
-			pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-	}
-	if (pe->getYVelocity() == 0)
-		pe->setYAcceleration(0);
-
+		resolver->resolve(dynamicPhysics, pe->getXVelocity(), pe->getYVelocity());
 }
