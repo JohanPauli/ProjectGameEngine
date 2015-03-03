@@ -7,25 +7,25 @@
 
 
 
-// ---- Texture ----
+// ---- Sprite ----
 
-Texture::Texture(SDL_Texture* texture, int width, int height) 
+Sprite::Sprite(SDL_Texture* texture, int width, int height) 
 	: _texture(texture), _width(width), _height(height) {}
 
 
-Texture::~Texture() {
+Sprite::~Sprite() {
 	SDL_DestroyTexture(_texture);
 }
 
 
 // color modulation
-void Texture::setColor(Uint8 red, Uint8 green, Uint8 blue) {
+void Sprite::setColor(Uint8 red, Uint8 green, Uint8 blue) {
 	SDL_SetTextureColorMod(_texture, red, green, blue);
 }
 
 
 // set blending
-void Texture::setBlendMode(BlendMode blending) {
+void Sprite::setBlendMode(BlendMode blending) {
 	SDL_BlendMode sdlBlend;
 	switch (blending) {
 	case BlendMode::NONE:	sdlBlend = SDL_BLENDMODE_NONE; break;
@@ -37,25 +37,21 @@ void Texture::setBlendMode(BlendMode blending) {
 }
 
 // set alpha (opacity)
-void Texture::setAlpha(Uint8 alpha) {
+void Sprite::setAlpha(Uint8 alpha) {
 	SDL_SetTextureAlphaMod(_texture, alpha);
 }
 
 
 
-int Texture::getWidth() const {
+int Sprite::getWidth() const {
 	return _width;
 }
 
 
-int Texture::getHeight() const {
+int Sprite::getHeight() const {
 	return _height;
 }
 
-
-SDL_Texture* Texture::getTexture() const {
-	return _texture;
-}
 
 
 
@@ -69,13 +65,12 @@ Renderer::~Renderer() {
 	SDL_DestroyRenderer(_renderer);
 }
 /*
-render texture at a given point
+render Sprite at a given point
 angle: the rotation of the object in degrees
 point: the point to rotate around
-flip: whether to flip the sprite texture or not
+flip: whether to flip the sprite Sprite or not
 */
-void Renderer::render(Texture* texture, Rect* pos, Rect* texPos, double angle, Point* center, RenderFlip flip) const {
-	assert(texture != nullptr); assert(pos != nullptr);
+void Renderer::render(Sprite* sprite, Rect* pos, Rect* src, double angle, Point* center, RenderFlip flip) const {
 	SDL_RendererFlip sdlFlip;
 	switch (flip) {
 		case RenderFlip::NONE:		sdlFlip = SDL_FLIP_NONE; break;
@@ -84,16 +79,16 @@ void Renderer::render(Texture* texture, Rect* pos, Rect* texPos, double angle, P
 	}
 	SDL_RenderCopyEx(
 		_renderer,
-		texture->getTexture(),
-		texPos->getRect(),
-		pos->getRect(),
+		sprite->_texture,
+		&src->rect,
+		&pos->rect,
 		angle,
-		center->getPoint(),
+		&center->point,
 		sdlFlip);
 }
 
 
-Texture* Renderer::loadTexture(std::string path) const {
+Sprite* Renderer::loadSprite(std::string path) const {
 	SDL_Texture* sdlTexture;
 	SDL_Surface* sdlSurface;
 	if ((sdlSurface = IMG_Load(path.c_str())) == nullptr) {
@@ -104,10 +99,10 @@ Texture* Renderer::loadTexture(std::string path) const {
 		LOG("Unable to create texture from image \"" << path << "\". SDL error: " << SDL_GetError());
 		return nullptr;
 	}
-	auto texture = new Texture(sdlTexture, sdlSurface->w, sdlSurface->h);
+	auto sprite = new Sprite(sdlTexture, sdlSurface->w, sdlSurface->h);
 
 	SDL_FreeSurface(sdlSurface);
-	return texture;
+	return sprite;
 }
 
 

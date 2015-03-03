@@ -30,7 +30,7 @@ private:
 	PhysicsEngine*	phyEng = nullptr;
 	Player*			player = nullptr;
 
-	Texture* bird = nullptr;
+	Sprite* bird = nullptr;
 	Sound*	 sound = nullptr;
 
 private:

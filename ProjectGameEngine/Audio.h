@@ -11,6 +11,7 @@
 
 // black box for Mix_Chunk
 class Sound {
+	friend class Audio;
 private:
 	Mix_Chunk*	chunk;
 
@@ -21,7 +22,6 @@ public:
 	Sound(Mix_Chunk* chunk);
 	~Sound();
 
-	Mix_Chunk*	getChunk() const;
 	void setVolume(int vol);
 };
 
@@ -29,14 +29,13 @@ public:
 
 // black box for Mix_Music
 class Music {
+	friend class Audio;
 private:
 	Mix_Music*	music;
 
 public:
 	Music(Mix_Music* music);
 	~Music();
-
-	Mix_Music*	getMusic() const;
 };
 
 
@@ -89,8 +88,8 @@ public:
 	void stopAllSound() const;
 
 	// static load functions
-	Sound*	loadSound(const std::string& path);
-	Music*	loadMusic(const std::string& path);
+	Sound*	loadSound(const std::string& path) const;
+	Music*	loadMusic(const std::string& path) const;
 };
 
 #endif

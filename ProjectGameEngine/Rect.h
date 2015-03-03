@@ -9,6 +9,7 @@ Black box for SDL_Point
 don't know where to put this class
 */
 class Point {
+	friend class Renderer;
 private:
 	SDL_Point point;
 public:
@@ -22,8 +23,6 @@ public:
 
 	void adjustX(int value)	{ point.x += value; }
 	void adjustY(int value)	{ point.y += value; }
-
-	SDL_Point* getPoint()	{ return &point; }
 };
 
 
@@ -32,6 +31,7 @@ public:
 	Blackbox for SDL_Rect
 */
 class Rect {
+	friend class Renderer;
 private:
 	SDL_Rect rect;
 
@@ -50,10 +50,6 @@ public:
 	}
 
 	// accessors
-
-	SDL_Rect* getRect()  { return &rect; }
-	SDL_Rect* getRekt()	 { return getRect(); }
-	SDL_Rect* getShrekt(){ return getRect(); }
 
 	int getX() const		{ return rect.x; }
 	int getY() const		{ return rect.y; }

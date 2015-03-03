@@ -30,17 +30,18 @@ enum class RenderFlip {
 /*
 	Encapsulates SDLs textures
 
-	Textures can be loaded from the renderer class 
+	Sprites can be loaded from the renderer class 
 */
-class Texture {
+class Sprite {
+	friend class Renderer;
 private:
 	SDL_Texture* _texture = nullptr;
 	int _width = 0;
 	int _height = 0;
 
 public:
-	Texture(SDL_Texture* texture, int width, int height);
-	~Texture();
+	Sprite(SDL_Texture* texture, int width, int height);
+	~Sprite();
 
 	// color modulation
 	void setColor(Uint8 red, Uint8 green, Uint8 blue);
@@ -54,7 +55,6 @@ public:
 	// accessors
 	int getWidth() const;
 	int getHeight() const;
-	SDL_Texture* getTexture() const;
 };
 
 
@@ -77,25 +77,25 @@ public:
 	~Renderer();
 
 	/* 
-		render a texture
+		render a Sprite
 
-		texture:	the texture to be rendered
-		pos:		the position on screen to render the texture
-		texPos:		what part of the texture should be rendered (optional)
-		angle:		angle the texture should be rendered in (optional)
-		center:		the center around which the texture should be turned (optional)
-		flip:		flip the texture (optional)
+		Sprite:	the Sprite to be rendered
+		pos:		the position on screen to render the Sprite
+		src:		what part of the Sprite should be rendered (optional)
+		angle:		angle the Sprite should be rendered in (optional)
+		center:		the center around which the Sprite should be turned (optional)
+		flip:		flip the Sprite (optional)
 	*/
 	void render(
-		Texture*	texture,
+		Sprite*		sprite,
 		Rect*		pos,
-		Rect*		texPos = nullptr,
+		Rect*		src = nullptr,
 		double		angle = 0.0,
 		Point*		center = nullptr,
 		RenderFlip	flip = RenderFlip::NONE) const;
 
 	// loading functions
-	Texture* loadTexture(std::string path) const;
+	Sprite* loadSprite(std::string path) const;
 };
 
 

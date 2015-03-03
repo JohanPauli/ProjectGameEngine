@@ -11,10 +11,6 @@ Sound::Sound(Mix_Chunk* chunk)
 Sound::~Sound() { Mix_FreeChunk(chunk); }
 
 
-Mix_Chunk* Sound::getChunk() const	{
-	return chunk;
-}
-
 void Sound::setVolume(int vol) {
 	chunk->volume = vol;
 }
@@ -28,11 +24,6 @@ Music::Music(Mix_Music* music)
 
 Music::~Music() { Mix_FreeMusic(music); }
 
-
-
-Mix_Music* Music::getMusic() const	{
-	return music;
-}
 
 
 
@@ -51,7 +42,6 @@ Audio& Audio::get() {
 
 
 bool Audio::init(int channels, int frequency, int chunkSize) {
-	assert(channels > 0); assert(frequency > 0); assert(chunkSize > 0);
 	if (SDL_Init(SDL_INIT_AUDIO < 0)) {
 		LOG("SDL_Init failed on SDL_INIT_AUDIO: " << SDL_GetError());
 		return false;
@@ -84,8 +74,7 @@ bool Audio::isInitialized() const {
 returns channel that sound is played on
 */
 int Audio::playSound(Sound* sound, int loops, int channel) const {
-	assert(sound != nullptr);
-	return Mix_PlayChannel(channel, sound->getChunk(), loops);
+	return Mix_PlayChannel(channel, sound->chunk, loops);
 }
 
 
@@ -94,8 +83,7 @@ returns volume ( previous, not the one being set)
 if volume is -1 or unspecified, doesnt change volume, but returns current volume
 */
 int Audio::soundVolume(Sound* sound, int vol) const {
-	assert(sound != nullptr);
-	return Mix_VolumeChunk(sound->getChunk(), vol);
+	return Mix_VolumeChunk(sound->chunk, vol);
 }
 
 
@@ -110,14 +98,12 @@ void Audio::stopSound(int channel) const {
 
 
 void Audio::playMusic(Music* music, int loops) const {
-	assert(music != nullptr);
-	Mix_PlayMusic(music->getMusic(), loops);
+	Mix_PlayMusic(music->music, loops);
 }
 
 
 void Audio::fadeInMusic(Music* music, int ms, int loops) const {
-	assert(music != nullptr);
-	Mix_FadeInMusic(music->getMusic(), loops, ms);
+	Mix_FadeInMusic(music->music, loops, ms);
 }
 
 void Audio::fadeOutMusic(int ms) const {
@@ -187,8 +173,7 @@ void Audio::stopAllSound() const {
 
 
 
-Sound* Audio::loadSound(const std::string& path) {
-	assert(path != "");
+Sound* Audio::loadSound(const std::string& path) const {
 	auto chunk = Mix_LoadWAV(path.c_str());
 	if (chunk == nullptr) {
 		LOG("path: " << path.c_str() << ", error: " << Mix_GetError());
@@ -199,8 +184,7 @@ Sound* Audio::loadSound(const std::string& path) {
 }
 
 
-Music* Audio::loadMusic(const std::string& path) {
-	assert(path != "");
+Music* Audio::loadMusic(const std::string& path) const {
 	auto mus = Mix_LoadMUS(path.c_str());
 	if (mus == nullptr) {
 		LOG("path: " << path.c_str() << ", error: " << Mix_GetError());
