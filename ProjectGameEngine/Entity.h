@@ -4,45 +4,51 @@
 
 #include "Rendering.h"
 #include "Physics.h"
+#include "Graphics.h"
 
 #include "Debug.h"
 
-//typedef PhysicsEntity	Physics;
-//typedef StaticEntity	StaticPhysics;
-//typedef DynamicEntity	DynamicPhysics;
 
+// entity interface
 class Entity {
 public:
-	virtual ~Entity() {}
-
-	virtual void update() = 0;	// update logic
-	virtual void render(Renderer*) = 0;		// render the entity
+	virtual void update() = 0;			// update logic
+	virtual void render(Renderer*) = 0;	// render the entity
 };
 
 
 
+// derived entities below
+
 class Player : public Entity {
 private:
 	DynamicPhysics* _physics = nullptr;
-	Texture*		_texture = nullptr;
-	Rect			_animation[3];
-	int				_aniIdx = 0;
+	SpriteSheet*	_spriteSheet = nullptr;
 	int				_updates = 0;
 
 
 public:
-	Player(DynamicPhysics* physics, Texture* texture) {
-		_texture = texture;
+	Player(DynamicPhysics* physics, Sprite* sprite) {
 		_physics = physics;
-		_animation[0] = Rect(0, 0, 18, 12);	// each animation is 18x12
-		_animation[1] = Rect(18, 0, 18, 12);
-		_animation[2] = Rect(36, 0, 18, 12); 
+
+
+		std::vector<Rect> rector;
+		
+		// each animation is 18x12
+		rector.emplace_back(Rect(0, 0, 18, 12));	
+		rector.emplace_back(Rect(18, 0, 18, 12));
+		rector.emplace_back(Rect(36, 0, 18, 12));
+
+		_spriteSheet = new SpriteSheet(rector, sprite);
+	}
+	~Player() {
+		delete _spriteSheet;
 	}
 
 	virtual void update() override {
 		_updates++;
 		if (_updates % 20 == 0)
-			_aniIdx = (_aniIdx + 1) % 3;
+			_spriteSheet->nextSprite();
 	}
 
 	virtual void render(Renderer* renderer) override {
@@ -50,7 +56,7 @@ public:
 		Rect pos = Rect(_physics->getXPosition(), _physics->getYPosition(), _physics->getWidth(), _physics->getHeight());
 		double angle = double(_updates % 360);
 
-		renderer->render(_texture, &pos, &_animation[_aniIdx], angle);
+		renderer->render(_spriteSheet->getSprite(), &pos, _spriteSheet->getSpriteSrc(), angle);
 	}
 
 	virtual void jump() {
