@@ -1,4 +1,4 @@
-#include "AudioBox.h"
+#include "Audio.h"
 
 #include "Debug.h"
 
@@ -36,21 +36,21 @@ Mix_Music* Music::getMusic() const	{
 
 
 
-// ---- AudioBox ----
+// ---- Audio ----
 
-AudioBox::AudioBox() {}
+Audio::Audio() {}
 
-AudioBox::~AudioBox() {
+Audio::~Audio() {
 	Mix_CloseAudio();
 }
 
-AudioBox& AudioBox::get() {
-	static AudioBox instance;
+Audio& Audio::get() {
+	static Audio instance;
 	return instance;
 }
 
 
-bool AudioBox::init(int channels, int frequency, int chunkSize) {
+bool Audio::init(int channels, int frequency, int chunkSize) {
 	assert(channels > 0); assert(frequency > 0); assert(chunkSize > 0);
 	if (SDL_Init(SDL_INIT_AUDIO < 0)) {
 		LOG("SDL_Init failed on SDL_INIT_AUDIO: " << SDL_GetError());
@@ -75,7 +75,7 @@ bool AudioBox::init(int channels, int frequency, int chunkSize) {
 	return true;
 }
 
-bool AudioBox::isInitialized() const {
+bool Audio::isInitialized() const {
 	return initialized;
 }
 
@@ -83,7 +83,7 @@ bool AudioBox::isInitialized() const {
 /*
 returns channel that sound is played on
 */
-int AudioBox::playSound(Sound* sound, int loops, int channel) const {
+int Audio::playSound(Sound* sound, int loops, int channel) const {
 	assert(sound != nullptr);
 	return Mix_PlayChannel(channel, sound->getChunk(), loops);
 }
@@ -93,7 +93,7 @@ int AudioBox::playSound(Sound* sound, int loops, int channel) const {
 returns volume ( previous, not the one being set)
 if volume is -1 or unspecified, doesnt change volume, but returns current volume
 */
-int AudioBox::soundVolume(Sound* sound, int vol) const {
+int Audio::soundVolume(Sound* sound, int vol) const {
 	assert(sound != nullptr);
 	return Mix_VolumeChunk(sound->getChunk(), vol);
 }
@@ -103,33 +103,33 @@ int AudioBox::soundVolume(Sound* sound, int vol) const {
 /*
 stops the specified sound channel
 */
-void AudioBox::stopSound(int channel) const {
+void Audio::stopSound(int channel) const {
 	Mix_HaltChannel(channel);
 }
 
 
 
-void AudioBox::playMusic(Music* music, int loops) const {
+void Audio::playMusic(Music* music, int loops) const {
 	assert(music != nullptr);
 	Mix_PlayMusic(music->getMusic(), loops);
 }
 
 
-void AudioBox::fadeInMusic(Music* music, int ms, int loops) const {
+void Audio::fadeInMusic(Music* music, int ms, int loops) const {
 	assert(music != nullptr);
 	Mix_FadeInMusic(music->getMusic(), loops, ms);
 }
 
-void AudioBox::fadeOutMusic(int ms) const {
+void Audio::fadeOutMusic(int ms) const {
 	Mix_FadeOutMusic(ms);
 }
 
-void AudioBox::pauseMusic() const {
+void Audio::pauseMusic() const {
 	if (Mix_PausedMusic() == 0)
 		Mix_PauseMusic();
 }
 
-bool AudioBox::isMusicPaused() const {
+bool Audio::isMusicPaused() const {
 	/* Mix_PausedMusic returns 1 if music is paused and 0 otherwise.
 	Can you simply
 	return Mix_PausedMusic(); ?
@@ -137,7 +137,7 @@ bool AudioBox::isMusicPaused() const {
 	return Mix_PausedMusic() == 1;
 }
 
-void AudioBox::resumeMusic() const {
+void Audio::resumeMusic() const {
 	Mix_ResumeMusic();
 }
 
@@ -145,13 +145,13 @@ void AudioBox::resumeMusic() const {
 returns volume ( previous, not the one being set)
 if volume is -1 or unspecified, doesnt change volume, but returns current volume
 */
-int AudioBox::musicVolume(int vol) const {
+int Audio::musicVolume(int vol) const {
 	return Mix_VolumeMusic(vol);
 }
 
 
 
-void AudioBox::stopMusic() const {
+void Audio::stopMusic() const {
 	Mix_HaltMusic();
 }
 
@@ -161,17 +161,17 @@ returns volume ( previous, not the one being set)
 if volume is -1 or unspecified, doesnt change volume, but returns current volume
 if channel is -1 or unspecified, set volume for all channels
 */
-int AudioBox::volume(int vol, int channel) const {
+int Audio::volume(int vol, int channel) const {
 	return Mix_Volume(channel, vol);
 }
 
 
-void AudioBox::allocateChannels(int n) const {
+void Audio::allocateChannels(int n) const {
 	Mix_AllocateChannels(n);
 }
 
 
-bool AudioBox::isChannelAvailable(int channel) const {
+bool Audio::isChannelAvailable(int channel) const {
 	if (Mix_Playing(channel))
 		return false;
 	if (Mix_Paused(channel))
@@ -180,14 +180,14 @@ bool AudioBox::isChannelAvailable(int channel) const {
 }
 
 
-void AudioBox::stopAllSound() const {
+void Audio::stopAllSound() const {
 	stopMusic();
 	stopSound();
 }
 
 
 
-Sound* AudioBox::loadSound(const std::string& path) {
+Sound* Audio::loadSound(const std::string& path) {
 	assert(path != "");
 	auto chunk = Mix_LoadWAV(path.c_str());
 	if (chunk == nullptr) {
@@ -199,7 +199,7 @@ Sound* AudioBox::loadSound(const std::string& path) {
 }
 
 
-Music* AudioBox::loadMusic(const std::string& path) {
+Music* Audio::loadMusic(const std::string& path) {
 	assert(path != "");
 	auto mus = Mix_LoadMUS(path.c_str());
 	if (mus == nullptr) {

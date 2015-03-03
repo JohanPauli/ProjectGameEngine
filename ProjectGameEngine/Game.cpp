@@ -14,7 +14,7 @@ bool Game::init() {
 	
 
 	// init audio
-	AudioBox::get().init(6, 44100, 1024);
+	Audio::get().init(6, 44100, 1024);
 
 	// init timers
 	_timer = new Timer();

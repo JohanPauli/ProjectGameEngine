@@ -4,7 +4,7 @@
 #include <SDL.h>
 
 #include "Timer.h"
-#include "AudioBox.h"
+#include "Audio.h"
 #include "Rendering.h"
 #include "Physics.h"
 #include "Entity.h"
