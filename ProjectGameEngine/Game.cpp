@@ -22,11 +22,10 @@ bool Game::init() {
 
 	// test variables
 	phyEng = new PhysicsEngine();
-	auto playerPhy = new DynamicPhysics(0, 0, 0, 0, 100, 100, 60, 90);
+	auto playerPhy = new DynamicPhysics(0, 0, 1, 0, 0, 100, 60, 90);
 	phyEng->addDynamicEntity(playerPhy);
 
 	auto renderer = _window->getRenderer();
-	bg = renderer->loadTexture("textures\\bg.bmp");
 	bird = renderer->loadTexture("textures\\BirdAnimation.png");
 
 	player = new Player(playerPhy, bird);
@@ -47,7 +46,7 @@ void Game::cleanup() {
 		_updateTimer;
 		
 
-	delete bg, bird, sound, phyEng, player; // test vars
+	delete bird, sound, phyEng, player; // test vars
 
 	// TODO: move SDL_Quit() to a lower level
 	SDL_Quit();
@@ -121,11 +120,9 @@ void Game::update() {
 
 void Game::render() {
 	// TODO: render stuff
-	Rect bgPos = Rect(0, 0, bg->getWidth(), bg->getHeight());
 
 	auto renderer = _window->getRenderer();
 
-	renderer->render(bg, &bgPos);
 	player->render(renderer);
 
 	_window->update();

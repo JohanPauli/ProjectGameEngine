@@ -29,7 +29,6 @@ private:
 	//// test stuff
 	PhysicsEngine*	phyEng = nullptr;
 	Player*			player = nullptr;
-	Texture*		bg = nullptr;
 
 	Texture* bird = nullptr;
 	Sound*	 sound = nullptr;
