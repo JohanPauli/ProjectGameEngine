@@ -47,14 +47,15 @@ public:
 class Audio {
 private:
 	bool initialized = false;
+
 private:
 	Audio();
 	Audio(const Audio&)			= delete;
 	Audio operator=(const Audio&) = delete;
+
 public:
 	const static int VOLUME_MAX = MIX_MAX_VOLUME;
 	const static Uint8 DISTANCE_MAX = 255;
-
 
 public:
 	~Audio();

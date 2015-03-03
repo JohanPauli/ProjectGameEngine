@@ -4,6 +4,11 @@
 #include <SDL.h>
 
 
+// forward declaration
+class Point;
+
+
+
 /*
 	Blackbox for SDL_Rect
 */
@@ -16,6 +21,16 @@ public:
 		: rect({rect.x = 0, rect.y = 0, rect.w = 0, rect.h = 0}) {}
 	Rect(int x, int y, int width, int height) 
 		: rect({ rect.x = x, rect.y = y, rect.w = width, rect.h = height }) {}
+
+	// center of the rectangle
+	Point getCenter() const {
+		int x, y;
+		x = rect.x + (rect.w / 2);
+		y = rect.y + (rect.h / 2);
+		return Point(x, y);
+	}
+
+	// accessors
 
 	SDL_Rect* getRect()  { return &rect; }
 	SDL_Rect* getRekt()	 { return getRect(); }
