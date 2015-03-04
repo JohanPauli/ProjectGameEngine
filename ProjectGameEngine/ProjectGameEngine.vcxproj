@@ -18,6 +18,26 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine\Audio.cpp" />
+    <ClCompile Include="Engine\Game.cpp" />
+    <ClCompile Include="Engine\main.cpp" />
+    <ClCompile Include="Engine\Physics.cpp" />
+    <ClCompile Include="Engine\Rendering.cpp" />
+    <ClCompile Include="Engine\Resolver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\Audio.h" />
+    <ClInclude Include="Engine\Debug.h" />
+    <ClInclude Include="Engine\Entity.h" />
+    <ClInclude Include="Engine\Game.h" />
+    <ClInclude Include="Engine\Graphics.h" />
+    <ClInclude Include="Engine\Input.h" />
+    <ClInclude Include="Engine\Physics.h" />
+    <ClInclude Include="Engine\Rendering.h" />
+    <ClInclude Include="Engine\Resolver.h" />
+    <ClInclude Include="Engine\Timer.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BA176B7F-5D0D-4202-89F5-C075451F15A6}</ProjectGuid>
     <RootNamespace>ProjectGameEngine</RootNamespace>
@@ -87,9 +107,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\SDL\SDL2-2.0.3\include; C:\SDL\SDL2_mixer-2.0.0\include; C:\SDL\SDL2_image-2.0.0\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\SDL\SDL2-2.0.3\include; C:\SDL\SDL2_mixer-2.0.0\include; C:\SDL\SDL2_image-2.0.0\include; $(SolutionDir)Engine; %(AdditionalIncludeDirectories);</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <StringPooling>true</StringPooling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -126,28 +148,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Audio.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="Rendering.cpp" />
-    <ClCompile Include="Resolver.cpp" />
-    <ClCompile Include="Timer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Audio.h" />
-    <ClInclude Include="Debug.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Graphics.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="Physics.h" />
-    <ClInclude Include="Rect.h" />
-    <ClInclude Include="Rendering.h" />
-    <ClInclude Include="Resolver.h" />
-    <ClInclude Include="Timer.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

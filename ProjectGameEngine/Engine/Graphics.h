@@ -22,19 +22,19 @@ public:
 
 	// set sprite to next sprite
 	void nextSprite() {
-		_currentAnimation = ++_currentAnimation % _animations.size();
+		_currentAnimation = ++_currentAnimation % (int)_animations.size();
 	}
 	
 	// set sprite to previous sprite
 	void prevSprite() {
 		--_currentAnimation;
 		if (_currentAnimation < 0)
-			_currentAnimation = _animations.size() - 1;
+			_currentAnimation = (int)_animations.size() - 1;
 	}
 
 	// set the sprite index
 	void setSprite(int idx) {
-		if (idx < _animations.size())
+		if (idx < (int)_animations.size())
 			_currentAnimation = idx;
 	}
 

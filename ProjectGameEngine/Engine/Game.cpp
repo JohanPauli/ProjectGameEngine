@@ -22,7 +22,7 @@ bool Game::init() {
 
 	// test variables
 	phyEng = new PhysicsEngine();
-	auto playerPhy = new DynamicPhysics(0, 0.1, 0.2, 0, 0, 100, 60, 90);
+	auto playerPhy = new DynamicPhysics(0.0, 0.1, 0.2, 0.0, 0.0, 100.0, 60.0, 90.0);
 	phyEng->addDynamicPhysics(playerPhy);
 
 	auto renderer = _window->getRenderer();

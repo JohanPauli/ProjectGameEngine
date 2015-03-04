@@ -53,7 +53,7 @@ public:
 
 	virtual void render(Renderer* renderer) override {
 		// maybe physics should return a Rect
-		Rect pos = Rect(_physics->getXPosition(), _physics->getYPosition(), _physics->getWidth(), _physics->getHeight());
+		Rect pos = Rect((int)_physics->getXPosition(), (int)_physics->getYPosition(), (int)_physics->getWidth(), (int)_physics->getHeight());
 		double angle = double(_updates % 360);
 
 		renderer->render(_spriteSheet->getSprite(), &pos, _spriteSheet->getSpriteSrc(), angle);

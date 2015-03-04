@@ -1,73 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{c2519e73-f043-49b5-bc27-e2aafbc5a01b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="Engine\Audio">
+      <UniqueIdentifier>{fcebacb5-0b78-4136-b0b4-2140c0549877}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Engine\Graphics">
+      <UniqueIdentifier>{02b90c90-7a3d-4653-b35e-863b82716a63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics">
+      <UniqueIdentifier>{08c50162-a6d0-413e-b0f7-2c0427bec545}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Engine\Audio.cpp">
+      <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Engine\Rendering.cpp">
+      <Filter>Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Physics.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Engine\Resolver.cpp">
+      <Filter>Engine\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Rendering.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Engine\Physics.cpp">
+      <Filter>Engine\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Engine\main.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Resolver.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Engine\Game.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\Audio.h">
+      <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\Graphics.h">
+      <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\Rendering.h">
+      <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Physics.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\Resolver.h">
+      <Filter>Engine\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\Physics.h">
+      <Filter>Engine\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\Input.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Rendering.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\Debug.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\Entity.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Audio.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\Game.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Resolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\Timer.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
