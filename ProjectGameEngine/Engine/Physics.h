@@ -1,11 +1,13 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
-#include <vector>
+#include <list>
+#include <algorithm>
 #include "Resolver.h"
 #include "Rect.h"
 
-using std::vector;
+
+using std::list;
 
 enum SIDES { TOP, BOTTOM, LEFT, RIGHT };
 
@@ -100,9 +102,15 @@ public:
 	void addStaticPhysics(StaticPhysics *se);
 	void setResolver(Resolver *res);
 
+	/*
+	Used when a single physics element has to be deleted
+	*/
+	bool deletePhysics(StaticPhysics *staticPhysics);
+	bool deletePhysics(DynamicPhysics *dynamicPhysics);
+
 private:
-	vector<DynamicPhysics*> dEntities;
-	vector<StaticPhysics*> sEntities;
+	list<DynamicPhysics*> dEntities;
+	list<StaticPhysics*> sEntities;
 	ResolverFactory rFactory;
 	Resolver *resolver;
 

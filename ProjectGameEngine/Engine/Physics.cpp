@@ -1,5 +1,7 @@
 #include "Physics.h"
 
+
+
 void Physics::update(int number)
 {
 	//xVelocity += xAcceleration;
@@ -119,6 +121,37 @@ void PhysicsEngine::update()
 		it->update(0);
 	}
 }
+
+bool PhysicsEngine::deletePhysics(StaticPhysics *staticPhysics)
+{
+	std::list<StaticPhysics*>::iterator found = std::find(sEntities.begin(), sEntities.end(), staticPhysics);
+
+	if (found != sEntities.end())
+	{
+		StaticPhysics *sPhysics = *found;
+		sEntities.erase(found);
+		delete sPhysics;
+		sPhysics = nullptr;
+		return true;
+	}
+	return false;
+}
+
+bool PhysicsEngine::deletePhysics(DynamicPhysics *dynamicPhysics)
+{
+	std::list<DynamicPhysics*>::iterator found = std::find(dEntities.begin(), dEntities.end(), dynamicPhysics);
+
+	if (found != dEntities.end())
+	{
+		DynamicPhysics *dPhysics = *found;
+		dEntities.erase(found);
+		delete dPhysics;
+		dPhysics = nullptr;
+		return true;
+	}
+	return false;
+}
+
 
 void PhysicsEngine::setResolver(Resolver *res)
 {
