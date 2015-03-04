@@ -161,15 +161,26 @@ void PhysicsEngine::setResolver(Resolver *res)
 
 void PhysicsEngine::detectColissions()
 {
+	/*
+	Collision between dynamic objects
+	to be implemented later...
+	*/
+	list<DynamicPhysics*>::iterator first, second, firstEnd, secondEnd;
+	second = first = dEntities.begin();
+	firstEnd = dEntities.end();
+	advance(second, 1);
+	advance(firstEnd, -1);
 	if (dEntities.size() > 1)
 	{
-		for (auto first = dEntities.begin(); first != (dEntities.end() - 1); first++)
-			for (auto second = first + 1; second != dEntities.end(); second++)
+		for (auto first = dEntities.begin(); first != firstEnd; first++)
+			for (second; second != dEntities.end(); second++)
 			{
 
 			}
 
 	}
+
+
 	if (dEntities.size() > 0 && sEntities.size() > 0)
 	{
 		float dynamicPhysicsXpos, dynamicPhysicsYpos, dynamicPhysicsH, dynamicPhysicsW;
