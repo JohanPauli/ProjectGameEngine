@@ -2,6 +2,8 @@
 #define __ENTITIES_H__
 
 #include "Entity.h"
+#include "Rect.h"
+
 
 // forward declarations
 class Rect;
@@ -40,9 +42,12 @@ public:
 class PipeEntity : public Entity {
 private:
 	StaticPhysics*	_physics = nullptr;
-	Sprite*			_top = nullptr;	// 26x13
-	Sprite*			_mid = nullptr;	// 26x1
-	Sprite*			_bot = nullptr;	// 26x13
+	Sprite*	_top = nullptr;
+	Sprite*	_mid = nullptr;
+	Sprite*	_bot = nullptr;
+	Rect	_topPos;
+	Rect	_midPos;
+	Rect	_botPos;
 
 public:
 	const static int HEIGHT_MIN = 26;

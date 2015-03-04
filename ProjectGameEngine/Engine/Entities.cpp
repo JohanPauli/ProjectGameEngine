@@ -1,6 +1,5 @@
 #include "Entities.h"
 
-#include "Rect.h"
 #include "Rendering.h"
 #include "Physics.h"
 #include "Sprites.h"
@@ -61,7 +60,28 @@ void PlayerEntity::jump() {
 
 
 PipeEntity::PipeEntity(StaticPhysics* physics, Sprite* top, Sprite* mid, Sprite* bot) 
-	: _physics(physics), _top(top), _mid(mid), _bot(bot) {}
+	: _physics(physics), _top(top), _mid(mid), _bot(bot) 
+{
+	// entity divided by sprite
+	float entityScaleFactor = _physics->getWidth() / _top->getWidth();
+
+	// heights
+	int topHeight = (int)(_top->getHeight() * entityScaleFactor);
+	int botHeight = (int)(_bot->getHeight() * entityScaleFactor);
+	int midHeight = (int)(_physics->getHeight() - topHeight - botHeight);
+
+	// y positions
+	int topY = _physics->getYPosition();
+	int midY = topY + topHeight;
+	int botY = midY + midHeight;
+
+	int x = _physics->getXPosition();
+	int width = (int)_physics->getWidth();
+
+	_topPos = Rect(x, topY, width, topHeight);
+	_midPos = Rect(x, midY, width, midHeight);
+	_botPos = Rect(x, botY, width, botHeight);
+}
 
 PipeEntity::~PipeEntity() {
 	// tell PhysicsEngine to deallocate the physics object?
@@ -73,26 +93,7 @@ void PipeEntity::update() {
 
 
 void PipeEntity::render(Renderer* renderer) {
-
-	// entity divided by sprite
-	float entityScaleFactor = _physics->getWidth() / _top->getWidth();
-	float entityHeight = _physics->getHeight();
-	int topHeight = (int)(_top->getHeight() * entityScaleFactor);
-	int botHeight = (int)(_bot->getHeight() * entityScaleFactor);
-	int midHeight = (int)(entityHeight - topHeight - botHeight);
-
-	int topY = _physics->getYPosition();
-	int midY = topY + topHeight;
-	int botY = midY + midHeight;
-
-	int x = _physics->getXPosition();
-	int width = (int)_physics->getWidth();
-
-	Rect topPos = Rect(x, topY, width, topHeight);
-	Rect midPos = Rect(x, midY, width, midHeight);
-	Rect botPos = Rect(x, botY, width, botHeight);
-
-	renderer->render(_top, &botPos);
-	renderer->render(_mid, &midPos);
-	renderer->render(_bot, &topPos);
+	renderer->render(_top, &_topPos);
+	renderer->render(_mid, &_midPos);
+	renderer->render(_bot, &_botPos);
 }
