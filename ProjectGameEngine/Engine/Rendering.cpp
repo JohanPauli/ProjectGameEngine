@@ -1,56 +1,8 @@
 #include "Rendering.h"
 
 #include "Debug.h"
-
-
-
-
-
-
-// ---- Sprite ----
-
-Sprite::Sprite(SDL_Texture* texture, int width, int height) 
-	: _texture(texture), _width(width), _height(height) {}
-
-
-Sprite::~Sprite() {
-	SDL_DestroyTexture(_texture);
-}
-
-
-// color modulation
-void Sprite::setColor(Uint8 red, Uint8 green, Uint8 blue) {
-	SDL_SetTextureColorMod(_texture, red, green, blue);
-}
-
-
-// set blending
-void Sprite::setBlendMode(BlendMode blending) {
-	SDL_BlendMode sdlBlend;
-	switch (blending) {
-	case BlendMode::NONE:	sdlBlend = SDL_BLENDMODE_NONE; break;
-	case BlendMode::ADD:	sdlBlend = SDL_BLENDMODE_ADD; break;
-	case BlendMode::BLEND:	sdlBlend = SDL_BLENDMODE_BLEND; break;
-	case BlendMode::MOD:	sdlBlend = SDL_BLENDMODE_MOD; break;
-	}
-	SDL_SetTextureBlendMode(_texture, sdlBlend);
-}
-
-// set alpha (opacity)
-void Sprite::setAlpha(Uint8 alpha) {
-	SDL_SetTextureAlphaMod(_texture, alpha);
-}
-
-
-
-int Sprite::getWidth() const {
-	return _width;
-}
-
-
-int Sprite::getHeight() const {
-	return _height;
-}
+#include "Sprites.h"
+#include "Rect.h"
 
 
 

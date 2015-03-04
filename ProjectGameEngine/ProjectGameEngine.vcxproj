@@ -20,18 +20,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio.cpp" />
+    <ClCompile Include="Engine\Entities.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\main.cpp" />
     <ClCompile Include="Engine\Physics.cpp" />
     <ClCompile Include="Engine\Rendering.cpp" />
     <ClCompile Include="Engine\Resolver.cpp" />
+    <ClCompile Include="Engine\Sprites.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\Debug.h" />
+    <ClInclude Include="Engine\Entities.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\Game.h" />
-    <ClInclude Include="Engine\Graphics.h" />
+    <ClInclude Include="Engine\Rect.h" />
+    <ClInclude Include="Engine\Sprites.h" />
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\Physics.h" />
     <ClInclude Include="Engine\Rendering.h" />

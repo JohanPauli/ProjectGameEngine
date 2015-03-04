@@ -1,5 +1,11 @@
 #include "Game.h"
 
+#include "Timer.h"
+#include "Audio.h"
+#include "Rendering.h"
+#include "Physics.h"
+#include "Entities.h"
+#include "Sprites.h"
 
 
 Game::Game(int argc, char ** argv) {
@@ -22,14 +28,19 @@ bool Game::init() {
 
 	// test variables
 	phyEng = new PhysicsEngine();
-	auto playerPhy = new DynamicPhysics(0.0, 0.1, 0.2, 0.0, 0.0, 100.0, 60.0, 90.0);
+	auto playerPhy = new DynamicPhysics(0, 0.1, 0.2, 0, 0, 100, 60, 90);
+	auto pipePhy = new StaticPhysics(0, 0, 0, 0, 200, 0, 240, 130);
 	phyEng->addDynamicPhysics(playerPhy);
+	phyEng->addStaticPhysics(pipePhy);
 
 	auto renderer = _window->getRenderer();
 	bird = renderer->loadSprite("assets\\sprites\\bird_ani_sheet.png");
+	pipeTop = renderer->loadSprite("assets\\sprites\\pipe-top.png");
+	pipeMid = renderer->loadSprite("assets\\sprites\\pipe-mid.png");
+	pipeBot = renderer->loadSprite("assets\\sprites\\pipe-bot.png");
 
-	player = new Player(playerPhy, bird);
-
+	player = new PlayerEntity(playerPhy, bird);
+	pipe = new PipeEntity(pipePhy, pipeBot, pipeMid, pipeTop);
 
 
 	//sound = AudioBox::get().loadSound("sound\\fanfare.wav");
@@ -46,7 +57,7 @@ void Game::cleanup() {
 		_updateTimer;
 		
 
-	delete bird, sound, phyEng, player; // test vars
+	delete bird, sound, phyEng, player, pipeTop, pipeMid, pipeBot; // test vars
 
 	// TODO: move SDL_Quit() to a lower level
 	SDL_Quit();
@@ -124,6 +135,6 @@ void Game::render() {
 	auto renderer = _window->getRenderer();
 
 	player->render(renderer);
-
+	pipe->render(renderer);;
 	_window->update();
 }

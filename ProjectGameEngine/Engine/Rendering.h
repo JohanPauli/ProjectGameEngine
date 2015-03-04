@@ -6,7 +6,13 @@
 
 #include <string>
 
-#include "Rect.h"
+
+
+
+// forward declarations
+class Sprite;
+class Rect;
+class Point;
 
 
 // various renderer related enumerators
@@ -25,37 +31,6 @@ enum class RenderFlip {
 };
 
 
-
-
-/*
-	Encapsulates SDLs textures
-
-	Sprites can be loaded from the renderer class 
-*/
-class Sprite {
-	friend class Renderer;
-private:
-	SDL_Texture* _texture = nullptr;
-	int _width = 0;
-	int _height = 0;
-
-public:
-	Sprite(SDL_Texture* texture, int width, int height);
-	~Sprite();
-
-	// color modulation
-	void setColor(Uint8 red, Uint8 green, Uint8 blue);
-
-	// set blending
-	void setBlendMode(BlendMode blending);
-
-	// set alpha (opacity)
-	void setAlpha(Uint8 alpha);
-
-	// accessors
-	int getWidth() const;
-	int getHeight() const;
-};
 
 
 

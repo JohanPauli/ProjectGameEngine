@@ -13,6 +13,9 @@
     <Filter Include="Engine\Physics">
       <UniqueIdentifier>{08c50162-a6d0-413e-b0f7-2c0427bec545}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Entities">
+      <UniqueIdentifier>{d1b747cc-94ae-4e45-92a7-756e437e21c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio.cpp">
@@ -33,13 +36,16 @@
     <ClCompile Include="Engine\Game.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Sprites.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities.cpp">
+      <Filter>Engine\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h">
       <Filter>Engine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics.h">
-      <Filter>Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Rendering.h">
       <Filter>Engine\Graphics</Filter>
@@ -56,14 +62,23 @@
     <ClInclude Include="Engine\Debug.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Entity.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Game.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Timer.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Sprites.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Rect.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entity.h">
+      <Filter>Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities.h">
+      <Filter>Engine\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
