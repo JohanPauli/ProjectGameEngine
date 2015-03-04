@@ -8,6 +8,27 @@ void Physics::update(int number)
 	yPosition += yVelocity;
 }
 
+DynamicPhysics::DynamicPhysics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width) : Physics(_xAcceleration, _yAcceleration, _xVelocity, _yVelocity, _xPosition, _yPosition, _height, _width)
+{
+	/*
+	In DynamicPhysics the physics box is smaller than the
+	drawing box, this is to minimize the chance of collision
+	outside the sprite, when it is rotated
+	*/
+
+	//Maybe it would be better to pass the rectWidt and rectHeight
+	//in the constructor, and calculate the physics box from these
+	rectWidth = width * 1.25;
+	rectHeight = height * 1.25;
+
+	int xMidPoint = xPosition + (width / 2);
+	int yMidPoint = yPosition + (height / 2);
+
+	rectXpos = xMidPoint - (rectWidth / 2);
+	rectYpos = yMidPoint - (rectHeight / 2);
+}
+
+
 void DynamicPhysics::jump()
 {
 	yVelocity = -15;
@@ -16,6 +37,17 @@ void DynamicPhysics::jump()
 void DynamicPhysics::update(int number)
 {
 	Physics::update(number);
+
+	int xMidPoint = xPosition + (width / 2);
+	int yMidPoint = yPosition + (height / 2);
+
+	rectXpos = xMidPoint - (rectWidth / 2);
+	rectYpos = yMidPoint - (rectHeight / 2);
+}
+
+Rect DynamicPhysics::getRect()
+{
+	return Rect(rectXpos, rectYpos, rectWidth, rectHeight);
 }
 
 void DynamicPhysics::resolveCollision(float collVelocity, SIDES side)
@@ -40,6 +72,11 @@ void DynamicPhysics::resolveCollision(float collVelocity, SIDES side)
 void StaticPhysics::update(int number)
 {
 	Physics::update(number);
+}
+
+Rect StaticPhysics::getRect()
+{
+	return Rect(xPosition, yPosition, width, height);
 }
 
 /*

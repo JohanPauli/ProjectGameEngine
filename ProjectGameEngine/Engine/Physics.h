@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Resolver.h"
+#include "Rect.h"
 
 using std::vector;
 
@@ -51,15 +52,25 @@ public:
 	//Pure virtual update function
 	virtual void update(int elapsed) = 0;
 
+	//getRect will have different implementation
+	//for static and dynamic physics
+	virtual Rect getRect() = 0;
+
 
 };
 //Dynamic entity used by moving objects in the game
 class DynamicPhysics : public Physics
 {
+private:
+	int rectWidth;
+	int rectHeight;
+	int rectXpos;
+	int rectYpos;
 public:
-	DynamicPhysics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width) : Physics(_xAcceleration, _yAcceleration, _xVelocity, _yVelocity, _xPosition, _yPosition, _height, _width){}
+	DynamicPhysics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width);
 	void jump();
 	virtual void update(int elapsed);
+	virtual Rect getRect();
 	void resolveCollision(float collVelocity, SIDES);
 
 };
@@ -70,6 +81,7 @@ class StaticPhysics : public Physics
 public:
 	StaticPhysics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width) : Physics(_xAcceleration, _yAcceleration, _xVelocity, _yVelocity, _xPosition, _yPosition, _height, _width){}
 	virtual void update(int elapsed);
+	virtual Rect getRect();
 };
 
 //Resolver class is used to resolve collision between objects
