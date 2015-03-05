@@ -1,5 +1,5 @@
-#ifndef __RENDERING_H__
-#define __RENDERING_H__
+#pragma once
+
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -98,9 +98,3 @@ public:
 	*/
 	Renderer*	getRenderer() const;
 };
-
-
-
-
-
-#endif

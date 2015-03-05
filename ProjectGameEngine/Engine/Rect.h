@@ -1,5 +1,5 @@
-#ifndef __RECT_H__
-#define __RECT_H__
+#pragma once
+
 
 #include <SDL.h>
 
@@ -66,7 +66,3 @@ public:
 	void adjustWidth(int value)	{ rect.w += value; }
 	void adjustHeight(int value){ rect.h += value; }
 };
-
-
-
-#endif

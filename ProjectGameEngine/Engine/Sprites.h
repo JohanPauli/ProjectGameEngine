@@ -1,5 +1,5 @@
-#ifndef __SPRITES_H__
-#define __SPRITES_H__
+#pragma once
+
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -69,6 +69,3 @@ public:
 	// return the Rect showing the position of the sprite on the spritesheet
 	Rect*	getSpriteSrc();
 };
-
-
-#endif

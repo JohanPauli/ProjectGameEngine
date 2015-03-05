@@ -1,5 +1,4 @@
-#ifndef __ENTITIES_H__
-#define __ENTITIES_H__
+#pragma once
 
 #include "Entity.h"
 #include "Rect.h"
@@ -44,6 +43,10 @@ public:
 
 /*
 	PipeEntity 
+
+	this is actually a double-ended pipe, 
+	and the ones in the game are supposed to be single-ended
+	oops
 */
 class PipeEntity : public Entity {
 private:
@@ -66,6 +69,3 @@ public:
 
 	virtual void render(Renderer* renderer) override;
 };
-
-
-#endif

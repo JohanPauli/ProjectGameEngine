@@ -1,5 +1,4 @@
-#ifndef __ENTITY_H__
-#define __ENTITY_H__
+#pragma once
 
 #include "Rendering.h"
 
@@ -10,7 +9,3 @@ public:
 	virtual void update() = 0;			// update logic
 	virtual void render(Renderer*) = 0;	// render the entity
 };
-
-
-
-#endif

@@ -1,7 +1,4 @@
-#ifndef __AUDIO_BOX_H__
-#define __AUDIO_BOX_H__
-
-
+#pragma once
 
 #include <SDL.h>
 #include <SDL_mixer.h>
@@ -91,5 +88,3 @@ public:
 	Sound*	loadSound(const std::string& path) const;
 	Music*	loadMusic(const std::string& path) const;
 };
-
-#endif
