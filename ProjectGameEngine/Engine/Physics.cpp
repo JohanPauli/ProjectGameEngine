@@ -1,16 +1,17 @@
 #include "Physics.h"
 
+#include "Rect.h"
 
 
 void Physics::update(int number)
 {
 	//xVelocity += xAcceleration;
-	yVelocity += yAcceleration;
-	xPosition += xVelocity;
-	yPosition += yVelocity;
+	_yVelocity += _yAcceleration;
+	_xPosition += _xVelocity;
+	_yPosition += _yVelocity;
 }
 
-DynamicPhysics::DynamicPhysics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width) : Physics(_xAcceleration, _yAcceleration, _xVelocity, _yVelocity, _xPosition, _yPosition, _height, _width)
+DynamicPhysics::DynamicPhysics(float xAcceleration, float yAcceleration, float xVelocity, float yVelocity, float xPosition, float yPosition, float height, float width) : Physics(xAcceleration, yAcceleration, xVelocity, yVelocity, xPosition, yPosition, height, width)
 {
 	/*
 	In DynamicPhysics the physics box is smaller than the
@@ -20,31 +21,26 @@ DynamicPhysics::DynamicPhysics(float _xAcceleration, float _yAcceleration, float
 
 	//Maybe it would be better to pass the rectWidt and rectHeight
 	//in the constructor, and calculate the physics box from these
-	rectWidth = width * 1.25;
-	rectHeight = height * 1.25;
+	rectWidth = (int)(width * 1.25f);
+	rectHeight = (int)(height * 1.25f);
 
-	int xMidPoint = xPosition + (width / 2);
-	int yMidPoint = yPosition + (height / 2);
+	int xMidPoint = (int)(xPosition + (width / 2));
+	int yMidPoint = (int)(yPosition + (height / 2));
 
-	rectXpos = xMidPoint - (rectWidth / 2);
-	rectYpos = yMidPoint - (rectHeight / 2);
+	rectXpos = xMidPoint - (int)(rectWidth / 2);
+	rectYpos = yMidPoint - (int)(rectHeight / 2);
 }
 
-
-void DynamicPhysics::jump()
-{
-	yVelocity = -15;
-}
 
 void DynamicPhysics::update(int number)
 {
 	Physics::update(number);
 
-	int xMidPoint = xPosition + (width / 2);
-	int yMidPoint = yPosition + (height / 2);
+	int xMidPoint = (int)(_xPosition + (_width / 2));
+	int yMidPoint = (int)(_yPosition + (_height / 2));
 
-	rectXpos = xMidPoint - (rectWidth / 2);
-	rectYpos = yMidPoint - (rectHeight / 2);
+	rectXpos = (int)(xMidPoint - (rectWidth / 2));
+	rectYpos = (int)(yMidPoint - (rectHeight / 2));
 }
 
 Rect DynamicPhysics::getRect()
@@ -52,20 +48,20 @@ Rect DynamicPhysics::getRect()
 	return Rect(rectXpos, rectYpos, rectWidth, rectHeight);
 }
 
-void DynamicPhysics::resolveCollision(float collVelocity, SIDES side)
+void DynamicPhysics::resolveCollision(float collVelocity, Side side)
 {
 	switch (side)
 	{
-	case TOP:
+	case Side::TOP:
 		setYVelocity(collVelocity);
 		break;
-	case BOTTOM:
-		setYVelocity(collVelocity*0.4);
+	case Side::BOTTOM:
+		setYVelocity(collVelocity*0.4f);
 		break;
-	case LEFT:
+	case Side::LEFT:
 		setXVelocity(collVelocity);
 		break;
-	case RIGHT:
+	case Side::RIGHT:
 		setXVelocity(collVelocity);
 		break;
 	}
@@ -78,7 +74,7 @@ void StaticPhysics::update(int number)
 
 Rect StaticPhysics::getRect()
 {
-	return Rect(xPosition, yPosition, width, height);
+	return Rect((int)_xPosition, (int)_yPosition, (int)_width, (int)_height);
 }
 
 /*

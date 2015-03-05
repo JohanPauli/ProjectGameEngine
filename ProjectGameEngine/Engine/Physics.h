@@ -1,55 +1,57 @@
-#ifndef PHYSICS_H
-#define PHYSICS_H
+#pragma once
 
 #include <list>
 #include <algorithm>
-#include "Resolver.h"
-#include "Rect.h"
 
+#include "Resolver.h"
 
 using std::list;
 
-enum SIDES { TOP, BOTTOM, LEFT, RIGHT };
+// forward declarations
+class Rect;
+
+
+enum class Side { TOP, BOTTOM, LEFT, RIGHT };
 
 //General physics entity
 class Physics
 {
 protected:
-	float xAcceleration;
-	float yAcceleration;
+	float _xAcceleration;
+	float _yAcceleration;
 
-	float xVelocity;
-	float yVelocity;
+	float _xVelocity;
+	float _yVelocity;
 
-	float xPosition;
-	float yPosition;
+	float _xPosition;
+	float _yPosition;
 
-	float height;
-	float width;
+	float _height;
+	float _width;
 public:
 	//Constructor
-	Physics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width) :
-		xAcceleration(_xAcceleration), yAcceleration(_yAcceleration), xVelocity(_yAcceleration), yVelocity(_yVelocity),
-		xPosition(_xPosition), yPosition(_yPosition), height(_height), width(_width) {}
+	Physics(float xAcceleration, float yAcceleration, float xVelocity, float yVelocity, float xPosition, float yPosition, float height, float width) :
+		_xAcceleration(xAcceleration), _yAcceleration(yAcceleration), _xVelocity(yAcceleration), _yVelocity(yVelocity),
+		_xPosition(xPosition), _yPosition(yPosition), _height(height), _width(width) {}
 	virtual ~Physics() {}
 
 	//getters
-	float getXAcceleration() const { return xAcceleration; }
-	float getYAcceleration() const { return yAcceleration; }
-	float getXVelocity() const { return xVelocity; }
-	float getYVelocity() const { return yVelocity; }
-	float getXPosition() const { return xPosition; }
-	float getYPosition() const { return yPosition; }
-	float getWidth() const { return width; }
-	float getHeight() const { return height; }
+	float getXAcceleration() const { return _xAcceleration; }
+	float getYAcceleration() const { return _yAcceleration; }
+	float getXVelocity() const { return _xVelocity; }
+	float getYVelocity() const { return _yVelocity; }
+	float getXPosition() const { return _xPosition; }
+	float getYPosition() const { return _yPosition; }
+	float getWidth() const { return _width; }
+	float getHeight() const { return _height; }
 
 	//setters
-	void setXAcceleration(float _xAcceleration) { xAcceleration = _xAcceleration; }
-	void setYAcceleration(float _yAcceleration) { yAcceleration = _yAcceleration; }
-	void setXVelocity(float _xVelocity)  { xVelocity = _xVelocity; }
-	void setYVelocity(float _yVelocity) { yVelocity = _yVelocity; }
-	void setXPosition(float _xPosition) { xPosition = _xPosition; }
-	void setYPosition(float _yPosition) { yPosition = _yPosition; }
+	void setXAcceleration(float xAcceleration) { _xAcceleration = xAcceleration; }
+	void setYAcceleration(float yAcceleration) { _yAcceleration = yAcceleration; }
+	void setXVelocity(float xVelocity)  { _xVelocity = xVelocity; }
+	void setYVelocity(float yVelocity) { _yVelocity = yVelocity; }
+	void setXPosition(float xPosition) { _xPosition = xPosition; }
+	void setYPosition(float yPosition) { _yPosition = yPosition; }
 
 	//Pure virtual update function
 	virtual void update(int elapsed) = 0;
@@ -69,11 +71,10 @@ private:
 	int rectXpos;
 	int rectYpos;
 public:
-	DynamicPhysics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width);
-	void jump();
+	DynamicPhysics(float xAcceleration, float yAcceleration, float xVelocity, float yVelocity, float xPosition, float yPosition, float height, float width);
 	virtual void update(int elapsed);
 	virtual Rect getRect();
-	void resolveCollision(float collVelocity, SIDES);
+	void resolveCollision(float collVelocity, Side);
 
 };
 
@@ -81,13 +82,11 @@ public:
 class StaticPhysics : public Physics
 {
 public:
-	StaticPhysics(float _xAcceleration, float _yAcceleration, float _xVelocity, float _yVelocity, float _xPosition, float _yPosition, float _height, float _width) : Physics(_xAcceleration, _yAcceleration, _xVelocity, _yVelocity, _xPosition, _yPosition, _height, _width){}
+	StaticPhysics(float xAcceleration, float yAcceleration, float xVelocity, float yVelocity, float xPosition, float yPosition, float height, float width) : Physics(xAcceleration, yAcceleration, xVelocity, yVelocity, xPosition, yPosition, height, width){}
 	virtual void update(int elapsed);
 	virtual Rect getRect();
 };
 
-//Resolver class is used to resolve collision between objects
-class Resolver;
 
 
 //The physics engine updates the physicts objects, and detects collisions
@@ -115,6 +114,3 @@ private:
 	Resolver *resolver;
 
 };
-
-
-#endif
