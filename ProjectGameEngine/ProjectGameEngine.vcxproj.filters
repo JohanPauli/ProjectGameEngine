@@ -16,6 +16,9 @@
     <Filter Include="Engine\Entities">
       <UniqueIdentifier>{d1b747cc-94ae-4e45-92a7-756e437e21c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Input">
+      <UniqueIdentifier>{0f8edc36-7e2d-4153-8c6f-5b0fc5c359a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio.cpp">
@@ -42,6 +45,9 @@
     <ClCompile Include="Engine\Entities.cpp">
       <Filter>Engine\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\InputMapping.cpp">
+      <Filter>Engine\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h">
@@ -55,9 +61,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Physics.h">
       <Filter>Engine\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Input.h">
-      <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Debug.h">
       <Filter>Engine</Filter>
@@ -79,6 +82,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Entities.h">
       <Filter>Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\InputContext.h">
+      <Filter>Engine\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\InputMapping.h">
+      <Filter>Engine\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\InputConstants.h">
+      <Filter>Engine\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\InputPolling.h">
+      <Filter>Engine\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

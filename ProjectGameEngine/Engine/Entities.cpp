@@ -9,10 +9,9 @@
 
 // ---- Player ----
 
-PlayerEntity::PlayerEntity(DynamicPhysics* physics, Sprite* sprite) {
-	_physics = physics;
-
-
+PlayerEntity::PlayerEntity(DynamicPhysics* physics, Sprite* sprite) 
+	: InputContext(InputContextType::BIRD), _physics(physics)
+{
 	std::vector<Rect> rector;
 
 	// each animation is 18x12
@@ -47,12 +46,25 @@ void PlayerEntity::render(Renderer* renderer) {
 	renderer->render(_spriteSheet->getSprite(), &pos, _spriteSheet->getSpriteSrc(), angle);
 }
 
+bool PlayerEntity::onNotify(KeyboardInput key) {
 
-
-void PlayerEntity::jump() {
-	_physics->setYVelocity(-4);
+	switch (key) {
+	case KeyboardInput::SPACE:
+		flap();
+		return true;
+	case KeyboardInput::UP:
+		flap();
+		return true;
+	case KeyboardInput::W:
+		flap();
+		return true;
+	default: return false;;
+	}
 }
 
+void PlayerEntity::flap() {
+	_physics->setYVelocity(-5);
+}
 
 
 // ---- PipeEntity ----
@@ -71,11 +83,11 @@ PipeEntity::PipeEntity(StaticPhysics* physics, Sprite* top, Sprite* mid, Sprite*
 	int midHeight = (int)(_physics->getHeight() - topHeight - botHeight);
 
 	// y positions
-	int topY = _physics->getYPosition();
+	int topY = (int)_physics->getYPosition();
 	int midY = topY + topHeight;
 	int botY = midY + midHeight;
 
-	int x = _physics->getXPosition();
+	int x = (int)_physics->getXPosition();
 	int width = (int)_physics->getWidth();
 
 	_topPos = Rect(x, topY, width, topHeight);

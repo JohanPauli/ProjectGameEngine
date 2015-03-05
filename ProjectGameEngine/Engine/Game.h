@@ -1,5 +1,5 @@
-#ifndef __GAME_H__
-#define __GAME_H__
+#pragma once
+
 
 #include <SDL.h>
 
@@ -13,6 +13,7 @@ class PipeEntity;
 class Sprite;
 class Sound;
 class Music;
+class InputMapper;
 
 
 
@@ -23,7 +24,7 @@ private:
 	Timer*		 _timer = nullptr;			// general timer for the game
 	UpdateTimer* _updateTimer = nullptr;	// game logic timer
 	Window*		 _window = nullptr;
-
+	InputMapper* _inputMapper = nullptr;
 
 
 	// settings
@@ -48,11 +49,6 @@ private:
 	// release resources and stuff game ends
 	void cleanup();
 
-	void processEvents();
-
-	// handle any user input
-	void processInput(const SDL_Event& e);	// SDL_Event needs blackboxing
-
 	// run game logic
 	void update();
 
@@ -68,7 +64,3 @@ public:
 	void run();
 
 };
-
-
-
-#endif

@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "Rect.h"
+#include "InputContext.h"	// input handling
 
 
 // forward declarations
@@ -17,22 +18,27 @@ class StaticPhysics;
 /*
 	class representing the player
 */
-class PlayerEntity : public Entity {
+class PlayerEntity : public Entity, public InputContext {
 private:
 	DynamicPhysics* _physics = nullptr;
 	SpriteSheet*	_spriteSheet = nullptr;
 	int				_updates = 0;
 
+private:
+	void flap();
 
 public:
 	PlayerEntity(DynamicPhysics* physics, Sprite* sprite);
 	virtual ~PlayerEntity();
-	
+
+	// Entity: updates logic
 	virtual void update() override;
 
+	// Entity: renders itself
 	virtual void render(Renderer* renderer) override;
 
-	virtual void jump();
+	// InputContext: handles user input
+	virtual bool onNotify(KeyboardInput key) override;
 };
 
 

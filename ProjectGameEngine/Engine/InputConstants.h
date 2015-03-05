@@ -1,10 +1,23 @@
-#ifndef __INPUT_H__
-#define __INPUT_H__
+#pragma once
 
 #include <SDL.h>
 
+
+/*
+	enum of all input context
+	the order of the list defines the priority of the context where the top has the highes priority
+*/
+enum class InputContextType {
+	MENU,
+	BIRD,
+	undefined
+};
+
+
 // blackboxing SDL's keyboard codes
-enum class KEYBOARD {
+enum class KeyboardInput {
+	NONE,
+	SPACE = SDLK_SPACE,
 	BACKSPACE = SDLK_BACKSPACE,
 	TAB = SDLK_TAB,
 	CLEAR = SDLK_CLEAR,
@@ -133,6 +146,3 @@ enum class KEYBOARD {
 	MENU = SDLK_MENU,
 	POWER = SDLK_POWER
 };
-
-
-#endif

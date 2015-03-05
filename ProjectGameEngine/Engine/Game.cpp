@@ -6,6 +6,8 @@
 #include "Physics.h"
 #include "Entities.h"
 #include "Sprites.h"
+#include "InputMapping.h"
+#include "InputPolling.h"
 
 
 Game::Game(int argc, char ** argv) {
@@ -26,10 +28,12 @@ bool Game::init() {
 	_timer = new Timer();
 	_updateTimer = new UpdateTimer(_timer, MS_PER_UPDATE);
 
+	_inputMapper = new InputMapper();
+
 	// test variables
 	phyEng = new PhysicsEngine();
-	auto playerPhy = new DynamicPhysics(0, 0.1, 0.2, 0, 0, 100, 60, 90);
-	auto pipePhy = new StaticPhysics(0, 0, 0, 0, 200, 0, 240, 130);
+	auto playerPhy = new DynamicPhysics(0.f, 0.1f, 0.2f, 0.f, 0.f, 100.f, 60.f, 90.f);
+	auto pipePhy = new StaticPhysics(0.f, 0.f, 0.f, 0.f, 200.f, 0.f, 240.f, 130.f);
 	phyEng->addDynamicPhysics(playerPhy);
 	phyEng->addStaticPhysics(pipePhy);
 
@@ -41,7 +45,8 @@ bool Game::init() {
 
 	player = new PlayerEntity(playerPhy, bird);
 	pipe = new PipeEntity(pipePhy, pipeBot, pipeMid, pipeTop);
-
+	_inputMapper->registerContext(player);
+	_inputMapper->activateContext(InputContextType::BIRD);
 
 	//sound = AudioBox::get().loadSound("sound\\fanfare.wav");
 
@@ -54,7 +59,8 @@ void Game::cleanup() {
 	delete
 		_window,
 		_timer,
-		_updateTimer;
+		_updateTimer,
+		_inputMapper;
 		
 
 	delete bird, sound, phyEng, player, pipeTop, pipeMid, pipeBot; // test vars
@@ -80,7 +86,8 @@ void Game::run() {
 	while (_running) {
 		_timer->update();
 
-		processEvents();
+		// handle user input
+		InputHandling::pollInput(_inputMapper, _running);
 
 		// ensure game state updates at a constant rate, unaffected by the speed of the game loop
 		while (_updateTimer->isTimeToUpdate()) {
@@ -92,36 +99,6 @@ void Game::run() {
 	}
 }
 
-
-void Game::processEvents() {
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
-		switch (e.type) {
-		case SDL_QUIT:
-			_running = false; break;
-		case SDL_KEYDOWN:
-			processInput(e);
-		default: break;
-		}
-	}
-}
-
-
-
-void Game::processInput(const SDL_Event& e) {
-	switch (e.key.keysym.sym) {
-	case SDLK_LEFT:
-		break;
-	case SDLK_RIGHT:
-		break;
-	case SDLK_UP:
-		player->jump();
-		break;
-	case SDLK_DOWN:
-		break;
-	default:break;
-	}
-}
 
 void Game::update() {
 	// TODO: game logic
