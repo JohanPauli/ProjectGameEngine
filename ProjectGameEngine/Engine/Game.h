@@ -8,12 +8,12 @@ class Timer;
 class UpdateTimer;
 class Window;
 class PhysicsEngine;
-class PlayerEntity;
-class PipeEntity;
+class Entity;
 class Sprite;
 class Sound;
 class Music;
 class InputMapper;
+class Graphics;
 
 
 
@@ -43,14 +43,17 @@ private:
 	//// test stuff
 private:
 	PhysicsEngine*	phyEng = nullptr;
-	PlayerEntity*	player = nullptr;
-	PipeEntity*		pipe = nullptr;
-	PipeEntity*		pipe2 = nullptr;
+	Entity*	player = nullptr;
+	Entity*	pipe = nullptr;
+	Entity*	pipe2 = nullptr;
 
 	Sprite*	bird = nullptr;
 	Sprite*	pipeTop = nullptr;
 	Sprite*	pipeMid = nullptr;
 	Sprite*	pipeBot = nullptr;
+	Graphics* pipeGraphics = nullptr;
+	Graphics* pipeGraphics2 = nullptr;
+	Graphics* birdGraphics = nullptr;
 	Sound*	sound = nullptr;
 
 private:

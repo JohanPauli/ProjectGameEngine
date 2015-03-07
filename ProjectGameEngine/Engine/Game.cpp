@@ -4,10 +4,13 @@
 #include "Audio.h"
 #include "Rendering.h"
 #include "Physics.h"
-#include "Entities.h"
 #include "Sprites.h"
 #include "InputMapping.h"
 #include "Misc.h"
+#include "Rect.h"
+#include "Entity.h"
+#include "InputComponent.h"
+#include "GraphicsComponent.h"
 
 
 Game::Game(int argc, char ** argv) {
@@ -67,14 +70,21 @@ bool Game::init() {
 	rector.emplace_back(Rect(36, 0, 18, 12));
 	auto birdSheet = new SpriteSheet(rector, bird);
 
-	// create entities
-	player = new PlayerEntity(playerPhy, birdSheet);
-	pipe = new PipeEntity(pipePhy, pipeBot, pipeMid);
-	pipe2 = new PipeEntity(pipePhy2, pipeBot, pipeMid, false);
-	
+	// components
+	auto input = new PlayerInput();
+	pipeGraphics = new PipeGraphics(pipeBot, pipeMid);
+	pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, false);
+	birdGraphics = new BirdGraphics(birdSheet, _timer);
+
 	// activate player entities' input
-	_inputMapper->registerContext(player, 10);
-	_inputMapper->activateContext(player->getInputContextId());
+	_inputMapper->registerContext(input, 10);
+	_inputMapper->activateContext(input->getInputContextId());
+
+
+	// create entities
+	player = new Entity(birdGraphics, playerPhy, input);
+	pipe = new Entity(pipeGraphics, pipePhy);
+	pipe2 = new Entity(pipeGraphics2, pipePhy2);
 
 
 	return true;
@@ -87,18 +97,21 @@ void Game::cleanup() {
 		_timer,
 		_logicUpdateTimer,
 		_inputMapper;
-		
+
 	// test vars
 	delete bird, sound, phyEng,
 
 		// entities
-		player, pipe, pipe2, 
+		player, pipe, pipe2,
+
+		// graphics
+		pipeGraphics, pipeGraphics2, birdGraphics,
 
 		// textures
-		pipeTop, pipeMid, pipeBot; 
+		pipeTop, pipeMid, pipeBot;
 
 	// TODO: move SDL_Quit() to a lower level
-	SDL_Quit();
+	Flappy::quit();
 }
 
 

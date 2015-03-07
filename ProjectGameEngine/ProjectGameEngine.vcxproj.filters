@@ -42,9 +42,6 @@
     <ClCompile Include="Engine\Sprites.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Entities.cpp">
-      <Filter>Engine\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\InputFetcher.cpp">
       <Filter>Engine\Input</Filter>
     </ClCompile>
@@ -52,6 +49,15 @@
       <Filter>Engine\Input</Filter>
     </ClCompile>
     <ClCompile Include="Engine\InputContext.cpp">
+      <Filter>Engine\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entity.cpp">
+      <Filter>Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GraphicsComponent.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\InputComponent.cpp">
       <Filter>Engine\Input</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,12 +89,6 @@
     <ClInclude Include="Engine\Rect.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Entity.h">
-      <Filter>Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities.h">
-      <Filter>Engine\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\InputContext.h">
       <Filter>Engine\Input</Filter>
     </ClInclude>
@@ -103,6 +103,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Misc.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entity.h">
+      <Filter>Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsComponent.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\InputComponent.h">
+      <Filter>Engine\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

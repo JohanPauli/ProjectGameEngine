@@ -20,8 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio.cpp" />
-    <ClCompile Include="Engine\Entities.cpp" />
+    <ClCompile Include="Engine\Entity.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
+    <ClCompile Include="Engine\GraphicsComponent.cpp" />
+    <ClCompile Include="Engine\InputComponent.cpp" />
     <ClCompile Include="Engine\InputContext.cpp" />
     <ClCompile Include="Engine\InputFetcher.cpp" />
     <ClCompile Include="Engine\InputMapping.cpp" />
@@ -34,9 +36,10 @@
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\Debug.h" />
-    <ClInclude Include="Engine\Entities.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\Game.h" />
+    <ClInclude Include="Engine\GraphicsComponent.h" />
+    <ClInclude Include="Engine\InputComponent.h" />
     <ClInclude Include="Engine\InputConstants.h" />
     <ClInclude Include="Engine\InputContext.h" />
     <ClInclude Include="Engine\InputFetcher.h" />
