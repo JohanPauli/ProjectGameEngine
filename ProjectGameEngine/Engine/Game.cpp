@@ -32,8 +32,14 @@ bool Game::init() {
 
 	// test variables
 	phyEng = new PhysicsEngine();
-	auto playerPhy = new DynamicPhysics(0.f, 0.1f, 0.2f, 0.f, 0.f, 100.f, 60.f, 90.f);
-	auto pipePhy = new StaticPhysics(0.f, 0.f, 0.f, 0.f, 200.f, 0.f, 240.f, 130.f);
+	auto playerPhy = new DynamicPhysics(0.f, 0.08f, 
+										2.f, 0.f, 
+										0.f, 100.f, 
+										60.f, 90.f);
+	auto pipePhy = new StaticPhysics(0.f, 0.f, 
+									 0.f, 0.f, 
+									 200.f, 0.f, 
+									 240.f, 130.f);
 	phyEng->addDynamicPhysics(playerPhy);
 	phyEng->addStaticPhysics(pipePhy);
 

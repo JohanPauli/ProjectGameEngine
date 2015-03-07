@@ -11,7 +11,8 @@ void Physics::update(int number)
 	_yPosition += _yVelocity;
 }
 
-DynamicPhysics::DynamicPhysics(float xAcceleration, float yAcceleration, float xVelocity, float yVelocity, float xPosition, float yPosition, float height, float width) : Physics(xAcceleration, yAcceleration, xVelocity, yVelocity, xPosition, yPosition, height, width)
+DynamicPhysics::DynamicPhysics(float xAcceleration, float yAcceleration, float xVelocity, float yVelocity, float xPosition, float yPosition, float height, float width) 
+: Physics(xAcceleration, yAcceleration, xVelocity, yVelocity, xPosition, yPosition, height, width)
 {
 	/*
 	In DynamicPhysics the physics box is smaller than the

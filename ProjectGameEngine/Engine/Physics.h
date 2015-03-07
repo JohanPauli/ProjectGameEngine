@@ -2,6 +2,7 @@
 
 #include <list>
 #include <algorithm>
+#include <cmath>
 
 #include "Resolver.h"
 
@@ -10,8 +11,11 @@ using std::list;
 // forward declarations
 class Rect;
 
-
 enum class Side { TOP, BOTTOM, LEFT, RIGHT };
+
+// math constants
+static const float PI = 3.14159265358979323846264338327950f;
+
 
 //General physics entity
 class Physics
@@ -31,7 +35,7 @@ protected:
 public:
 	//Constructor
 	Physics(float xAcceleration, float yAcceleration, float xVelocity, float yVelocity, float xPosition, float yPosition, float height, float width) :
-		_xAcceleration(xAcceleration), _yAcceleration(yAcceleration), _xVelocity(yAcceleration), _yVelocity(yVelocity),
+		_xAcceleration(xAcceleration), _yAcceleration(yAcceleration), _xVelocity(xVelocity), _yVelocity(yVelocity),
 		_xPosition(xPosition), _yPosition(yPosition), _height(height), _width(width) {}
 	virtual ~Physics() {}
 
@@ -53,13 +57,15 @@ public:
 	void setXPosition(float xPosition) { _xPosition = xPosition; }
 	void setYPosition(float yPosition) { _yPosition = yPosition; }
 
+	// angle of the object
+	double getAngle() { return atan2(_yVelocity, _xVelocity) / (PI / 180); }
+
 	//Pure virtual update function
 	virtual void update(int elapsed) = 0;
 
 	//getRect will have different implementation
 	//for static and dynamic physics
 	virtual Rect getRect() = 0;
-
 
 };
 //Dynamic entity used by moving objects in the game

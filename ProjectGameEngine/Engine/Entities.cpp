@@ -42,9 +42,8 @@ void PlayerEntity::update() {
 void PlayerEntity::render(Renderer* renderer) {
 	// maybe physics should return a Rect
 	Rect pos = Rect((int)_physics->getXPosition(), (int)_physics->getYPosition(), (int)_physics->getWidth(), (int)_physics->getHeight());
-	double angle = double(_updates % 360);
 
-	renderer->render(_spriteSheet->getSprite(), &pos, _spriteSheet->getSpriteSrc(), angle);
+	renderer->render(_spriteSheet->getSprite(), &pos, _spriteSheet->getSpriteSrc(), _physics->getAngle());
 }
 
 
