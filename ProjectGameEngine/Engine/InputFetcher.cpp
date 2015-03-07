@@ -3,11 +3,13 @@
 
 void InputFetcher::updateKeyboard() {
 	// get state
-	SDL_PumpEvents();	// update the keyboard state
+	//SDL_PumpEvents();	// update the keyboard state // unnecessary since we use pollevent for getting quit events
 	_rawState = SDL_GetKeyboardState(0); // might allocate memory, look it up
 
-	// switch pointers
+	// begin working on _currentState
 	switchPointers();
+	_currentState->clear();
+
 
 	// update
 	updateAllKeys();
@@ -54,9 +56,6 @@ void InputFetcher::updateKey(SDL_Scancode scancode) {
 
 
 void InputFetcher::updateAllKeys() {
-	// begin working on _currentState
-	_currentState->clear();
-
 	// NUMERIC
 	updateKey(SDL_SCANCODE_0);
 	updateKey(SDL_SCANCODE_1);
