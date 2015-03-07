@@ -37,7 +37,7 @@ public:
 	virtual void render(Renderer* renderer) override;
 
 	// InputContext: handles user input
-	virtual bool onNotify(KeyboardInput key) override;
+	virtual bool onNotify(const KeyboardInput& key) override;
 };
 
 

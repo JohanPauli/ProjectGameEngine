@@ -3,6 +3,8 @@
 
 #include "InputConstants.h"
 
+struct KeyboardInput;
+
 /*
 	
 */
@@ -21,7 +23,8 @@ public:
 		handle the given KeyboardInput
 		should return true if the KeyboardInput is used and false otherwise
 	*/
-	virtual bool onNotify(KeyboardInput) = 0;
+	virtual bool onNotify(const KeyboardInput&) = 0;
 };
 
-inline bool compareInputContext(InputContext* lhs, InputContext* rhs) { return lhs->getType() < rhs->getType(); }
+// comparator function
+inline bool inputContext_lessThan(InputContext* lhs, InputContext* rhs) { return lhs->getType() < rhs->getType(); }

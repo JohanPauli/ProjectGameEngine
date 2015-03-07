@@ -3,6 +3,7 @@
 #include "Rendering.h"
 #include "Physics.h"
 #include "Sprites.h"
+#include "InputFetcher.h"
 
 #include <cmath>
 
@@ -46,16 +47,20 @@ void PlayerEntity::render(Renderer* renderer) {
 	renderer->render(_spriteSheet->getSprite(), &pos, _spriteSheet->getSpriteSrc(), angle);
 }
 
-bool PlayerEntity::onNotify(KeyboardInput key) {
 
-	switch (key) {
-	case KeyboardInput::SPACE:
-		flap();
+
+bool PlayerEntity::onNotify(const KeyboardInput& key) {
+
+	switch (key.key) {
+	case KeyboardKey::SPACE:
+		if (!key.repeat)
+			flap();
 		return true;
-	case KeyboardInput::UP:
-		flap();
+	case KeyboardKey::UP:
+		if (!key.repeat)
+			flap();
 		return true;
-	case KeyboardInput::W:
+	case KeyboardKey::W:
 		flap();
 		return true;
 	default: return false;;

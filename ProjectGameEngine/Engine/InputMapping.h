@@ -4,38 +4,31 @@
 
 #include <list>
 #include <map>
+#include <set>
 
 #include "InputConstants.h"
 #include "InputContext.h"
-
-
-// temporary location
-class PausedInputContext : public InputContext {
-public:
-	PausedInputContext();
-
-	virtual bool onNotify(KeyboardInput) override;
-};
-
+#include "InputFetcher.h"
 
 
 
 /*
-	InputMapper is responsible for all InputContexts
+InputMapper is responsible for all InputContexts
 
-	InputMapper uses the observer pattern where it is the subject and InputContexts are the observers
+InputMapper uses the observer pattern where it is the subject and InputContexts are the observers
 */
 class InputMapper {
 private:
+	InputFetcher								_fetcher;
 	std::map<InputContextType, InputContext*>	_inputContexts;
 	std::list<InputContext*>					_activeContexts;
 
 public:
 	~InputMapper();
 
-	/* 
-		register a new context
-		the context will remain inactive until activated
+	/*
+	register a new context
+	the context will remain inactive until activated
 	*/
 	void registerContext(InputContext*);
 
@@ -46,6 +39,6 @@ public:
 	bool deactivateContext(InputContextType);
 
 	// notify all active contexts about a key press
-	void notify(KeyboardInput) const;
+	void notify();
 
 };

@@ -7,7 +7,7 @@
 #include "Entities.h"
 #include "Sprites.h"
 #include "InputMapping.h"
-#include "InputPolling.h"
+#include "PollEvents.h"
 
 
 Game::Game(int argc, char ** argv) {
@@ -86,8 +86,11 @@ void Game::run() {
 	while (_running) {
 		_timer->update();
 
-		// handle user input
-		InputHandling::pollInput(_inputMapper, _running);
+		// handle quit events
+		EventHandling::pollEvents(_running);
+
+		// handle input
+		_inputMapper->notify();
 
 		// ensure game state updates at a constant rate, unaffected by the speed of the game loop
 		while (_updateTimer->isTimeToUpdate()) {

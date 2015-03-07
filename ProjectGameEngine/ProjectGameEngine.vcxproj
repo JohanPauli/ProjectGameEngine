@@ -22,6 +22,7 @@
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\Entities.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
+    <ClCompile Include="Engine\InputFetcher.cpp" />
     <ClCompile Include="Engine\InputMapping.cpp" />
     <ClCompile Include="Engine\main.cpp" />
     <ClCompile Include="Engine\Physics.cpp" />
@@ -37,8 +38,9 @@
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\InputConstants.h" />
     <ClInclude Include="Engine\InputContext.h" />
+    <ClInclude Include="Engine\InputFetcher.h" />
     <ClInclude Include="Engine\InputMapping.h" />
-    <ClInclude Include="Engine\InputPolling.h" />
+    <ClInclude Include="Engine\PollEvents.h" />
     <ClInclude Include="Engine\Rect.h" />
     <ClInclude Include="Engine\Sprites.h" />
     <ClInclude Include="Engine\Physics.h" />

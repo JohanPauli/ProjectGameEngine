@@ -19,6 +19,9 @@
     <Filter Include="Engine\Input">
       <UniqueIdentifier>{0f8edc36-7e2d-4153-8c6f-5b0fc5c359a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Events">
+      <UniqueIdentifier>{4e29da2d-1f4b-434c-9bc6-d3af4b24c840}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio.cpp">
@@ -44,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Entities.cpp">
       <Filter>Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\InputFetcher.cpp">
+      <Filter>Engine\Input</Filter>
     </ClCompile>
     <ClCompile Include="Engine\InputMapping.cpp">
       <Filter>Engine\Input</Filter>
@@ -86,14 +92,17 @@
     <ClInclude Include="Engine\InputContext.h">
       <Filter>Engine\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\InputFetcher.h">
+      <Filter>Engine\Input</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\InputMapping.h">
       <Filter>Engine\Input</Filter>
     </ClInclude>
     <ClInclude Include="Engine\InputConstants.h">
       <Filter>Engine\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\InputPolling.h">
-      <Filter>Engine\Input</Filter>
+    <ClInclude Include="Engine\PollEvents.h">
+      <Filter>Engine\Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
