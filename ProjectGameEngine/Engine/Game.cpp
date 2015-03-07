@@ -45,8 +45,8 @@ bool Game::init() {
 
 	player = new PlayerEntity(playerPhy, bird);
 	pipe = new PipeEntity(pipePhy, pipeBot, pipeMid, pipeTop);
-	_inputMapper->registerContext(player);
-	_inputMapper->activateContext(InputContextType::BIRD);
+	_inputMapper->registerContext(player, 10);
+	_inputMapper->activateContext(player->getInputContextId());
 
 	//sound = AudioBox::get().loadSound("sound\\fanfare.wav");
 

@@ -24,7 +24,7 @@ private:
 	int				_updates = 0;
 
 private:
-	void flap();
+	void flap(bool repeat);
 
 public:
 	PlayerEntity(DynamicPhysics* physics, Sprite* sprite);

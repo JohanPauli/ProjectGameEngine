@@ -2,17 +2,6 @@
 
 #include <SDL.h>
 
-
-/*
-	enum of all input context
-	the order of the list defines the priority of the context where the top has the highes priority
-*/
-enum class InputContextType {
-	MENU,
-	BIRD,
-	undefined
-};
-
 // mapping SDL keyboard scancodes to custom enumerator class
 enum class KeyboardKey {
 	NONE,

@@ -22,6 +22,7 @@
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\Entities.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
+    <ClCompile Include="Engine\InputContext.cpp" />
     <ClCompile Include="Engine\InputFetcher.cpp" />
     <ClCompile Include="Engine\InputMapping.cpp" />
     <ClCompile Include="Engine\main.cpp" />

@@ -1,5 +1,6 @@
 #include "InputMapping.h"
 
+#include "InputFetcher.h"
 
 
 
@@ -9,33 +10,37 @@
 
 InputMapper::~InputMapper() {
 	for (auto it : _inputContexts) {
-		delete it.second;
+		delete it.second.context;
 	}
 }
 
 
-void InputMapper::registerContext(InputContext* context) {
-	if (_inputContexts[context->getType()] != nullptr)
-		return;
-	_inputContexts[context->getType()] = context;
+void InputMapper::registerContext(InputContext* context, int priority) {
+	auto prioContext = PriorityInputContext(context, priority);
+	auto old = _inputContexts[context->getInputContextId()];
+	if (old.context != nullptr){
+		// context was already registered, remove it before re-registering
+		_inputContexts.erase(old.context->getInputContextId());
+	}
+	// insert
+	_inputContexts[context->getInputContextId()] = prioContext;
 }
 
-bool InputMapper::activateContext(InputContextType type) {
-	auto context = _inputContexts[type];
-	if (context != nullptr) {
-		_activeContexts.emplace_front(context);
-		_activeContexts.sort(inputContext_lessThan);
+bool InputMapper::activateContext(int contextId) {
+	auto prioContext = _inputContexts[contextId];
+	if (prioContext.context != nullptr) {
+		_activeContexts.insert(prioContext);
 		return true;
 	}
 	return false;
 }
 
-bool InputMapper::deactivateContext(InputContextType type) {
-	auto context = _inputContexts[type];
-	if (context != nullptr) {
+bool InputMapper::deactivateContext(int contextId) {
+	auto prioContext = _inputContexts[contextId];
+	if (prioContext.context != nullptr) {
 		for (auto it : _activeContexts) {
-			if (it == context) {
-				_activeContexts.remove(it);
+			if (it.context == prioContext.context) {
+				_activeContexts.erase(it);
 				return true;
 			}
 		}
@@ -43,13 +48,15 @@ bool InputMapper::deactivateContext(InputContextType type) {
 	return false;
 }
 
+
+
 void InputMapper::notify() {
 	_fetcher.updateKeyboard();
 	auto inputSet = _fetcher.getInput();
 	for (auto input : *inputSet) {
-		for (auto context : _activeContexts) {
+		for (auto prioContext : _activeContexts) {
 			// stop after highest priority context that uses the key has been informed
-			if (context->onNotify(input))
+			if (prioContext.context->onNotify(input))
 				break;
 		}
 	}

@@ -6,25 +6,32 @@
 struct KeyboardInput;
 
 /*
-	
+	abstract base class for InputContexts
 */
 class InputContext {
+private:
+	static int _nextId;
+
 protected:
-	InputContextType _type;
+	int _inputContextId;
 
 public:
-	InputContext(InputContextType type) : _type(type) {}
+	InputContext() : _inputContextId(_nextId) { _nextId++; }
 	virtual ~InputContext() {}
 
-	// get the type of context. type is used as an ID
-	InputContextType getType() const { return _type; }
+	// get ID of the InputContext
+	int getInputContextId() const { return _inputContextId; }
 	 
 	/* 
 		handle the given KeyboardInput
 		should return true if the KeyboardInput is used and false otherwise
 	*/
 	virtual bool onNotify(const KeyboardInput&) = 0;
-};
 
-// comparator function
-inline bool inputContext_lessThan(InputContext* lhs, InputContext* rhs) { return lhs->getType() < rhs->getType(); }
+	// operator overloading
+	bool operator==	(const InputContext& rhs) const { return _inputContextId == rhs._inputContextId; }
+	bool operator<	(const InputContext& rhs) const { return _inputContextId < rhs._inputContextId; }
+	bool operator<=	(const InputContext& rhs) const { return _inputContextId <= rhs._inputContextId; }
+	bool operator>	(const InputContext& rhs) const { return _inputContextId > rhs._inputContextId; }
+	bool operator>=	(const InputContext& rhs) const { return _inputContextId >= rhs._inputContextId; }
+};

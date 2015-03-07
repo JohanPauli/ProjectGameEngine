@@ -54,6 +54,9 @@
     <ClCompile Include="Engine\InputMapping.cpp">
       <Filter>Engine\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\InputContext.cpp">
+      <Filter>Engine\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h">
@@ -89,6 +92,9 @@
     <ClInclude Include="Engine\Entities.h">
       <Filter>Engine\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PollEvents.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\InputContext.h">
       <Filter>Engine\Input</Filter>
     </ClInclude>
@@ -100,9 +106,6 @@
     </ClInclude>
     <ClInclude Include="Engine\InputConstants.h">
       <Filter>Engine\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PollEvents.h">
-      <Filter>Engine\Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

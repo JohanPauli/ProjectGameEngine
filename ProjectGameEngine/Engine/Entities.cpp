@@ -11,7 +11,7 @@
 // ---- Player ----
 
 PlayerEntity::PlayerEntity(DynamicPhysics* physics, Sprite* sprite) 
-	: InputContext(InputContextType::BIRD), _physics(physics)
+	: _physics(physics)
 {
 	std::vector<Rect> rector;
 
@@ -53,22 +53,21 @@ bool PlayerEntity::onNotify(const KeyboardInput& key) {
 
 	switch (key.key) {
 	case KeyboardKey::SPACE:
-		if (!key.repeat)
-			flap();
+		flap(key.repeat);
 		return true;
 	case KeyboardKey::UP:
-		if (!key.repeat)
-			flap();
+		flap(key.repeat);
 		return true;
 	case KeyboardKey::W:
-		flap();
+		flap(key.repeat);
 		return true;
 	default: return false;;
 	}
 }
 
-void PlayerEntity::flap() {
-	_physics->setYVelocity(-5);
+void PlayerEntity::flap(bool repeat) {
+	if (!repeat)
+		_physics->setYVelocity(-5);
 }
 
 
