@@ -105,9 +105,14 @@ public:
 		return timePerUpdate <= updateLag;
 	}
 
-	// ms to trim off of updateLag, use after each update
+	// trim timePerUpdate off of updateLag. use after each update
 	void updated() {
 		updateLag -= timePerUpdate;
+	}
+
+	// reset updateLag
+	void catchUp() {
+		updateLag = 0;
 	}
 };
 

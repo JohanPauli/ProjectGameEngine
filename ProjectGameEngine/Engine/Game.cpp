@@ -7,11 +7,15 @@
 #include "Entities.h"
 #include "Sprites.h"
 #include "InputMapping.h"
-#include "PollEvents.h"
+#include "Misc.h"
 
 
 Game::Game(int argc, char ** argv) {
 	// use arguments for some settings maybe
+}
+
+Game::~Game() {
+	cleanup();
 }
 
 bool Game::init() {
@@ -26,7 +30,8 @@ bool Game::init() {
 
 	// init timers
 	_timer = new Timer();
-	_updateTimer = new UpdateTimer(_timer, MS_PER_UPDATE);
+	_logicUpdateTimer = new UpdateTimer(_timer, MS_PER_UPDATE);
+	_renderUpdateTimer = new UpdateTimer(_timer, MS_PER_RENDER);
 
 	_inputMapper = new InputMapper();
 
@@ -80,7 +85,7 @@ void Game::cleanup() {
 	delete
 		_window,
 		_timer,
-		_updateTimer,
+		_logicUpdateTimer,
 		_inputMapper;
 		
 	// test vars
@@ -105,27 +110,30 @@ void Game::run() {
 
 	processing input and rendering are flexible
 	update is bound by MS_PER_UPDATE
+	render is bound by MS_PER_RENDER
 
-	TODO: should be possible to have an upper limit on number of times
-	per second to run render() so we don't have higher fps than the monitor can handle
-	for example 300 fps would be wasteful on a 60 hertz monitor
 	*/
 	while (_running) {
 		_timer->update();
 
-		// handle quit events
-		EventHandling::pollEvents(_running);
-
 		// handle input
+		Flappy::pollEvents(_running);
 		_inputMapper->notify();
 
 		// ensure game state updates at a constant rate, unaffected by the speed of the game loop
-		while (_updateTimer->isTimeToUpdate()) {
+		while (_logicUpdateTimer->isTimeToUpdate()) {
 			update();
-			_updateTimer->updated();
+			_logicUpdateTimer->updated();
 		}
 
-		render();
+		// render if enough time has passed
+		if (_renderUpdateTimer->isTimeToUpdate()) {
+			render();
+			_renderUpdateTimer->catchUp();
+		}
+		// release cpu resource if nothing to do
+		else
+			Flappy::delay(1);
 	}
 }
 

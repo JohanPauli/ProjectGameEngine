@@ -41,7 +41,7 @@
     <ClInclude Include="Engine\InputContext.h" />
     <ClInclude Include="Engine\InputFetcher.h" />
     <ClInclude Include="Engine\InputMapping.h" />
-    <ClInclude Include="Engine\PollEvents.h" />
+    <ClInclude Include="Engine\Misc.h" />
     <ClInclude Include="Engine\Rect.h" />
     <ClInclude Include="Engine\Sprites.h" />
     <ClInclude Include="Engine\Physics.h" />

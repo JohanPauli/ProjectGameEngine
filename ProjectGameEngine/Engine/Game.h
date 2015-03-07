@@ -19,22 +19,29 @@ class InputMapper;
 
 class Game {
 private:
-	const static long MS_PER_UPDATE = 8;	// how many milliseconds should be between each call of update()
+	const static long	MS_PER_UPDATE = 8;	// how many milliseconds should be between each call of update()
+	const static long	MS_PER_RENDER = 8;	// milliseconds between each render
 
-	Timer*		 _timer = nullptr;			// general timer for the game
-	UpdateTimer* _updateTimer = nullptr;	// game logic timer
+	// core
+private:
 	Window*		 _window = nullptr;
 	InputMapper* _inputMapper = nullptr;
 
+	// timers
+private:
+	Timer*		 _timer = nullptr;			// general timer for the game
+	UpdateTimer* _logicUpdateTimer = nullptr;	// game logic timer
+	UpdateTimer* _renderUpdateTimer = nullptr;
 
 	// settings
+private:
 	char* _windowTitle = "Window Title";
 	int   _windowWidth = 1024;
 	int   _windowHeight = 768;
 	bool  _running = true;
 
-
 	//// test stuff
+private:
 	PhysicsEngine*	phyEng = nullptr;
 	PlayerEntity*	player = nullptr;
 	PipeEntity*		pipe = nullptr;
@@ -58,6 +65,7 @@ private:
 
 public:
 	Game(int argc, char ** argv);
+	~Game();
 
 	bool init();
 
