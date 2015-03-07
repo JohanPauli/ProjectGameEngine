@@ -38,6 +38,7 @@ private:
 	PhysicsEngine*	phyEng = nullptr;
 	PlayerEntity*	player = nullptr;
 	PipeEntity*		pipe = nullptr;
+	PipeEntity*		pipe2 = nullptr;
 
 	Sprite*	bird = nullptr;
 	Sprite*	pipeTop = nullptr;

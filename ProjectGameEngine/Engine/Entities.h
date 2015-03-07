@@ -27,7 +27,7 @@ private:
 	void flap(bool repeat);
 
 public:
-	PlayerEntity(DynamicPhysics* physics, Sprite* sprite);
+	PlayerEntity(DynamicPhysics* physics, SpriteSheet* sprite);
 	virtual ~PlayerEntity();
 
 	// Entity: updates logic
@@ -41,14 +41,34 @@ public:
 };
 
 
-/*
-	PipeEntity 
-
-	this is actually a double-ended pipe, 
-	and the ones in the game are supposed to be single-ended
-	oops
-*/
+// 
 class PipeEntity : public Entity {
+private:
+	StaticPhysics*	_physics = nullptr;
+	Sprite*	_top = nullptr;
+	Sprite* _mid = nullptr;
+	Rect	_topPos;
+	Rect	_midPos;
+	bool	_upward;
+
+public:
+	PipeEntity(StaticPhysics* physics, Sprite* top, Sprite* mid, bool upward = true);
+	virtual ~PipeEntity();
+
+	virtual void update() override;
+
+	virtual void render(Renderer* renderer) override;
+};
+
+
+/*
+	DEPipeEntity 
+
+	was trying to make a pipe, but this is actually a double-ended pipe, 
+	and the ones in the game are supposed to be single-ended
+	maybe it'll be useful sometime
+*/
+class DEPipeEntity : public Entity {
 private:
 	StaticPhysics*	_physics = nullptr;
 	Sprite*	_top = nullptr;
@@ -59,11 +79,8 @@ private:
 	Rect	_botPos;
 
 public:
-	const static int HEIGHT_MIN = 26;
-
-public:
-	PipeEntity(StaticPhysics* physics, Sprite* bot, Sprite* mid, Sprite* top);
-	virtual ~PipeEntity();
+	DEPipeEntity(StaticPhysics* physics, Sprite* bot, Sprite* mid, Sprite* top);
+	virtual ~DEPipeEntity();
 
 	virtual void update() override;
 

@@ -10,18 +10,8 @@
 
 // ---- Player ----
 
-PlayerEntity::PlayerEntity(DynamicPhysics* physics, Sprite* sprite) 
-	: _physics(physics)
-{
-	std::vector<Rect> rector;
-
-	// each animation is 18x12
-	rector.emplace_back(Rect(0, 0, 18, 12));
-	rector.emplace_back(Rect(18, 0, 18, 12));
-	rector.emplace_back(Rect(36, 0, 18, 12));
-
-	_spriteSheet = new SpriteSheet(rector, sprite);
-}
+PlayerEntity::PlayerEntity(DynamicPhysics* physics, SpriteSheet* spriteSheet) 
+: _physics(physics), _spriteSheet(spriteSheet) { }
 
 
 
@@ -73,8 +63,62 @@ void PlayerEntity::flap(bool repeat) {
 // ---- PipeEntity ----
 
 
+PipeEntity::PipeEntity(StaticPhysics* physics, Sprite* top, Sprite* mid, bool upward)
+: _physics(physics), _top(top), _mid(mid), _upward(upward) {
+	/*
+		TODO:
+		these calculations could probably be made more generally applicable
+		we shouldnt have to write the same code in every entity
+	*/
 
-PipeEntity::PipeEntity(StaticPhysics* physics, Sprite* top, Sprite* mid, Sprite* bot) 
+	// entity divided by sprite
+	float entityScaleFactor = _physics->getWidth() / _top->getWidth();
+
+	// heights
+	int topHeight = (int)(_top->getHeight() * entityScaleFactor);
+	int midHeight = (int)(_physics->getHeight() - topHeight);
+
+	// y positions
+	int topY, midY;
+	if (_upward) {
+		topY = (int)_physics->getYPosition();
+		midY = topY + topHeight;
+	}
+	else {
+		midY = (int)_physics->getYPosition();
+		topY = midY + midHeight;
+	}
+	
+	int x = (int)_physics->getXPosition();
+	int width = (int)_physics->getWidth();
+
+
+	_topPos = Rect(x, topY, width, topHeight);;
+	_midPos = Rect(x, midY, width, midHeight);;
+}
+
+PipeEntity::~PipeEntity() {
+	// tell PhysicsEngine to deallocate the physics object?
+}
+
+
+void PipeEntity::update() {
+	// do nothing
+}
+
+void PipeEntity::render(Renderer* renderer) {
+	if (_upward)
+		renderer->render(_top, &_topPos);
+	else
+		renderer->render(_top, &_topPos, nullptr, 0.0, nullptr, RenderFlip::VERTICAL);
+	renderer->render(_mid, &_midPos);
+}
+
+
+
+// ---- DEPipeEntity ----
+
+DEPipeEntity::DEPipeEntity(StaticPhysics* physics, Sprite* top, Sprite* mid, Sprite* bot) 
 	: _physics(physics), _top(top), _mid(mid), _bot(bot) 
 {
 	// entity divided by sprite
@@ -98,16 +142,16 @@ PipeEntity::PipeEntity(StaticPhysics* physics, Sprite* top, Sprite* mid, Sprite*
 	_botPos = Rect(x, botY, width, botHeight);
 }
 
-PipeEntity::~PipeEntity() {
+DEPipeEntity::~DEPipeEntity() {
 	// tell PhysicsEngine to deallocate the physics object?
 }
 
-void PipeEntity::update() {
+void DEPipeEntity::update() {
 	// do nothing
 }
 
 
-void PipeEntity::render(Renderer* renderer) {
+void DEPipeEntity::render(Renderer* renderer) {
 	renderer->render(_top, &_topPos);
 	renderer->render(_mid, &_midPos);
 	renderer->render(_bot, &_botPos);
