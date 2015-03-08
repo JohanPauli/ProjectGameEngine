@@ -22,7 +22,7 @@ private:
 	Graphics*	_graphics;
 	Input*		_input;
 
-	// physics is public so InputComponent has access to it
+	// physics is public so Input and Graphics have access to x, y, and velocity
 public:
 	Physics*	_physics;
 
