@@ -211,10 +211,32 @@ void PhysicsEngine::detectColissions()
 
 }
 
+// check if a point intersects
+inline bool pointIntersect(float pt, float lowest, float highest) {
+	return pt > lowest && pt < highest;
+}
+
+// check if a range intersects partially
+inline bool partialIntersect(float leftLow, float leftHigh, float rightLow, float rightHigh) {
+	bool right, left;
+	left = pointIntersect(leftLow, rightLow, rightHigh);
+	right = pointIntersect(leftHigh, rightLow, rightHigh);
+	return right != left; // one intersects
+}
+
+// check if a range intersects fully
+inline bool fullIntersect(float leftLow, float leftHigh, float rightLow, float rightHigh) {
+	bool right, left;
+	left = pointIntersect(leftLow, rightLow, rightHigh);
+	right = pointIntersect(leftHigh, rightLow, rightHigh);
+	return right && left; // both intersect
+}
+
+
 void PhysicsEngine::collision(DynamicPhysics *dynamicPhysics, Physics *pe)
 {
 	bool left = false, right = false, top = false, bottom = false;
-	float 
+	/*float
 		dynamicPhysicsXpos = dynamicPhysics->getXPosition(), 
 		dynamicPhysicsYpos = dynamicPhysics->getYPosition(), 
 		dynamicPhysicsH = dynamicPhysics->getHeight(), 
@@ -225,7 +247,7 @@ void PhysicsEngine::collision(DynamicPhysics *dynamicPhysics, Physics *pe)
 		peH = pe->getHeight(), 
 		peW = pe->getWidth();
 
-
+	
 	//Check collision
 	if ((dynamicPhysicsYpos + dynamicPhysicsH) >= peYpos 
 		&& dynamicPhysicsYpos < peYpos)
@@ -239,6 +261,51 @@ void PhysicsEngine::collision(DynamicPhysics *dynamicPhysics, Physics *pe)
 	if ((dynamicPhysicsXpos + dynamicPhysicsW) >= peXpos 
 		&& dynamicPhysicsXpos < peXpos)
 		right = true;
+	*/
+	// first physics object
+	float dpXlow = dynamicPhysics->getXPosition();
+	float dpXhigh = dpXlow + dynamicPhysics->getWidth();
+	float dpYlow = dynamicPhysics->getYPosition();
+	float dpYhigh = dpYlow + dynamicPhysics->getHeight();
+
+	// second physics object
+	float pXlow = pe->getXPosition();
+	float pXhigh = pXlow + pe->getWidth();
+	float pYlow = pe->getYPosition();
+	float pYhigh = pYlow + pe->getHeight();
+
+
+	// assume it isn't possible for full Y-intersection at the same time as full X-intersection for simplicity
+	// check for full intersections first
+	if (fullIntersect(dpXlow, dpXhigh, pXlow, pXhigh)) {
+		// check if there's a Y intersection. 
+		if (pointIntersect(dpYlow, pYlow, pYhigh))
+			top = true;
+		else if (pointIntersect(dpYhigh, pYlow, pYhigh))
+			bottom = true;
+	}
+	else if (fullIntersect(dpYlow, dpYhigh, pYlow, pYhigh)) {
+		// check if there's an X intersection. 
+		if (pointIntersect(dpXlow, pXlow, pXhigh))
+			left = true;
+		else if (pointIntersect(dpXhigh, pXlow, pXhigh))
+			right = true;
+	}
+	// check for partial intersections
+	else {
+		// X intersects
+		if (pointIntersect(dpXlow, pXlow, pXhigh))
+			left = true;
+		else if (pointIntersect(dpXhigh, pXlow, pXhigh))
+			right = true;
+		// Y intersects
+		if (pointIntersect(dpYlow, pYlow, pYhigh))
+			top = true;
+		else if (pointIntersect(dpYhigh, pYlow, pYhigh))
+			bottom = true;
+	}
+
+
 
 	setResolver(rFactory.createResolver(top, bottom, left, right));
 
