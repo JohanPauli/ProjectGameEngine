@@ -8,6 +8,7 @@ class Entity;
 class Renderer;
 class Sprite;
 class SpriteSheet;
+class Physics;
 
 
 
@@ -15,6 +16,9 @@ class SpriteSheet;
 class Graphics {
 public:
 	virtual ~Graphics() {}
+
+	// update any logic inside the graphics component
+	virtual void update(Entity& entity) = 0;
 	// render the graphics object
 	virtual void render(Entity& entity, Renderer* renderer) = 0;
 };
@@ -33,10 +37,9 @@ private:
 	UpdateTimer	 _flapTimer;
 	SpriteSheet* _spriteSheet;
 public:
-	const static long MS_PER_FRAME = 250;
-public:
-	BirdGraphics(SpriteSheet* spriteSheet, Timer* timer);
+	BirdGraphics(SpriteSheet* spriteSheet, UpdateTimer timer);
 	virtual ~BirdGraphics();
+	virtual void update(Entity& entity) override;
 	virtual void render(Entity& entity, Renderer* renderer) override;
 };
 
@@ -50,12 +53,14 @@ private:
 	Rect	_topPos;
 	Rect	_midPos;
 	bool	_upward;
-	bool	_isInit = false;
 private:
+	// check if the entity's physics has moved compared to Graphics's positions
+	bool hasMoved(const Physics* physics) const;
 	// calculate the positions of both sprites
-	void init(Entity& entity);
+	void calcPos(const Physics* physics);
 public:
 	PipeGraphics(Sprite* top, Sprite* mid, bool upward = true);
 	virtual ~PipeGraphics();
+	virtual void update(Entity& entity) override;
 	virtual void render(Entity& entity, Renderer* renderer) override;
 };

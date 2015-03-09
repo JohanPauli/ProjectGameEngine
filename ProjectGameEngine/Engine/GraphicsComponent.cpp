@@ -11,19 +11,23 @@
 
 // ---- BirdGraphics ----
 
-BirdGraphics::BirdGraphics(SpriteSheet* spriteSheet, Timer* timer)
-: _spriteSheet(spriteSheet), _flapTimer(UpdateTimer(timer, MS_PER_FRAME)) {}
+BirdGraphics::BirdGraphics(SpriteSheet* spriteSheet, UpdateTimer timer)
+: _spriteSheet(spriteSheet), _flapTimer(std::move(timer)) {}
 
 
-BirdGraphics::~BirdGraphics() {}
+BirdGraphics::~BirdGraphics() {
+	delete _spriteSheet;
+}
 
-
-void BirdGraphics::render(Entity& entity, Renderer* renderer) {
+void BirdGraphics::update(Entity& entity) {
 	// animation
 	if (_flapTimer.isTimeToUpdate()) {
 		_spriteSheet->nextSprite();
 		_flapTimer.updated();
 	}
+}
+
+void BirdGraphics::render(Entity& entity, Renderer* renderer) {
 	// render
 	renderer->render(_spriteSheet->getSprite(), &entity._physics->getRect(), _spriteSheet->getSpriteSrc(), entity._physics->getAngle());
 }
@@ -41,10 +45,14 @@ PipeGraphics::PipeGraphics(Sprite* top, Sprite* mid, bool upward)
 
 PipeGraphics::~PipeGraphics() {}
 
+void PipeGraphics::update(Entity& entity) {
+	// calculate position if not initialized or if entity's position has changed
+	if (hasMoved(entity._physics))
+		calcPos(entity._physics);
+
+}
 
 void PipeGraphics::render(Entity& entity, Renderer* renderer) {
-	if (!_isInit)
-		init(entity);
 	if (_upward)
 		renderer->render(_top, &_topPos);
 	else
@@ -53,31 +61,41 @@ void PipeGraphics::render(Entity& entity, Renderer* renderer) {
 }
 
 
-// calculate the positions of both sprites
-void PipeGraphics::init(Entity& entity) {
-	// calculate position
-	float entityScaleFactor = entity._physics->getWidth() / _top->getWidth();
 
+// check if the entity's physics has moved compared to Graphics's positions
+bool PipeGraphics::hasMoved(const Physics* physics) const {
+	// moved on the X-axis
+	if (physics->getXPosition() != _topPos.getX())
+		return true;
+	// moved on the Y-axis, take into account _topPos and _midPos could be flipped
+	if (physics->getYPosition() != _topPos.getY() &&
+		physics->getYPosition() != _midPos.getY())
+		return true;
+	return false;
+}
+
+
+// calculate the positions of both sprites
+void PipeGraphics::calcPos(const Physics* physics) {
 	// heights
-	int topHeight = (int)(_top->getHeight() * entityScaleFactor);
-	int midHeight = (int)(entity._physics->getHeight() - topHeight);
+	int topHeight = (int)(_top->getHeight() * (physics->getWidth() / _top->getWidth()));
+	int midHeight = (int)(physics->getHeight() - topHeight);
 
 	// y positions
 	int topY, midY;
 	if (_upward) {
-		topY = (int)entity._physics->getYPosition();
+		topY = (int)physics->getYPosition();
 		midY = topY + topHeight;
 	}
 	else {
-		midY = (int)entity._physics->getYPosition();
+		midY = (int)physics->getYPosition();
 		topY = midY + midHeight;
 	}
 
-	int x = (int)entity._physics->getXPosition();
-	int width = (int)entity._physics->getWidth();
+	int x =		(int)physics->getXPosition();
+	int width =	(int)physics->getWidth();
 
 	// set positions
 	_topPos = Rect(x, topY, width, topHeight);
 	_midPos = Rect(x, midY, width, midHeight);
-	_isInit = true;
 }

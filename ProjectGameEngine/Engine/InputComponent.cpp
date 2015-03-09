@@ -9,6 +9,10 @@
 
 PlayerInput::~PlayerInput() {}
 
+void PlayerInput::update(Entity& entity) {
+	// do nothing
+}
+
 bool PlayerInput::onNotify(const KeyboardInput& input) {
 	switch (input.key) {
 	case KeyboardKey::SPACE:

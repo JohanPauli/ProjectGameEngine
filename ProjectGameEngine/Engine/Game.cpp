@@ -47,14 +47,15 @@ bool Game::init() {
 										60.f, 90.f);
 	auto pipePhy = new StaticPhysics(0.f, 0.f, 
 									 0.f, 0.f, 
-									 200.f, _windowHeight-240.f, 
+									 250.f, _windowHeight-240.f, 
 									 240.f, 130.f);
 	auto pipePhy2 = new StaticPhysics(0.f, 0.f,
 									  0.f, 0.f,
-									  200.f, 0.f,
+									  250.f, 0.f,
 									  240.f, 130.f);
 	phyEng->addDynamicPhysics(playerPhy);
 	phyEng->addStaticPhysics(pipePhy);
+	phyEng->addStaticPhysics(pipePhy2);
 
 	// init textures
 	auto renderer = _window->getRenderer();
@@ -66,15 +67,18 @@ bool Game::init() {
 	// create bird spritesheet
 	std::vector<Rect> rector;
 	rector.emplace_back(Rect(0, 0, 18, 12));
+	rector.emplace_back(Rect(0, 0, 18, 12));
 	rector.emplace_back(Rect(18, 0, 18, 12));
 	rector.emplace_back(Rect(36, 0, 18, 12));
+	rector.emplace_back(Rect(36, 0, 18, 12));
+	rector.emplace_back(Rect(18, 0, 18, 12));
 	auto birdSheet = new SpriteSheet(rector, bird);
 
 	// components
 	auto input = new PlayerInput();
-	pipeGraphics = new PipeGraphics(pipeBot, pipeMid);
+	pipeGraphics = new PipeGraphics(pipeBot, pipeMid, true);
 	pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, false);
-	birdGraphics = new BirdGraphics(birdSheet, _timer);
+	birdGraphics = new BirdGraphics(birdSheet, UpdateTimer(_timer, 20));
 
 	// activate player entities' input
 	_inputMapper->registerContext(input, 10);
@@ -82,9 +86,9 @@ bool Game::init() {
 
 
 	// create entities
-	player = new Entity(birdGraphics, playerPhy, input);
-	pipe = new Entity(pipeGraphics, pipePhy);
-	pipe2 = new Entity(pipeGraphics2, pipePhy2);
+	player = new Entity(playerPhy, birdGraphics, input);
+	pipe = new Entity(pipePhy, birdGraphics);
+	pipe2 = new Entity(pipePhy2, birdGraphics);
 
 
 	return true;
@@ -96,21 +100,17 @@ void Game::cleanup() {
 		_window,
 		_timer,
 		_logicUpdateTimer,
+		_renderUpdateTimer,
 		_inputMapper;
 
 	// test vars
 	delete bird, sound, phyEng,
-
 		// entities
 		player, pipe, pipe2,
-
-		// graphics
-		pipeGraphics, pipeGraphics2, birdGraphics,
-
 		// textures
 		pipeTop, pipeMid, pipeBot;
 
-	// TODO: move SDL_Quit() to a lower level
+	// shut down low-level modules
 	Flappy::quit();
 }
 
@@ -153,8 +153,8 @@ void Game::run() {
 
 void Game::update() {
 	// TODO: game logic
-	phyEng->update();
 	player->update();
+	phyEng->detectColissions();
 }
 
 void Game::render() {
@@ -162,8 +162,8 @@ void Game::render() {
 
 	auto renderer = _window->getRenderer();
 
-	player->render(renderer);
 	pipe->render(renderer);
 	pipe2->render(renderer);
+	player->render(renderer);
 	_window->update();
 }

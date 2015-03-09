@@ -26,6 +26,12 @@ void InputMapper::registerContext(InputContext* context, int priority) {
 	_inputContexts[context->getInputContextId()] = prioContext;
 }
 
+
+void InputMapper::unregisterContext(InputContext* context) {
+	_inputContexts.erase(context->getInputContextId());
+}
+
+
 bool InputMapper::activateContext(int contextId) {
 	auto prioContext = _inputContexts[contextId];
 	if (prioContext.context != nullptr) {

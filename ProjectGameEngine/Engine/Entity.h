@@ -1,22 +1,19 @@
 #pragma once
 
-#include "Rendering.h"
 
-
-// entity interface
-/*class Entity {
-public:
-	virtual void update() = 0;			// update logic
-	virtual void render(Renderer*) = 0;	// render the entity
-};
-*/
 
 class Graphics;
 class Input;
 class Physics;
+class Renderer;
 
 
-
+/*
+	General component-based Entity class
+	
+	graphics and input components depend on a physics component existing for x,y, and acceleration
+	input component should be unregistered from the InputMapper before deleting the entity
+*/
 class Entity {
 private:
 	Graphics*	_graphics;
@@ -27,8 +24,12 @@ public:
 	Physics*	_physics;
 
 public:
-	Entity(Graphics* graphics, Physics* physics = nullptr, Input* input = nullptr);
+	Entity(Physics* physics, Graphics* graphics = nullptr, Input* input = nullptr);
 	virtual ~Entity();
+
+	// update components' logic
 	virtual void update();
+
+	// render entity
 	virtual void render(Renderer* renderer);
 };

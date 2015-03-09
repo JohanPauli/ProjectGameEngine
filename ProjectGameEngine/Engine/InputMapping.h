@@ -50,6 +50,10 @@ public:
 	*/
 	void registerContext(InputContext* context, int priority = 0);
 
+	/*
+		unregister an existing context
+	*/
+	void unregisterContext(InputContext* context);
 	/* 
 		activate a context based on its id
 		return false if context doesnt exist

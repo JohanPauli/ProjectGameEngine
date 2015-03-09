@@ -1,24 +1,30 @@
 #include "Entity.h"
 
+#include "Rendering.h"
 #include "GraphicsComponent.h"
 #include "InputComponent.h"
 #include "Physics.h"
 
 
-Entity::Entity(Graphics* graphics, Physics* physics, Input* input)
-: _graphics(graphics), _physics(physics), _input(input) {
+Entity::Entity(Physics* physics, Graphics* graphics, Input* input)
+: _physics(physics), _graphics(graphics), _input(input) {
 	// init input component
 	if (_input != nullptr)
 		_input->setEntity(this);
 }
 
 
-Entity::~Entity() {}
+Entity::~Entity() {
+	delete _physics;
+	delete _graphics;
+	delete _input;
+}
 
 
 void Entity::update() {
-	// questionmark
-	// update states or something
+	_input->update(*this);
+	_physics->update(0);
+	_graphics->update(*this);
 }
 
 
