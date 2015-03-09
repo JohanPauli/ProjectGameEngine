@@ -1,11 +1,7 @@
 #include "Game.h"
 
-#include "Timer.h"
 #include "Audio.h"
-#include "Rendering.h"
-#include "Physics.h"
 #include "Sprites.h"
-#include "InputMapping.h"
 #include "Misc.h"
 #include "Rect.h"
 #include "Entity.h"
@@ -13,8 +9,16 @@
 #include "GraphicsComponent.h"
 
 
-Game::Game(int argc, char ** argv) {
+const char* Game::WINDOW_TITLE = "Flappy Bird Demo";
+
+
+
+Game::Game(int argc, char ** argv) 
+: _window(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT) {
 	// use arguments for some settings maybe
+
+	_windowWidth = WINDOW_WIDTH;
+	_windowHeight = WINDOW_HEIGHT;
 }
 
 Game::~Game() {
@@ -22,25 +26,17 @@ Game::~Game() {
 }
 
 bool Game::init() {
-	
-	// initialise variables
-	if ((_window = new Window(_windowTitle, _windowWidth, _windowHeight)) == nullptr)
-		return false;
-	
-
 	// init audio
 	Audio::get().init(6, 44100, 1024);
 
 	// init timers
-	_timer = new Timer();
-	_logicUpdateTimer = new UpdateTimer(_timer, MS_PER_UPDATE);
-	_renderUpdateTimer = new UpdateTimer(_timer, MS_PER_RENDER);
+	_timer = Timer();
+	_logicUpdateTimer = UpdateTimer(&_timer, MS_PER_UPDATE);
+	_renderUpdateTimer = UpdateTimer(&_timer, MS_PER_RENDER);
 
-	_inputMapper = new InputMapper();
 
 	// test variables
-	// init physics
-	phyEng = new PhysicsEngine();
+	// physics
 	auto playerPhy = new DynamicPhysics(0.f, 0.08f, 
 										2.f, 0.f, 
 										0.f, 100.f, 
@@ -53,12 +49,12 @@ bool Game::init() {
 									  0.f, 0.f,
 									  250.f, 0.f,
 									  240.f, 130.f);
-	phyEng->addDynamicPhysics(playerPhy);
-	phyEng->addStaticPhysics(pipePhy);
-	phyEng->addStaticPhysics(pipePhy2);
+	phyEng.addDynamicPhysics(playerPhy);
+	phyEng.addStaticPhysics(pipePhy);
+	phyEng.addStaticPhysics(pipePhy2);
 
 	// init textures
-	auto renderer = _window->getRenderer();
+	auto renderer = _window.getRenderer();
 	bird = renderer->loadSprite("assets\\sprites\\bird_ani_sheet.png");
 	pipeTop = renderer->loadSprite("assets\\sprites\\pipe-top.png");
 	pipeMid = renderer->loadSprite("assets\\sprites\\pipe-mid.png");
@@ -76,13 +72,13 @@ bool Game::init() {
 
 	// components
 	auto input = new PlayerInput();
-	pipeGraphics = new PipeGraphics(pipeBot, pipeMid, true);
-	pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, false);
-	birdGraphics = new BirdGraphics(birdSheet, UpdateTimer(_timer, 20));
+	auto pipeGraphics = new PipeGraphics(pipeBot, pipeMid, true);
+	auto pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, false);
+	auto birdGraphics = new BirdGraphics(birdSheet, UpdateTimer(&_timer, 20));
 
 	// activate player entities' input
-	_inputMapper->registerContext(input, 10);
-	_inputMapper->activateContext(input->getInputContextId());
+	_inputMapper.registerContext(input, 10);
+	_inputMapper.activateContext(input->getInputContextId());
 
 
 	// create entities
@@ -96,12 +92,6 @@ bool Game::init() {
 
 
 void Game::cleanup() {
-	delete
-		_window,
-		_timer,
-		_logicUpdateTimer,
-		_renderUpdateTimer,
-		_inputMapper;
 
 	// test vars
 	delete bird, sound, phyEng,
@@ -116,54 +106,64 @@ void Game::cleanup() {
 
 
 void Game::run() {
-	_timer->start();
+	_timer.start();
 
-	/*
-	start game loop
-
-	processing input and rendering are flexible
-	update is bound by MS_PER_UPDATE
-	render is bound by MS_PER_RENDER
-
-	*/
+	// main game loop
 	while (_running) {
-		_timer->update();
+		_timer.update(); // update the game's timers
 
-		// handle input
-		Flappy::pollEvents(_running);
-		_inputMapper->notify();
+		handleUserInput();
 
-		// ensure game state updates at a constant rate, unaffected by the speed of the game loop
-		while (_logicUpdateTimer->isTimeToUpdate()) {
-			update();
-			_logicUpdateTimer->updated();
-		}
+		tryUpdate(); // updating is bound by MS_PER_UPDATE
 
-		// render if enough time has passed
-		if (_renderUpdateTimer->isTimeToUpdate()) {
-			render();
-			_renderUpdateTimer->catchUp();
-		}
-		// release cpu resource if nothing to do
-		else
-			Flappy::delay(1);
+		tryRender(); // rendering is bound by MS_PER_RENDER
 	}
 }
 
 
-void Game::update() {
-	// TODO: game logic
-	player->update();
-	phyEng->detectColissions();
+void Game::handleUserInput() {
+	Flappy::pollEvents(_running);
+	_inputMapper.notify();
 }
 
-void Game::render() {
-	// TODO: render stuff
 
-	auto renderer = _window->getRenderer();
+void Game::tryUpdate() {
+	// ensure game state updates at a constant rate, unaffected by the speed of the game loop
+	while (_logicUpdateTimer.isTimeToUpdate()) {
+		update();
+		_logicUpdateTimer.updated();
+	}
+}
+
+
+void Game::tryRender() {
+	// lock maximum framerate
+	if (_renderUpdateTimer.isTimeToUpdate()) {
+		render();
+		_renderUpdateTimer.catchUp();
+	}
+	else // release cpu resource if nothing to do
+		Flappy::delay(1);
+}
+
+
+void Game::update() {
+
+	pipe->update();
+	pipe2->update();
+	player->update();
+
+	phyEng.detectColissions();
+}
+
+
+void Game::render() {
+
+	auto renderer = _window.getRenderer();
 
 	pipe->render(renderer);
 	pipe2->render(renderer);
 	player->render(renderer);
-	_window->update();
+
+	_window.update();
 }

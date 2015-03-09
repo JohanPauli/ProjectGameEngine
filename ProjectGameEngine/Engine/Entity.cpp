@@ -22,9 +22,16 @@ Entity::~Entity() {
 
 
 void Entity::update() {
-	_input->update(*this);
+	// input
+	if (_input != nullptr)
+		_input->update(*this);
+
+	// physics
 	_physics->update(0);
-	_graphics->update(*this);
+
+	// graphics
+	if (_graphics != nullptr)
+		_graphics->update(*this);
 }
 
 
