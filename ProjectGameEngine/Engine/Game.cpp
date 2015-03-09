@@ -83,8 +83,8 @@ bool Game::init() {
 
 	// create entities
 	player = new Entity(playerPhy, birdGraphics, input);
-	pipe = new Entity(pipePhy, birdGraphics);
-	pipe2 = new Entity(pipePhy2, birdGraphics);
+	pipe = new Entity(pipePhy, pipeGraphics);
+	pipe2 = new Entity(pipePhy2, pipeGraphics2);
 
 
 	return true;
