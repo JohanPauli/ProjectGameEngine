@@ -61,6 +61,15 @@ public:
 		start();
 	}
 
+	// reset the timer. pauses it too
+	void reset() {
+		gameTime = 0;
+		previous = 0;
+		current = 0;
+		elapsed = 0;
+		paused = true;
+	}
+
 	// time since game started
 	long long getGameTime() const {
 		return gameTime;
@@ -84,13 +93,14 @@ private:
 		long long udTime = timer->getGameTime();
 		if (lastUpdateTime != udTime) {
 			updateLag += timer->elapsed;
-			lastUpdateTime = timer->getGameTime();
+			lastUpdateTime = udTime;
 		}
 
 	}
 
 public:
-	UpdateTimer(Timer*timer, int timePerUpdate)
+	UpdateTimer() : timer(nullptr), timePerUpdate(INT_MAX) {}
+	UpdateTimer(Timer* timer, int timePerUpdate)
 		: timer(timer), timePerUpdate(timePerUpdate) {}
 
 	// milliseconds since last update
