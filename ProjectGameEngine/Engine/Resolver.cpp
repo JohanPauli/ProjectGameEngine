@@ -5,85 +5,48 @@
 // logic was buggy and I don't know how to fix it. going with something simpler for now
 
 inline void resTop(Physics* physics, Physics* otherPhysics) {
-	physics->setYVelocity(-physics->getYVelocity());
-	/*
 	float leftYV = physics->getYVelocity();
-	float rightYV = otherPhysics->getYVelocity();
-	float newYVel;
 
-	// logic
-	if (rightYV > 0 && leftYV > 0)
-		newYVel = rightYV + leftYV;
-	else if (rightYV < 0 && leftYV < 0)
-		newYVel = rightYV - leftYV;
-	else
-		newYVel = -(leftYV - rightYV);
+	// physics moving towards otherPhysics
+	if (leftYV < 0)
+		leftYV = -leftYV;
 
 	// set new value
-	physics->setYVelocity(newYVel);
-	*/
+	physics->setYVelocity(leftYV);
 }
 
 
 inline void resBottom(Physics* physics, Physics* otherPhysics) {
-	physics->setYVelocity(-physics->getYVelocity());
-	/*
 	float leftYV = physics->getYVelocity();
-	float rightYV = otherPhysics->getYVelocity();
-	float newYVel;
 
-	// logic
-	if (rightYV < 0 && leftYV < 0)
-		newYVel = rightYV + leftYV;
-	else if (rightYV > 0 && leftYV > 0)
-		newYVel = rightYV - leftYV;
-	else
-		newYVel = -(leftYV - rightYV);
+	// physics moving towards otherPhysics
+	if (leftYV > 0)
+		leftYV = -leftYV;
 
 	// set new value
-	physics->setYVelocity(newYVel);
-	*/
+	physics->setYVelocity(leftYV);
 }
 
 inline void resLeft(Physics* physics, Physics* otherPhysics) {
-	physics->setXVelocity(physics->getXVelocity());
-	/*
 	float leftXV = physics->getXVelocity();
-	float rightXV = otherPhysics->getXVelocity();
-	float newXVel;
 
-	// logic
-	if (rightXV <= 0 && leftXV < 0)		// both moving left
-		newXVel = rightXV - leftXV;
-	else if (rightXV < 0 && leftXV < 0)	// both moving right
-		newXVel = rightXV + leftXV;
-	else								// moving in opposite directions
-		newXVel = -(leftXV - rightXV);
+	// physics moving towards otherPhysics
+	if (leftXV < 0)
+		leftXV = -leftXV;
 
 	// set new value
-	physics->setXVelocity(newXVel);
-	*/
+	physics->setXVelocity(leftXV);
 }
 
 inline void resRight(Physics* physics, Physics* otherPhysics) {
-	physics->setXVelocity(physics->getXVelocity());
-	/*
 	float leftXV = physics->getXVelocity();
-	float rightXV = otherPhysics->getXVelocity();
-	float newXVel;
 
-	// logic
-	newXVel = leftXV;
-	if (rightXV > 0 && leftXV > 0)
-		newXVel = rightXV - leftXV;
-	else if (rightXV< 0 && leftXV < 0)
-		newXVel = rightXV + leftXV;
-	else
-		newXVel = -(leftXV - rightXV);
-
+	// physics moving towards otherPhysics
+	if (leftXV > 0)
+		leftXV = -leftXV;
+	 
 	// set new value
-	physics->setXVelocity(newXVel);
-	*/
+	physics->setXVelocity(leftXV);
 }
 
 
