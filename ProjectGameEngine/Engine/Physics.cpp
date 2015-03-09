@@ -214,22 +214,34 @@ void PhysicsEngine::detectColissions()
 void PhysicsEngine::collision(DynamicPhysics *dynamicPhysics, Physics *pe)
 {
 	bool left = false, right = false, top = false, bottom = false;
-	float dynamicPhysicsXpos = dynamicPhysics->getXPosition(), dynamicPhysicsYpos = dynamicPhysics->getYPosition(), dynamicPhysicsH = dynamicPhysics->getHeight(), dynamicPhysicsW = dynamicPhysics->getWidth();
-	float peXpos = pe->getXPosition(), peYpos = pe->getYPosition(), peH = pe->getHeight(), peW = pe->getWidth();
-	//Check corner collision
+	float 
+		dynamicPhysicsXpos = dynamicPhysics->getXPosition(), 
+		dynamicPhysicsYpos = dynamicPhysics->getYPosition(), 
+		dynamicPhysicsH = dynamicPhysics->getHeight(), 
+		dynamicPhysicsW = dynamicPhysics->getWidth();
+	float 
+		peXpos = pe->getXPosition(),
+		peYpos = pe->getYPosition(), 
+		peH = pe->getHeight(), 
+		peW = pe->getWidth();
 
 
-	if ((dynamicPhysicsYpos + dynamicPhysicsH) >= peYpos && dynamicPhysicsYpos < peYpos)
+	//Check collision
+	if ((dynamicPhysicsYpos + dynamicPhysicsH) >= peYpos 
+		&& dynamicPhysicsYpos < peYpos)
 		bottom = true;
-	else if (dynamicPhysicsYpos <= (peYpos + peH) && dynamicPhysicsYpos < peYpos)
+	if (dynamicPhysicsYpos <= (peYpos + peH) 
+		&& dynamicPhysicsYpos > peYpos)
 		top = true;
-	else if (dynamicPhysicsXpos <= peXpos + peW && dynamicPhysicsXpos > peXpos)
+	if (dynamicPhysicsXpos <= peXpos + peW 
+		&& dynamicPhysicsXpos > peXpos)
 		left = true;
-	else if (dynamicPhysicsXpos + dynamicPhysicsW >= peXpos && dynamicPhysicsXpos < peXpos)
+	if ((dynamicPhysicsXpos + dynamicPhysicsW) >= peXpos 
+		&& dynamicPhysicsXpos < peXpos)
 		right = true;
 
 	setResolver(rFactory.createResolver(top, bottom, left, right));
 
 	if (resolver != nullptr)
-		resolver->resolve(dynamicPhysics, pe->getXVelocity(), pe->getYVelocity());
+		resolver->resolve(dynamicPhysics, pe);
 }

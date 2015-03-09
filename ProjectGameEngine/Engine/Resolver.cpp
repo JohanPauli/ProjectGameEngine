@@ -2,6 +2,91 @@
 #include "Physics.h"
 
 
+// logic was buggy and I don't know how to fix it. going with something simpler for now
+
+inline void resTop(Physics* physics, Physics* otherPhysics) {
+	physics->setYVelocity(-physics->getYVelocity());
+	/*
+	float leftYV = physics->getYVelocity();
+	float rightYV = otherPhysics->getYVelocity();
+	float newYVel;
+
+	// logic
+	if (rightYV > 0 && leftYV > 0)
+		newYVel = rightYV + leftYV;
+	else if (rightYV < 0 && leftYV < 0)
+		newYVel = rightYV - leftYV;
+	else
+		newYVel = -(leftYV - rightYV);
+
+	// set new value
+	physics->setYVelocity(newYVel);
+	*/
+}
+
+
+inline void resBottom(Physics* physics, Physics* otherPhysics) {
+	physics->setYVelocity(-physics->getYVelocity());
+	/*
+	float leftYV = physics->getYVelocity();
+	float rightYV = otherPhysics->getYVelocity();
+	float newYVel;
+
+	// logic
+	if (rightYV < 0 && leftYV < 0)
+		newYVel = rightYV + leftYV;
+	else if (rightYV > 0 && leftYV > 0)
+		newYVel = rightYV - leftYV;
+	else
+		newYVel = -(leftYV - rightYV);
+
+	// set new value
+	physics->setYVelocity(newYVel);
+	*/
+}
+
+inline void resLeft(Physics* physics, Physics* otherPhysics) {
+	physics->setXVelocity(physics->getXVelocity());
+	/*
+	float leftXV = physics->getXVelocity();
+	float rightXV = otherPhysics->getXVelocity();
+	float newXVel;
+
+	// logic
+	if (rightXV <= 0 && leftXV < 0)		// both moving left
+		newXVel = rightXV - leftXV;
+	else if (rightXV < 0 && leftXV < 0)	// both moving right
+		newXVel = rightXV + leftXV;
+	else								// moving in opposite directions
+		newXVel = -(leftXV - rightXV);
+
+	// set new value
+	physics->setXVelocity(newXVel);
+	*/
+}
+
+inline void resRight(Physics* physics, Physics* otherPhysics) {
+	physics->setXVelocity(physics->getXVelocity());
+	/*
+	float leftXV = physics->getXVelocity();
+	float rightXV = otherPhysics->getXVelocity();
+	float newXVel;
+
+	// logic
+	newXVel = leftXV;
+	if (rightXV > 0 && leftXV > 0)
+		newXVel = rightXV - leftXV;
+	else if (rightXV< 0 && leftXV < 0)
+		newXVel = rightXV + leftXV;
+	else
+		newXVel = -(leftXV - rightXV);
+
+	// set new value
+	physics->setXVelocity(newXVel);
+	*/
+}
+
+
 /*
 Resolvers
 */
@@ -30,116 +115,49 @@ Resolver* ResolverFactory::createResolver(bool top, bool bottom, bool left, bool
 }
 
 //Resolvers
-void TopLeftResolver::resolve(Physics *pe, int xv, int yv)
+void TopLeftResolver::resolve(Physics *physics, Physics *otherPhysics)
 {
-	if (yv > 0 && pe->getYVelocity() > 0)
-		pe->setYVelocity(yv + pe->getYVelocity());
-	else if (yv < 0 && pe->getYVelocity() < 0)
-		pe->setYVelocity(yv - pe->getYVelocity());
-	else
-		pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-	if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
-
+	resTop(physics, otherPhysics);
+	resLeft(physics, otherPhysics);
 }
 
-void TopRightResolver::resolve(Physics *pe, int xv, int yv)
+void TopRightResolver::resolve(Physics *physics, Physics *otherPhysics)
 {
-	if (yv > 0 && pe->getYVelocity() > 0)
-		pe->setYVelocity(yv + pe->getYVelocity());
-	else if (yv < 0 && pe->getYVelocity() < 0)
-		pe->setYVelocity(yv - pe->getYVelocity());
-	else
-		pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
 
-	if (xv > 0 && pe->getXVelocity() > 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv + pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
+	resTop(physics, otherPhysics);
+	resRight(physics, otherPhysics);
 }
 
-void BottomLeftResolver::resolve(Physics *pe, int xv, int yv)
+void BottomLeftResolver::resolve(Physics *physics, Physics *otherPhysics)
 {
-
-	if (yv < 0 && pe->getYVelocity() < 0)
-		pe->setYVelocity(yv + pe->getYVelocity());
-	else if (yv > 0 && pe->getYVelocity() > 0)
-		pe->setYVelocity(yv - pe->getYVelocity());
-	else
-		pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-
-	if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
+	resBottom(physics, otherPhysics);
+	resLeft(physics, otherPhysics);
 }
 
-void BottomRightResolver::resolve(Physics *pe, int xv, int yv)
+void BottomRightResolver::resolve(Physics *physics, Physics *otherPhysics)
 {
-	if (yv < 0 && pe->getYVelocity() < 0)
-		pe->setYVelocity(yv + pe->getYVelocity());
-	else if (yv > 0 && pe->getYVelocity() > 0)
-		pe->setYVelocity(yv - pe->getYVelocity());
-	else
-		pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-
-	if (xv > 0 && pe->getXVelocity() > 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv + pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
+	resBottom(physics, otherPhysics);
+	resRight(physics, otherPhysics);
 }
 
-void LeftResolver::resolve(Physics *pe, int xv, int yv)
+void LeftResolver::resolve(Physics *physics, Physics *otherPhysics)
 {
-	if (xv > 0 && pe->getXVelocity() > 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv + pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
+	resLeft(physics, otherPhysics);
 }
 
-void RightResolver::resolve(Physics *pe, int xv, int yv)
+void RightResolver::resolve(Physics *physics, Physics *otherPhysics)
 {
-	if (xv > 0 && pe->getXVelocity() > 0)
-		pe->setXVelocity(xv - pe->getXVelocity());
-	else if (xv < 0 && pe->getXVelocity() < 0)
-		pe->setXVelocity(xv + pe->getXVelocity());
-	else
-		pe->setXVelocity(-1 * (pe->getXVelocity() - xv));
+	resRight(physics, otherPhysics);
 }
 
-void TopResolver::resolve(Physics *pe, int xv, int yv)
+void TopResolver::resolve(Physics *physics, Physics *otherPhysics)
 {
-
-	if (yv > 0 && pe->getYVelocity() > 0)
-		pe->setYVelocity(yv + pe->getYVelocity());
-	else if (yv < 0 && pe->getYVelocity() < 0)
-		pe->setYVelocity(yv - pe->getYVelocity());
-	else
-		pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-
-	//pe->setYVelocity(1);
+	resTop(physics, otherPhysics);
 }
 
-void BottomResolver::resolve(Physics *pe, int xv, int yv)
+void BottomResolver::resolve(Physics *physics, Physics *otherPhysics)
 {
-	if (pe->getYVelocity() > 0)
-	{
-		if (yv < 0 && pe->getYVelocity() < 0)
-			pe->setYVelocity(yv + pe->getYVelocity());
-		else if (yv > 0 && pe->getYVelocity() > 0)
-			pe->setYVelocity(yv - pe->getYVelocity());
-		else
-			pe->setYVelocity(-1 * (pe->getYVelocity() - yv));
-	}
-	if (pe->getYVelocity() == 0)
-		pe->setYAcceleration(0);
-
+	resBottom(physics, otherPhysics);
+	//if (physics->getYVelocity() == 0)
+	//	physics->setYAcceleration(0);
 }
