@@ -107,16 +107,16 @@ void PhysicsEngine::addStaticPhysics(StaticPhysics *staticPhysics)
 	sEntities.push_back(staticPhysics);
 }
 
-void PhysicsEngine::update()
+void PhysicsEngine::update(std::vector<Entity*> entities)
 {
-	for (auto it : dEntities)
+	for (auto it : entities)
+	{
+		it->_physics->update(0);
+	}
+	/*for (auto it : sEntities)
 	{
 		it->update(0);
-	}
-	for (auto it : sEntities)
-	{
-		it->update(0);
-	}
+	}*/
 }
 
 bool PhysicsEngine::deletePhysics(StaticPhysics *staticPhysics)
@@ -156,7 +156,43 @@ void PhysicsEngine::setResolver(Resolver *res)
 	resolver = res;
 }
 
-void PhysicsEngine::detectColissions()
+void PhysicsEngine::detectColissions(std::vector<Entity*> dynamicEntities, std::vector<Entity*> staticEntities)
+{
+
+	if (dynamicEntities.size() > 0 && staticEntities.size() > 0)
+	{
+		float dynamicPhysicsXpos, dynamicPhysicsYpos, dynamicPhysicsH, dynamicPhysicsW;
+		float staticPhysicsXpos, staticPhysicsYpos, staticPhysicsH, staticPhysicsW;
+		for (auto dynamicEntity : dynamicEntities)
+		{
+			dynamicPhysicsXpos = dynamicEntity->_physics->getXPosition();
+			dynamicPhysicsYpos = dynamicEntity->_physics->getYPosition();
+			dynamicPhysicsH = dynamicEntity->_physics->getHeight();
+			dynamicPhysicsW = dynamicEntity->_physics->getWidth();
+			for (auto staticEntity : staticEntities)
+			{
+				staticPhysicsXpos = staticEntity->_physics->getXPosition();
+				staticPhysicsYpos = staticEntity->_physics->getYPosition();
+				staticPhysicsH = staticEntity->_physics->getHeight();
+				staticPhysicsW = staticEntity->_physics->getWidth();
+				if (dynamicPhysicsYpos + dynamicPhysicsH < staticPhysicsYpos || dynamicPhysicsYpos > staticPhysicsYpos + staticPhysicsH)
+				{
+				}
+				else if (dynamicPhysicsXpos + dynamicPhysicsW < staticPhysicsXpos || dynamicPhysicsXpos > staticPhysicsXpos + staticPhysicsW)
+				{
+				}
+				else
+				{
+					collision(dynamicEntity->_physics, staticEntity->_physics);
+				}
+
+			}
+		}
+	}
+
+}
+
+void PhysicsEngine::detectColissions(std::vector<Entity*> entities)
 {
 	/*
 	Collision between dynamic objects
@@ -177,38 +213,7 @@ void PhysicsEngine::detectColissions()
 
 	}
 
-
-	if (dEntities.size() > 0 && sEntities.size() > 0)
-	{
-		float dynamicPhysicsXpos, dynamicPhysicsYpos, dynamicPhysicsH, dynamicPhysicsW;
-		float staticPhysicsXpos, staticPhysicsYpos, staticPhysicsH, staticPhysicsW;
-		for (auto dynamicPhysics : dEntities)
-		{
-			dynamicPhysicsXpos = dynamicPhysics->getXPosition();
-			dynamicPhysicsYpos = dynamicPhysics->getYPosition();
-			dynamicPhysicsH = dynamicPhysics->getHeight();
-			dynamicPhysicsW = dynamicPhysics->getWidth();
-			for (auto staticPhysics : sEntities)
-			{
-				staticPhysicsXpos = staticPhysics->getXPosition();
-				staticPhysicsYpos = staticPhysics->getYPosition();
-				staticPhysicsH = staticPhysics->getHeight();
-				staticPhysicsW = staticPhysics->getWidth();
-				if (dynamicPhysicsYpos + dynamicPhysicsH < staticPhysicsYpos || dynamicPhysicsYpos > staticPhysicsYpos + staticPhysicsH)
-				{
-				}
-				else if (dynamicPhysicsXpos + dynamicPhysicsW < staticPhysicsXpos || dynamicPhysicsXpos > staticPhysicsXpos + staticPhysicsW)
-				{
-				}
-				else
-				{
-					collision(dynamicPhysics, staticPhysics);
-				}
-
-			}
-		}
-	}
-
+	
 }
 
 // check if a point intersects
@@ -226,14 +231,12 @@ inline bool partialIntersect(float leftLow, float leftHigh, float rightLow, floa
 
 // check if a range intersects fully
 inline bool fullIntersect(float leftLow, float leftHigh, float rightLow, float rightHigh) {
-	bool right, left;
-	left = pointIntersect(leftLow, rightLow, rightHigh);
-	right = pointIntersect(leftHigh, rightLow, rightHigh);
-	return right && left; // both intersect
+
+	return pointIntersect(leftLow, rightLow, rightHigh) && pointIntersect(leftHigh, rightLow, rightHigh); // both intersect
 }
 
 
-void PhysicsEngine::collision(DynamicPhysics *dynamicPhysics, Physics *pe)
+void PhysicsEngine::collision(Physics *dynamicPhysics, Physics *pe)
 {
 	bool left = false, right = false, top = false, bottom = false;
 	/*float

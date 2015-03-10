@@ -3,8 +3,9 @@
 #include <list>
 #include <algorithm>
 #include <cmath>
-
+#include <vector>
 #include "Resolver.h"
+#include "Entity.h"
 
 using std::list;
 
@@ -100,9 +101,10 @@ class PhysicsEngine
 {
 public:
 	~PhysicsEngine();
-	void update();
-	void detectColissions();
-	void collision(DynamicPhysics *, Physics *);
+	void update(std::vector<Entity*> entities);
+	void detectColissions(std::vector<Entity*> entities1, std::vector<Entity*> entities2);
+	void detectColissions(std::vector<Entity*> entities1);
+	void collision(Physics *, Physics *);
 	void addDynamicPhysics(DynamicPhysics *de);
 	void addStaticPhysics(StaticPhysics *se);
 	void setResolver(Resolver *res);
