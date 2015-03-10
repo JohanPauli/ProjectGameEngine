@@ -22,6 +22,9 @@
     <Filter Include="Engine\World">
       <UniqueIdentifier>{dc3c6953-247f-4883-82e0-b23f751bbac3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Components">
+      <UniqueIdentifier>{8445c266-0410-4764-a623-92778cb14540}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio.cpp">
@@ -58,10 +61,13 @@
       <Filter>Engine\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Engine\GraphicsComponent.cpp">
-      <Filter>Engine\Graphics</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Engine\InputComponent.cpp">
-      <Filter>Engine\Input</Filter>
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World.cpp">
+      <Filter>Engine\World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,14 +116,14 @@
     <ClInclude Include="Engine\Entity.h">
       <Filter>Engine\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\GraphicsComponent.h">
-      <Filter>Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\InputComponent.h">
-      <Filter>Engine\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\World.h">
       <Filter>Engine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphicsComponent.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\InputComponent.h">
+      <Filter>Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

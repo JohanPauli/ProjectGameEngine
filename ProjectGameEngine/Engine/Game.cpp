@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "InputComponent.h"
 #include "GraphicsComponent.h"
+#include "InputMapping.h"
 
 
 const char* Game::WINDOW_TITLE = "Flappy Bird Demo";
@@ -42,17 +43,11 @@ bool Game::init() {
 	// test variables
 	// physics
 	auto top = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
-		-100.f, -100.f, // pos
-		 100.f, 10000.f); // height width
+		-100.f, -100.f,		// x, y
+		 100.f, 10000.f);	// height, width
 	auto bot = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
-		-100.f, (float)_windowHeight,
-		10000.f, 10000.f);
-	auto left = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
-		-100.f, -100.f,
-		10000.f, 100.f);
-	auto right = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
-		(float)_windowWidth, -100.f,
-		10000.f, 100.f);
+		-100.f, (float)_windowHeight, // x, y
+		10000.f, 10000.f);			  // height, width
 
 	auto playerPhy = new DynamicPhysics(0.f, 0.08f, 
 										2.f, 0.f, 
@@ -66,18 +61,10 @@ bool Game::init() {
 									  0.f, 0.f,
 									  250.f, 0.f,
 									  240.f, 130.f);
-	phyEng.addStaticPhysics(top);
-	phyEng.addStaticPhysics(bot);
-	phyEng.addStaticPhysics(left);
-	phyEng.addStaticPhysics(right);
-	phyEng.addDynamicPhysics(playerPhy);
-	phyEng.addStaticPhysics(pipePhy);
-	phyEng.addStaticPhysics(pipePhy2);
 
 	// init textures
 	auto renderer = _window.getRenderer();
 	bird = renderer->loadSprite("assets\\sprites\\bird_ani_sheet.png");
-	pipeTop = renderer->loadSprite("assets\\sprites\\pipe-top.png");
 	pipeMid = renderer->loadSprite("assets\\sprites\\pipe-mid.png");
 	pipeBot = renderer->loadSprite("assets\\sprites\\pipe-bot.png");
 
@@ -97,16 +84,25 @@ bool Game::init() {
 	auto pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, false);
 	auto birdGraphics = new BirdGraphics(birdSheet, UpdateTimer(&_timer, 20));
 
-	// activate player entities' input
-	_inputMapper.registerContext(input, 10);
-	_inputMapper.activateContext(input->getInputContextId());
+	// register
+	InputMapper::getInstance().registerContext(input, 10);
 
 
 	// create entities
-	player = new Entity(playerPhy, birdGraphics, input);
-	pipe = new Entity(pipePhy, pipeGraphics);
-	pipe2 = new Entity(pipePhy2, pipeGraphics2);
+	auto botBorder = new Entity(bot);
+	auto topBorder = new Entity(top);
 
+
+	auto player = new Entity(playerPhy, birdGraphics, input);
+	auto pipe = new Entity(pipePhy, pipeGraphics);
+	auto pipe2 = new Entity(pipePhy2, pipeGraphics2);
+
+	_world.setPlayer(player);
+	_world.addEntity(pipe, EntityType::STATIC);
+	_world.addEntity(pipe2, EntityType::STATIC);
+	_world.setBorders(topBorder, botBorder);
+
+	while (_world.activateFrontEntity(EntityType::STATIC));
 
 	return true;
 }
@@ -115,11 +111,9 @@ bool Game::init() {
 void Game::cleanup() {
 
 	// test vars
-	delete bird, sound, phyEng,
-		// entities
-		player, pipe, pipe2,
+	delete bird, sound,
 		// textures
-		pipeTop, pipeMid, pipeBot;
+		pipeMid, pipeBot;
 
 	// shut down low-level modules
 	Flappy::quit();
@@ -144,7 +138,7 @@ void Game::run() {
 
 void Game::handleUserInput() {
 	Flappy::pollEvents(_running);
-	_inputMapper.notify();
+	InputMapper::getInstance().notify();
 }
 
 
@@ -169,22 +163,11 @@ void Game::tryRender() {
 
 
 void Game::update() {
-
-	pipe->update();
-	pipe2->update();
-	player->update();
-
-	phyEng.detectColissions();
+	_world.update();
 }
 
 
 void Game::render() {
-
-	auto renderer = _window.getRenderer();
-
-	pipe->render(renderer);
-	pipe2->render(renderer);
-	player->render(renderer);
-
+	_world.render(_window.getRenderer());
 	_window.update();
 }

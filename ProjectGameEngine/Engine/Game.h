@@ -5,8 +5,8 @@
 
 #include "Timer.h"
 #include "Rendering.h"
-#include "InputMapping.h"
 #include "Physics.h"
+#include "World.h"
 
 // forward declarations
 class Entity;
@@ -30,7 +30,8 @@ private:
 	// core
 private:
 	Window		_window;
-	InputMapper _inputMapper;
+	World		_world;	// the game world
+	
 
 	// timers
 private:
@@ -46,14 +47,7 @@ private:
 
 	//// test variables
 private:
-	PhysicsEngine phyEng;
-
-	Entity*	player = nullptr;
-	Entity*	pipe = nullptr;
-	Entity*	pipe2 = nullptr;
-
 	Sprite*	bird = nullptr;
-	Sprite*	pipeTop = nullptr;
 	Sprite*	pipeMid = nullptr;
 	Sprite*	pipeBot = nullptr;
 	Sound*	sound = nullptr;
@@ -87,6 +81,6 @@ public:
 	void run();
 
 	static int getWindowWidth() { return _windowWidth; }
-	static int getWindowWidth() { return _windowHeight; }
+	static int getWindowHeight() { return _windowHeight; }
 
 };

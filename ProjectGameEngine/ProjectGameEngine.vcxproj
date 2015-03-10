@@ -32,6 +32,7 @@
     <ClCompile Include="Engine\Rendering.cpp" />
     <ClCompile Include="Engine\Resolver.cpp" />
     <ClCompile Include="Engine\Sprites.cpp" />
+    <ClCompile Include="Engine\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h" />
