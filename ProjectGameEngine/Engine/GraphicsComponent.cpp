@@ -47,8 +47,7 @@ PipeGraphics::~PipeGraphics() {}
 
 void PipeGraphics::update(Entity& entity) {
 	// calculate position if not initialized or if entity's position has changed
-	if (hasMoved(entity._physics))
-		calcPos(entity._physics);
+	calcPos(entity._physics);
 
 }
 
@@ -62,17 +61,6 @@ void PipeGraphics::render(Entity& entity, Renderer* renderer) {
 
 
 
-// check if the entity's physics has moved compared to Graphics's positions
-bool PipeGraphics::hasMoved(const Physics* physics) const {
-	// moved on the X-axis
-	if (physics->getXPosition() != _topPos.getX())
-		return true;
-	// moved on the Y-axis, take into account _topPos and _midPos could be flipped
-	if (physics->getYPosition() != _topPos.getY() &&
-		physics->getYPosition() != _midPos.getY())
-		return true;
-	return false;
-}
 
 
 // calculate the positions of both sprites

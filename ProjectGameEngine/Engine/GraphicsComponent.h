@@ -54,8 +54,6 @@ private:
 	Rect	_midPos;
 	bool	_upward;
 private:
-	// check if the entity's physics has moved compared to Graphics's positions
-	bool hasMoved(const Physics* physics) const;
 	// calculate the positions of both sprites
 	void calcPos(const Physics* physics);
 public:

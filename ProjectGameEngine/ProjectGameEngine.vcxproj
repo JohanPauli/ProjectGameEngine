@@ -51,6 +51,7 @@
     <ClInclude Include="Engine\Rendering.h" />
     <ClInclude Include="Engine\Resolver.h" />
     <ClInclude Include="Engine\Timer.h" />
+    <ClInclude Include="Engine\World.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BA176B7F-5D0D-4202-89F5-C075451F15A6}</ProjectGuid>

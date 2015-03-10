@@ -11,6 +11,10 @@
 
 const char* Game::WINDOW_TITLE = "Flappy Bird Demo";
 
+// init statics
+int Game::_windowWidth = -1;
+int Game::_windowHeight = -1;
+
 
 
 Game::Game(int argc, char ** argv) 
@@ -37,6 +41,19 @@ bool Game::init() {
 
 	// test variables
 	// physics
+	auto top = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
+		-100.f, -100.f, // pos
+		 100.f, 10000.f); // height width
+	auto bot = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
+		-100.f, (float)_windowHeight,
+		10000.f, 10000.f);
+	auto left = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
+		-100.f, -100.f,
+		10000.f, 100.f);
+	auto right = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
+		(float)_windowWidth, -100.f,
+		10000.f, 100.f);
+
 	auto playerPhy = new DynamicPhysics(0.f, 0.08f, 
 										2.f, 0.f, 
 										0.f, 100.f, 
@@ -49,6 +66,10 @@ bool Game::init() {
 									  0.f, 0.f,
 									  250.f, 0.f,
 									  240.f, 130.f);
+	phyEng.addStaticPhysics(top);
+	phyEng.addStaticPhysics(bot);
+	phyEng.addStaticPhysics(left);
+	phyEng.addStaticPhysics(right);
 	phyEng.addDynamicPhysics(playerPhy);
 	phyEng.addStaticPhysics(pipePhy);
 	phyEng.addStaticPhysics(pipePhy2);

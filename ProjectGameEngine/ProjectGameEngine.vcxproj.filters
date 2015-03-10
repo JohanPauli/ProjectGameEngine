@@ -19,6 +19,9 @@
     <Filter Include="Engine\Input">
       <UniqueIdentifier>{0f8edc36-7e2d-4153-8c6f-5b0fc5c359a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\World">
+      <UniqueIdentifier>{dc3c6953-247f-4883-82e0-b23f751bbac3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio.cpp">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="Engine\InputComponent.h">
       <Filter>Engine\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World.h">
+      <Filter>Engine\World</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

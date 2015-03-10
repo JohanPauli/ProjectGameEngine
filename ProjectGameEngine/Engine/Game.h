@@ -41,12 +41,13 @@ private:
 	// settings
 private:
 	bool _running = true;
-	int	 _windowWidth;
-	int	 _windowHeight;
+	static int	 _windowWidth;
+	static int	 _windowHeight;
 
 	//// test variables
 private:
 	PhysicsEngine phyEng;
+
 	Entity*	player = nullptr;
 	Entity*	pipe = nullptr;
 	Entity*	pipe2 = nullptr;
@@ -84,5 +85,8 @@ public:
 
 	// start the game loop
 	void run();
+
+	static int getWindowWidth() { return _windowWidth; }
+	static int getWindowWidth() { return _windowHeight; }
 
 };

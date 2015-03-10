@@ -21,7 +21,7 @@ Entity::~Entity() {
 }
 
 
-void Entity::update() {
+void Entity::update(int xMove, int yMove) {
 	// input
 	if (_input != nullptr)
 		_input->update(*this);

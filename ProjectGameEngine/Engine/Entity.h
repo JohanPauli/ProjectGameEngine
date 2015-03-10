@@ -28,7 +28,7 @@ public:
 	virtual ~Entity();
 
 	// update components' logic
-	virtual void update();
+	virtual void update(int xMove = 0, int yMove = 0);
 
 	// render entity
 	virtual void render(Renderer* renderer);
