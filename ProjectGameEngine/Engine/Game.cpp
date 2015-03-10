@@ -8,6 +8,7 @@
 #include "InputComponent.h"
 #include "GraphicsComponent.h"
 #include "InputMapping.h"
+#include "RessourceManager.h"
 
 
 const char* Game::WINDOW_TITLE = "Flappy Bird Demo";
@@ -63,10 +64,16 @@ bool Game::init() {
 									  240.f, 130.f);
 
 	// init textures
+
 	auto renderer = _window.getRenderer();
-	bird = renderer->loadSprite("assets\\sprites\\bird_ani_sheet.png");
-	pipeMid = renderer->loadSprite("assets\\sprites\\pipe-mid.png");
-	pipeBot = renderer->loadSprite("assets\\sprites\\pipe-bot.png");
+
+	RessourceManager &rManager = RessourceManager::getInstance(renderer);
+	rManager.load("loadDocument.txt");
+	
+
+	bird = rManager.getByTag<Sprite*>("bird");
+	pipeMid = rManager.getByTag<Sprite*>("pipemid");
+	pipeBot = rManager.getByTag<Sprite*>("pipebot");
 
 	// create bird spritesheet
 	std::vector<Rect> rector;
@@ -101,6 +108,9 @@ bool Game::init() {
 	_world.addEntity(pipe, EntityType::STATIC);
 	_world.addEntity(pipe2, EntityType::STATIC);
 	_world.setBorders(topBorder, botBorder);
+
+
+
 
 	while (_world.activateFrontEntity(EntityType::STATIC));
 
