@@ -40,7 +40,14 @@ private:
 	std::map<int, PriorityInputContext>	_inputContexts;
 	PriorityContextSet					_activeContexts;
 
+private:
+	InputMapper() {}
+	InputMapper(const InputMapper&) = delete;
+	InputMapper operator=(const InputMapper&) = delete;
+
 public:
+	static InputMapper& getInstance();
+
 	~InputMapper();
 
 	/* 

@@ -7,12 +7,13 @@
 
 // ---- InputMapper ----
 
-
-InputMapper::~InputMapper() {
-	for (auto it : _inputContexts) {
-		delete it.second.context;
-	}
+InputMapper& InputMapper::getInstance() {
+	static InputMapper instance;
+	return instance;
 }
+
+
+InputMapper::~InputMapper() {}
 
 
 void InputMapper::registerContext(InputContext* context, int priority) {
