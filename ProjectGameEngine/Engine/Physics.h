@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <vector>
+#include <deque>
 #include "Resolver.h"
 #include "Entity.h"
 
@@ -79,8 +80,8 @@ private:
 	int rectYpos;
 public:
 	DynamicPhysics(float xAcceleration, float yAcceleration, float xVelocity, float yVelocity, float xPosition, float yPosition, float height, float width);
-	virtual void update(int elapsed);
-	virtual Rect getRect();
+	virtual void update(int elapsed) override;
+	virtual Rect getRect() override;
 	void resolveCollision(float collVelocity, Side);
 
 };
@@ -89,9 +90,10 @@ public:
 class StaticPhysics : public Physics
 {
 public:
-	StaticPhysics(float xAcceleration, float yAcceleration, float xVelocity, float yVelocity, float xPosition, float yPosition, float height, float width) : Physics(xAcceleration, yAcceleration, xVelocity, yVelocity, xPosition, yPosition, height, width){}
-	virtual void update(int elapsed);
-	virtual Rect getRect();
+	StaticPhysics(float xAcceleration, float yAcceleration, float xVelocity, float yVelocity, float xPosition, float yPosition, float height, float width) 
+		: Physics(xAcceleration, yAcceleration, xVelocity, yVelocity, xPosition, yPosition, height, width){}
+	virtual void update(int elapsed) override;
+	virtual Rect getRect() override;
 };
 
 
@@ -101,23 +103,31 @@ class PhysicsEngine
 {
 public:
 	~PhysicsEngine();
-	void update(std::vector<Entity*> entities);
-	void detectColissions(std::vector<Entity*> entities1, std::vector<Entity*> entities2);
-	void detectColissions(std::vector<Entity*> entities1);
-	void collision(Physics *, Physics *);
+	//void update(std::vector<Entity*> entities);
+	void detectCollisions(const std::deque<Entity*>& entities1, const std::deque<Entity*>& entities2);
+	void detectCollisions(Entity* entity, const std::deque<Entity*>& entities2);
+	void detectCollisions(Entity* entity, Entity* entity2);
+
+	void collision(Physics* phy, Physics* phy2);
+	//void detectColissions(std::vector<Entity*> entities1);
+	/*
 	void addDynamicPhysics(DynamicPhysics *de);
 	void addStaticPhysics(StaticPhysics *se);
+	*/
 	void setResolver(Resolver *res);
 
 	/*
 	Used when a single physics element has to be deleted
 	*/
+	/*
 	bool deletePhysics(StaticPhysics *staticPhysics);
 	bool deletePhysics(DynamicPhysics *dynamicPhysics);
-
+	*/
 private:
+	/*
 	list<DynamicPhysics*> dEntities;
 	list<StaticPhysics*> sEntities;
+	*/
 	ResolverFactory rFactory;
 	Resolver *resolver;
 
