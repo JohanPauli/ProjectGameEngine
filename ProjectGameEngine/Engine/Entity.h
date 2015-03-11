@@ -16,12 +16,12 @@ class Renderer;
 */
 class Entity {
 private:
-	Graphics*	_graphics;
+	Graphics*	graphics;
 
 	// physics is public so Input and Graphics have access to x, y, and velocity
 public:
-	Input*		_input;
-	Physics*	_physics;
+	Input*		input;
+	Physics*	physics;
 
 public:
 	Entity(Physics* physics, Graphics* graphics = nullptr, Input* input = nullptr);

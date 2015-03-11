@@ -40,7 +40,8 @@ private:
 	int		_yOffset = 0;
 
 private:
-
+	// move the display area to where the player is
+	void followPlayer();
 
 public:
 	~World();

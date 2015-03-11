@@ -29,7 +29,7 @@ void BirdGraphics::update(Entity& entity) {
 
 void BirdGraphics::render(Entity& entity, Renderer* renderer) {
 	// render
-	renderer->render(_spriteSheet->getSprite(), &entity._physics->getRect(), _spriteSheet->getSpriteSrc(), entity._physics->getAngle());
+	renderer->render(_spriteSheet->getSprite(), &entity.physics->getRect(), _spriteSheet->getSpriteSrc(), entity.physics->getAngle());
 }
 
 
@@ -47,7 +47,7 @@ PipeGraphics::~PipeGraphics() {}
 
 void PipeGraphics::update(Entity& entity) {
 	// calculate position if not initialized or if entity's position has changed
-	calcPos(entity._physics);
+	calcPos(entity.physics);
 
 }
 
@@ -98,10 +98,10 @@ BackgroundGraphics::~BackgroundGraphics() {}
 
 void BackgroundGraphics::update(Entity &entity)
 {
-	int xPos = entity._physics->getXPosition(),
-		yPos = entity._physics->getYPosition(),
-		height = entity._physics->getHeight(),
-		width = entity._physics->getWidth();
+	int xPos = entity.physics->getXPosition(),
+		yPos = entity.physics->getYPosition(),
+		height = entity.physics->getHeight(),
+		width = entity.physics->getWidth();
 
 	int skyHeight = height * 0.75;
 	int landHeight = height * 0.25;

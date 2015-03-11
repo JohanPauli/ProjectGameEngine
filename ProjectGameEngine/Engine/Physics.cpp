@@ -111,7 +111,7 @@ void PhysicsEngine::update(std::vector<Entity*> entities)
 {
 	for (auto it : entities)
 	{
-		it->_physics->update(0);
+		it->physics->update(0);
 	}
 	/*for (auto it : sEntities)
 	{
@@ -165,16 +165,16 @@ void PhysicsEngine::detectColissions(std::vector<Entity*> dynamicEntities, std::
 		float staticPhysicsXpos, staticPhysicsYpos, staticPhysicsH, staticPhysicsW;
 		for (auto dynamicEntity : dynamicEntities)
 		{
-			dynamicPhysicsXpos = dynamicEntity->_physics->getXPosition();
-			dynamicPhysicsYpos = dynamicEntity->_physics->getYPosition();
-			dynamicPhysicsH = dynamicEntity->_physics->getHeight();
-			dynamicPhysicsW = dynamicEntity->_physics->getWidth();
+			dynamicPhysicsXpos = dynamicEntity->physics->getXPosition();
+			dynamicPhysicsYpos = dynamicEntity->physics->getYPosition();
+			dynamicPhysicsH = dynamicEntity->physics->getHeight();
+			dynamicPhysicsW = dynamicEntity->physics->getWidth();
 			for (auto staticEntity : staticEntities)
 			{
-				staticPhysicsXpos = staticEntity->_physics->getXPosition();
-				staticPhysicsYpos = staticEntity->_physics->getYPosition();
-				staticPhysicsH = staticEntity->_physics->getHeight();
-				staticPhysicsW = staticEntity->_physics->getWidth();
+				staticPhysicsXpos = staticEntity->physics->getXPosition();
+				staticPhysicsYpos = staticEntity->physics->getYPosition();
+				staticPhysicsH = staticEntity->physics->getHeight();
+				staticPhysicsW = staticEntity->physics->getWidth();
 				if (dynamicPhysicsYpos + dynamicPhysicsH < staticPhysicsYpos || dynamicPhysicsYpos > staticPhysicsYpos + staticPhysicsH)
 				{
 				}
@@ -183,7 +183,7 @@ void PhysicsEngine::detectColissions(std::vector<Entity*> dynamicEntities, std::
 				}
 				else
 				{
-					collision(dynamicEntity->_physics, staticEntity->_physics);
+					collision(dynamicEntity->physics, staticEntity->physics);
 				}
 
 			}
