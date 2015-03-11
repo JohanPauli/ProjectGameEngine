@@ -7,6 +7,38 @@ RessourceManager::RessourceManager(Renderer *renderer): renderer(renderer)
 	typeMap["SOUND"] = 2;
 	typeMap["MUSIC"] = 3;
 }
+//
+//
+RessourceManager::~RessourceManager()
+{
+	/*auto spriteIt = spriteMap.begin();
+	while (spriteIt != spriteMap.end())
+	{
+		Sprite *sprite = spriteIt->second;
+		delete sprite;
+		sprite = nullptr;
+		spriteIt++;
+	}
+	auto soundIt = soundMap.begin();
+	while (soundIt != soundMap.end())
+	{
+		Sound *sound = soundIt->second;
+		delete sound;
+		sound = nullptr;
+		soundIt++;
+	}
+	auto musicIt = musicMap.begin();
+	while (musicIt != musicMap.end())
+	{
+		Music *music = musicIt->second;
+		delete music;
+		music = nullptr;
+		musicIt++;
+	}*/
+	spriteMap.clear();
+	soundMap.clear();
+	musicMap.clear();
+}
 
 bool RessourceManager::load(std::string filename)
 {

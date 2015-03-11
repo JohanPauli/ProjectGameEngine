@@ -30,11 +30,11 @@ private:
 	//Maybe make renderer a singleton?
 	Renderer *renderer = nullptr;
 	RessourceManager(Renderer *);
-	RessourceManager(RessourceManager const&)	= delete;              // Don't Implement
-	void operator=(RessourceManager const&)		= delete; // Don't implement
+	RessourceManager(RessourceManager const&) = delete;
+	void operator=(RessourceManager const&)		= delete;
 
 public:
-
+	~RessourceManager();
 	bool load(std::string filename);
 
 	//Template function specified in cpp file
