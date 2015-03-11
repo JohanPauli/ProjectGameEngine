@@ -33,6 +33,9 @@ public:
 class PlayerInput : public Input {
 private:
 	void flap(bool repeat) const;
+	void right(bool repeat) const;
+	void left(bool repeat) const;
+	void stop(bool repeat) const;
 
 public:
 	virtual ~PlayerInput();
