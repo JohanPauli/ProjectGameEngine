@@ -3,6 +3,8 @@
 #include "Timer.h"
 #include "Rect.h"
 
+#include <vector>
+
 // forward declarations
 class Entity;
 class Renderer;
@@ -67,13 +69,11 @@ public:
 
 class BackgroundGraphics : public Graphics{
 private:
-	Sprite* _sky;
-	Sprite* _land;
-	Rect skyPos;
-	Rect landPos;
+	Sprite* background;
+	Rect pos;
 
 public:
-	BackgroundGraphics(Sprite* sky, Sprite* land);
+	BackgroundGraphics(Sprite* sprite);
 	virtual ~BackgroundGraphics();
 	virtual void update(Entity& entity) override;
 	virtual void render(Entity& entity, Renderer* renderer) override;

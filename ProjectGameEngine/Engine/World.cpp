@@ -103,6 +103,28 @@ inline void renderContainer(EntityCont& container, Renderer* renderer) {
 }
 
 
+void World::init(Level level)
+{
+	std::vector<Entity*> pipes = level.getPipeEntities();
+	for (auto it = pipes.begin(); it != pipes.end(); it++)
+	{
+		addEntity( *it, EntityType::STATIC);
+	}
+
+	std::vector<Entity*> back = level.getBackground();
+	for (auto it = back.begin(); it != back.end(); it++)
+	{
+		addEntity(*it, EntityType::BACKGROUND);
+	}
+
+	std::vector<Entity*> foreground = level.getForeground();
+	for (auto it = foreground.begin(); it != foreground.end(); it++)
+	{
+		addEntity(*it, EntityType::FOREGROUND);
+	}
+}
+
+
 void World::render(Renderer* renderer) {
 	// rendering offsets
 	renderer->setOffsets(_xOffset, _yOffset);
@@ -112,12 +134,13 @@ void World::render(Renderer* renderer) {
 	_player->render(renderer);
 	renderContainer(_activeEntities.staticEntities, renderer);
 	renderContainer(_activeEntities.foregroundEntities, renderer);
+	manageScene();
 }
 
 
 // check if entity is left of the offSet
 inline bool toTheLeft(Entity* entity, int xOffset) {
-	return (entity->getX() < (float)xOffset);
+	return (entity->_physics->getXPosition() < (float)xOffset);
 }
 inline void emplaceEntity(Entity* entity, EntityCont& left, EntityCont& right, int xOffset) {
 	if (toTheLeft(entity, xOffset))

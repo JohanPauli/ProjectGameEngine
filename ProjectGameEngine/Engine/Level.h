@@ -2,11 +2,9 @@
 #define LEVEL_H
 
 #include "Entity.h"
-#include "Physics.h"
-#include "GraphicsComponent.h"
+
 #include "Rendering.h"
-#include "Game.h"
-#include "RessourceManager.h"
+
 #include <vector>
 #include <queue>
 #include <random>
@@ -17,17 +15,18 @@ This class will be used to initialize all game objects
 class Level
 {
 private:
-	Entity *player;
 	std::vector < Entity* > pipes;
 	std::vector < Entity* > background;
+	std::vector < Entity* > foreground;
 
-	bool init(Renderer*);
+	bool init();
 	
 public:
-	Level(Renderer *renderer);
+	Level();
 
-	std::vector<Entity*> getPipeEntities() const;
-	std::vector<Entity*> getBackground() const;
+	std::vector<Entity*>& getPipeEntities();
+	std::vector<Entity*>& getBackground();
+	std::vector<Entity*>& getForeground();
 	//Entity* getPlayer() const;
 
 };

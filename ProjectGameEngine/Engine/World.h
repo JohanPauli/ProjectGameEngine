@@ -1,7 +1,7 @@
 #pragma once
 
 #include <deque>
-#include "Physics.h"
+#include "Level.h"
 
 class Entity;
 class Renderer;
@@ -54,6 +54,10 @@ public:
 	// deallocate all objects and resets the world state
 	void free();
 
+
+	//Load world
+	void init(Level level);
+
 	// update logic
 	void update();
 
@@ -80,4 +84,6 @@ public:
 
 	// deactivate an entity
 	bool deactivateRightEntity(EntityType type);
+
+	void manageScene();
 };

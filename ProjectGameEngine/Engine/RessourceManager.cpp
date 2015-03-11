@@ -1,6 +1,6 @@
 #include "RessourceManager.h"
 
-RessourceManager::RessourceManager(Renderer *renderer): renderer(renderer)
+RessourceManager::RessourceManager()
 {
 	//define typemap integers
 	typeMap["SPRITE"] = 1;
@@ -40,7 +40,7 @@ RessourceManager::~RessourceManager()
 	musicMap.clear();
 }
 
-bool RessourceManager::load(std::string filename)
+bool RessourceManager::load(std::string filename, Renderer *renderer)
 {
 	std::ifstream inFile;
 	std::stringstream ss;
@@ -108,6 +108,7 @@ bool RessourceManager::load(std::string filename)
 
 		
 	}
+	inFile.close();
 	return true;
 
 }
@@ -140,8 +141,8 @@ Music* RessourceManager::getByTag<Music*>(std::string tag)
 }
 
 
-RessourceManager& RessourceManager::getInstance(Renderer *renderer)
+RessourceManager& RessourceManager::getInstance()
 {
-	static RessourceManager instance(renderer);
+	static RessourceManager instance;
 	return instance;
 }

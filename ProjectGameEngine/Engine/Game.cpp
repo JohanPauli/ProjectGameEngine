@@ -43,7 +43,7 @@ bool Game::init() {
 		10000.f, 10000.f);			  // height, width
 
 	auto playerPhy = new DynamicPhysics(0.f, 0.08f, 
-										2.f, 0.f, 
+										0.f, 0.f, 
 										0.f, 100.f, 
 										60.f, 90.f);
 	auto pipePhy = new StaticPhysics(0.f, 0.f, 0.f, 0.f, 
@@ -53,12 +53,21 @@ bool Game::init() {
 									  250.f, 0.f, // x, y
 									  240.f, 130.f); // h, w
 
+	auto pipePhy3 = new StaticPhysics(0.f, 0.f,
+		0.f, 0.f,
+		550.f, _windowHeight - 240.f,
+		240.f, 130.f);
+	auto pipePhy4 = new StaticPhysics(0.f, 0.f,
+		0.f, 0.f,
+		550.f, 0.f,
+		240.f, 130.f);
+
 	// init textures
 
 	auto renderer = _window.getRenderer();
 
-	RessourceManager &rManager = RessourceManager::getInstance(renderer);
-	rManager.load("loadDocument.txt");
+	RessourceManager &rManager = RessourceManager::getInstance();
+	rManager.load("loadDocument.txt", renderer);
 	
 
 	auto bird = rManager.getByTag<Sprite*>("bird");
@@ -79,6 +88,8 @@ bool Game::init() {
 	auto input = new PlayerInput();
 	auto pipeGraphics = new PipeGraphics(pipeBot, pipeMid, true);
 	auto pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, false);
+	auto pipeGraphics3 = new PipeGraphics(pipeBot, pipeMid, true);
+	auto pipeGraphics4 = new PipeGraphics(pipeBot, pipeMid, false);
 	auto birdGraphics = new BirdGraphics(birdSheet, UpdateTimer(&_timer, 20));
 
 	// register
@@ -93,16 +104,40 @@ bool Game::init() {
 	auto player = new Entity(playerPhy, birdGraphics, input);
 	auto pipe = new Entity(pipePhy, pipeGraphics);
 	auto pipe2 = new Entity(pipePhy2, pipeGraphics2);
+	auto pipe3 = new Entity(pipePhy3, pipeGraphics3);
+	auto pipe4 = new Entity(pipePhy4, pipeGraphics4);
 
 	_world->setPlayer(player);
 	_world->addEntity(pipe, EntityType::STATIC);
 	_world->addEntity(pipe2, EntityType::STATIC);
 	_world->setBorders(topBorder, botBorder);
 
+	Level level;
 
+	_world.init(level);
+	/*
+	for (auto entity : level.getPipeEntities())
+	{
+		_world.addEntity(entity, EntityType::STATIC);
+	}
+
+	for (auto entity : level.getBackground())
+	{
+		_world.addEntity(entity, EntityType::BACKGROUND);
+	}
+
+	for (auto entity : level.getForeground())
+	{
+		_world.addEntity(entity, EntityType::FOREGROUND);
+	}
+	*/
 	// activate all static entities
-	while (_world->activateLeftEntity(EntityType::STATIC));
-	while (_world->activateRightEntity(EntityType::STATIC));
+	while (_world.activateLeftEntity(EntityType::STATIC));
+	while (_world.activateRightEntity(EntityType::STATIC));
+	while (_world.activateLeftEntity(EntityType::BACKGROUND));
+	while (_world.activateRightEntity(EntityType::BACKGROUND));
+	while (_world.activateLeftEntity(EntityType::FOREGROUND));
+	while (_world.activateRightEntity(EntityType::FOREGROUND));
 
 	return true;
 }

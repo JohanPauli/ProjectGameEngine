@@ -72,6 +72,9 @@
     <ClCompile Include="Engine\RessourceManager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Level.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="Engine\RessourceManager.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Level.h">
+      <Filter>Engine\World</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

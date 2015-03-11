@@ -1,23 +1,29 @@
 #include "Level.h"
+#include "Game.h"
+#include "RessourceManager.h"
+#include "Physics.h"
+#include "GraphicsComponent.h"
 
-Level::Level(Renderer *renderer)
+Level::Level()
 {
 	//if(!init())
 		//Chrash!!!
-	init(renderer);
+	init();
 }
+
+
 
 /*
 Level components are hardcoded here
 Hopefully functionality can be implemented to 
 read from file instead
 */
-bool Level::init(Renderer *renderer)
+bool Level::init()
 {
 
 	int windowHeight = Game::getWindowHeight();
 	int windowWidth = Game::getWindowWidth();
-	RessourceManager &rManager = RessourceManager::getInstance(renderer);
+	RessourceManager &rManager = RessourceManager::getInstance();
 	Sprite*	bird = nullptr;
 	Sprite*	pipeTop = nullptr;
 	Sprite*	pipeMid = nullptr;
@@ -33,20 +39,24 @@ bool Level::init(Renderer *renderer)
 	backgroundLand = rManager.getByTag<Sprite*>("land");
 
 	if (pipeMid && pipeBot){
-		auto pipeGraphics = new PipeGraphics(pipeBot, pipeMid, false);
-		auto pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, true);
+		PipeGraphics* pipeGraphics;
+		PipeGraphics* pipeGraphics2;
+		StaticPhysics *top;
+		StaticPhysics *bot;
 
 		//First draft
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> dis(100, Game::getWindowHeight() / 2);
-		for (float xPos = 200; xPos < 1000; xPos += 100)
+		std::uniform_int_distribution<> dis(100, (Game::getWindowHeight()*0.75-350));
+		for (float xPos = 200; xPos < 10000; xPos += 500)
 		{
 			float yPos = (float)dis(gen);
-			auto pipePhyTop = new StaticPhysics(0.f, 0.f, -1.f, 0.f, xPos, yPos, 240.f, 130.f);
-			auto pipePhyBot = new StaticPhysics(0, 0, -1, 0, xPos, yPos + 50, 478, 130);
-			pipes.push_back(new Entity(pipePhyTop, pipeGraphics));
-			pipes.push_back(new Entity(pipePhyBot, pipeGraphics2));
+			pipeGraphics = new PipeGraphics(pipeBot, pipeMid, false);
+			pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, true);
+			top = new StaticPhysics(0.f, 0.f, -1.f, 0.f, xPos, 0, yPos, 130.f);
+			bot = new StaticPhysics(0, 0, -1, 0, xPos, yPos + 350, windowHeight/2, 130);
+			pipes.push_back(new Entity(top, pipeGraphics));
+			pipes.push_back(new Entity(bot, pipeGraphics2));
 
 		}
 
@@ -54,10 +64,39 @@ bool Level::init(Renderer *renderer)
 	else
 		return false;
 	if (backgroundSky && backgroundLand){
-		float skyScale = (windowHeight / backgroundSky->getHeight());
-		auto bgPhy = new StaticPhysics(0.f, 0.f, -0.1, 0.f, 0.f, 0.f, skyScale * backgroundSky->getHeight(), skyScale * backgroundSky->getWidth());
-		BackgroundGraphics *bgGraphics = new BackgroundGraphics(backgroundSky, backgroundLand);
-		background.push_back(new Entity(bgPhy, bgGraphics));
+		//skalera bakgrund so hon gongur frá ovast til har landbakgrund byrjar
+		float skyScale = (((float)windowHeight - backgroundLand->getHeight()) / backgroundSky->getHeight());
+
+		float xPos = 0;
+		BackgroundGraphics *bgGraphics;
+
+		//Make as many background entities as it takes to cover the window
+		while (xPos < windowWidth)
+		{
+			bgGraphics = new BackgroundGraphics(backgroundSky);
+			auto bgPhy = new StaticPhysics(xPos, 0.f, -0.1, 0.f, 0.f, 0.f, skyScale * backgroundSky->getHeight(), skyScale * backgroundSky->getWidth());
+			background.push_back(new Entity(bgPhy, bgGraphics));
+
+			xPos += skyScale * backgroundSky->getWidth();
+
+		}
+
+		xPos = 0;
+		int yPos = skyScale * backgroundSky->getHeight();
+
+		//same as with backgroundLand
+		while (xPos < windowWidth)
+		{
+			bgGraphics = new BackgroundGraphics(backgroundLand);
+			auto bgPhy = new StaticPhysics(0.f, 0.f, -1.f, 0.f, xPos, yPos, backgroundLand->getHeight(), backgroundLand->getWidth());
+			foreground.push_back(new Entity(bgPhy, bgGraphics));
+
+			xPos += backgroundLand->getWidth();
+
+		}
+		
+
+
 	}
 	else
 		return false;
@@ -76,7 +115,17 @@ bool Level::init(Renderer *renderer)
 	return pEngine;
 }*/
 
-std::vector<Entity*> Level::getPipeEntities() const
+std::vector<Entity*>& Level::getPipeEntities()
 {
 	return pipes;
+}
+
+std::vector<Entity*>& Level::getBackground()
+{
+	return background;
+}
+
+std::vector<Entity*>& Level::getForeground()
+{
+	return foreground;
 }

@@ -91,29 +91,20 @@ void PipeGraphics::calcPos(const Entity& entity) {
 
 //Background
 
-BackgroundGraphics::BackgroundGraphics(Sprite* sky, Sprite* land) : _sky(sky), _land(land)
-{}
+BackgroundGraphics::BackgroundGraphics(Sprite* bg) : background(bg)
+{
+}
 
 BackgroundGraphics::~BackgroundGraphics() {}
 
 void BackgroundGraphics::update(Entity &entity)
 {
-	int xPos = entity.getX(),
-		yPos = entity.getY(),
-		height = entity.getHeight(),
-		width = entity.getWidth();
 
-	int skyHeight = height * 0.75;
-	int landHeight = height * 0.25;
-
-	skyPos = Rect(xPos, yPos, width, skyHeight);
-	landPos = Rect(xPos, yPos + skyHeight, width, landHeight);
-
+	pos = entity.physics->getRect();
 }
 
 void BackgroundGraphics::render(Entity &entity, Renderer *renderer)
 {
-	renderer->render(_sky, &skyPos);
-	renderer->render(_land, &landPos);
+	renderer->render(background, &pos);
 
 }

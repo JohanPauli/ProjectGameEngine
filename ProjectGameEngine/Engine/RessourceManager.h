@@ -27,22 +27,20 @@ private:
 	SoundMap soundMap;
 	MusicMap musicMap;
 
-	//Maybe make renderer a singleton?
-	Renderer *renderer = nullptr;
-	RessourceManager(Renderer *);
+	RessourceManager();
 	RessourceManager(RessourceManager const&) = delete;
 	void operator=(RessourceManager const&)		= delete;
 
 public:
 	~RessourceManager();
-	bool load(std::string filename);
+	bool load(std::string filename, Renderer *);
 
 	//Template function specified in cpp file
 	template<class T> 
 	T getByTag(std::string tag);
 
 	//return singleton
-	static RessourceManager& getInstance(Renderer *);
+	static RessourceManager& getInstance();
 
 };
 
