@@ -42,7 +42,10 @@ class Renderer {
 	friend class Window;
 private:
 	SDL_Renderer*	_renderer = nullptr;
+	int				_xOffset = 0;
+	int				_yOffset = 0;
 
+private:
 	// private constructor. Renderer only initialized from friend class
 	Renderer(SDL_Renderer* renderer);
 	Renderer(const Renderer&) = delete;
@@ -69,6 +72,8 @@ public:
 		Point*		center = nullptr,
 		RenderFlip	flip = RenderFlip::NONE) const;
 
+	void setOffsets(int x, int y);
+
 	// loading functions
 	Sprite* loadSprite(std::string path) const;
 };
@@ -81,8 +86,10 @@ public:
 */
 class Window {
 private:
-	SDL_Window* _window = nullptr;
-	Renderer*	_renderer = nullptr;
+	SDL_Window* _window;
+	Renderer*	_renderer;
+	int			_width;
+	int			_height;
 
 public:
 	Window(std::string title, int width, int height);
@@ -97,4 +104,6 @@ public:
 		may return nullptr if renderer failed to initialize
 	*/
 	Renderer*	getRenderer() const;
+	int			getWidth() const;
+	int			getHeight() const;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <deque>
+#include "Physics.h"
 
 class Entity;
 class Renderer;
@@ -30,21 +31,29 @@ struct EntityList {
 
 class World {
 private:
+	PhysicsEngine _physEng;
 	EntityList	_activeEntities;		// entities to get rendered
 	EntityList	_inactiveEntitiesLeft;	// entities to the left of the screen
 	EntityList	_inactiveEntitiesRight;	// entities to the right of the screen
-	Entity*		_player;
-	Entity*		_botBorder;
-	Entity*		_topBorder;
-	int		_xOffset = 0;
-	int		_yOffset = 0;
+	Entity*		_player = nullptr;
+	Entity*		_botBorder = nullptr;
+	Entity*		_topBorder = nullptr;
+	int			_displayWidth;
+	int			_displayHeight;
+	int			_xOffset = 0;
+	int			_yOffset = 0;
 
 private:
 	// move the display area to where the player is
 	void followPlayer();
 
 public:
+	World(int width, int height);
 	~World();
+
+	// deallocate all objects and resets the world state
+	void free();
+
 	// update logic
 	void update();
 

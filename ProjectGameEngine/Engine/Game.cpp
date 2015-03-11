@@ -13,18 +13,10 @@
 
 const char* Game::WINDOW_TITLE = "Flappy Bird Demo";
 
-// init statics
-int Game::_windowWidth = -1;
-int Game::_windowHeight = -1;
-
-
 
 Game::Game(int argc, char ** argv) 
 : _window(WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT) {
 	// use arguments for some settings maybe
-
-	_windowWidth = WINDOW_WIDTH;
-	_windowHeight = WINDOW_HEIGHT;
 
 	// init timers
 	_timer = Timer();
@@ -40,27 +32,26 @@ Game::~Game() {
 }
 
 bool Game::init() {
+	_world = new World(_window.getWidth(), _window.getHeight());
 	// test variables
 	// physics
 	auto top = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
 		-100.f, -100.f,		// x, y
 		 100.f, 10000.f);	// height, width
 	auto bot = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
-		-100.f, (float)_windowHeight, // x, y
+		-100.f, (float)_window.getHeight(), // x, y
 		10000.f, 10000.f);			  // height, width
 
 	auto playerPhy = new DynamicPhysics(0.f, 0.08f, 
 										2.f, 0.f, 
 										0.f, 100.f, 
 										60.f, 90.f);
-	auto pipePhy = new StaticPhysics(0.f, 0.f, 
-									 0.f, 0.f, 
-									 250.f, _windowHeight-240.f, 
-									 240.f, 130.f);
-	auto pipePhy2 = new StaticPhysics(0.f, 0.f,
-									  0.f, 0.f,
-									  250.f, 0.f,
-									  240.f, 130.f);
+	auto pipePhy = new StaticPhysics(0.f, 0.f, 0.f, 0.f, 
+									 250.f, _window.getHeight()-240.f, // x, y
+									 240.f, 130.f); // h, w
+	auto pipePhy2 = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
+									  250.f, 0.f, // x, y
+									  240.f, 130.f); // h, w
 
 	// init textures
 
@@ -103,21 +94,22 @@ bool Game::init() {
 	auto pipe = new Entity(pipePhy, pipeGraphics);
 	auto pipe2 = new Entity(pipePhy2, pipeGraphics2);
 
-	_world.setPlayer(player);
-	_world.addEntity(pipe, EntityType::STATIC);
-	_world.addEntity(pipe2, EntityType::STATIC);
-	_world.setBorders(topBorder, botBorder);
+	_world->setPlayer(player);
+	_world->addEntity(pipe, EntityType::STATIC);
+	_world->addEntity(pipe2, EntityType::STATIC);
+	_world->setBorders(topBorder, botBorder);
 
 
 	// activate all static entities
-	while (_world.activateLeftEntity(EntityType::STATIC));
-	while (_world.activateRightEntity(EntityType::STATIC));
+	while (_world->activateLeftEntity(EntityType::STATIC));
+	while (_world->activateRightEntity(EntityType::STATIC));
 
 	return true;
 }
 
 
 void Game::cleanup() {
+	delete _world;
 
 	// shut down low-level modules
 	Flappy::quit();
@@ -167,11 +159,11 @@ void Game::tryRender() {
 
 
 void Game::update() {
-	_world.update();
+	_world->update();
 }
 
 
 void Game::render() {
-	_world.render(_window.getRenderer());
+	_world->render(_window.getRenderer());
 	_window.update();
 }
