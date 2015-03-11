@@ -73,18 +73,41 @@ inline void renderContainer(EntityCont& container, Renderer* renderer) {
 }
 
 
+void World::init(Level level)
+{
+	std::vector<Entity*> pipes = level.getPipeEntities();
+	for (auto it = pipes.begin(); it != pipes.end(); it++)
+	{
+		addEntity( *it, EntityType::STATIC);
+	}
+
+	std::vector<Entity*> back = level.getBackground();
+	for (auto it = back.begin(); it != back.end(); it++)
+	{
+		addEntity(*it, EntityType::BACKGROUND);
+	}
+
+	std::vector<Entity*> foreground = level.getForeground();
+	for (auto it = foreground.begin(); it != foreground.end(); it++)
+	{
+		addEntity(*it, EntityType::FOREGROUND);
+	}
+}
+
+
 void World::render(Renderer* renderer) {
 	renderContainer(_activeEntities.backgroundEntities, renderer);
 	renderContainer(_activeEntities.dynamicEntities, renderer);
 	_player->render(renderer);
 	renderContainer(_activeEntities.staticEntities, renderer);
 	renderContainer(_activeEntities.foregroundEntities, renderer);
+	manageScene();
 }
 
 
 // check if entity is left of the offSet
 inline bool toTheLeft(Entity* entity, int xOffset) {
-	return (entity->_physics->getXPosition() < (float)xOffset);
+	return (entity->physics->getXPosition() < (float)xOffset);
 }
 inline void emplaceEntity(Entity* entity, EntityCont& left, EntityCont& right, int xOffset) {
 	if (toTheLeft(entity, xOffset))
@@ -125,13 +148,13 @@ void World::setBorders(Entity* top, Entity* bot) {
 void World::setPlayer(Entity* entity) {
 	// deactivate old player's input
 	if (_player != nullptr) {
-		InputMapper::getInstance().deactivateContext(_player->_input->getInputContextId());
+		InputMapper::getInstance().deactivateContext(_player->input->getInputContextId());
 		delete _player;
 	}
 	_player = entity;
 	// activate new player's input
 	// assume the entity is already registered
-	InputMapper::getInstance().activateContext(_player->_input->getInputContextId());
+	InputMapper::getInstance().activateContext(_player->input->getInputContextId());
 }
 
 
@@ -227,4 +250,11 @@ bool World::deactivateRightEntity(EntityType type) {
 		return deactivateEntity(_activeEntities.foregroundEntities, _inactiveEntitiesLeft.foregroundEntities, true);
 	default: return false;
 	}
+}
+
+void World::manageScene()
+{
+
+
+
 }

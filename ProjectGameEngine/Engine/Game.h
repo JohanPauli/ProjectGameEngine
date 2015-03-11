@@ -2,11 +2,11 @@
 
 
 #include <SDL.h>
-
+#include "World.h"
 #include "Timer.h"
 #include "Rendering.h"
 #include "Physics.h"
-#include "World.h"
+
 
 // forward declarations
 class Entity;
@@ -14,7 +14,6 @@ class Sprite;
 class Sound;
 class Music;
 class Graphics;
-
 
 
 class Game {

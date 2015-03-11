@@ -1,9 +1,11 @@
 #pragma once
 
 #include <deque>
+#include "Level.h"
 
 class Entity;
 class Renderer;
+//class Level;
 
 typedef std::deque<Entity*> EntityCont;
 
@@ -45,6 +47,10 @@ private:
 
 public:
 	~World();
+
+	//Load world
+	void init(Level level);
+
 	// update logic
 	void update();
 
@@ -71,4 +77,6 @@ public:
 
 	// deactivate an entity
 	bool deactivateRightEntity(EntityType type);
+
+	void manageScene();
 };
