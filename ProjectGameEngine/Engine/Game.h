@@ -4,16 +4,9 @@
 #include <SDL.h>
 
 #include "Timer.h"
-#include "Rendering.h"
-#include "Physics.h"
 #include "World.h"
+#include "Rendering.h"
 
-// forward declarations
-class Entity;
-class Sprite;
-class Sound;
-class Music;
-class Graphics;
 
 
 

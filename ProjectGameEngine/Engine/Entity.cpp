@@ -39,3 +39,15 @@ void Entity::update() {
 void Entity::render(Renderer* renderer) {
 	graphics->render(*this, renderer);
 }
+
+Rect Entity::getRect() const	{ return std::move(physics->getRect()); }
+double Entity::getAngle() const { return physics->getAngle(); }
+int Entity::getX() const		{ return physics->getXPosition(); }
+int Entity::getY() const		{ return physics->getYPosition(); }
+int Entity::getWidth() const	{ return physics->getWidth(); }
+int Entity::getHeight() const	{ return physics->getHeight(); }
+float Entity::getXvelocity() const { return physics->getXVelocity(); }
+float Entity::getYvelocity() const { return physics->getYVelocity(); }
+void Entity::setXvelocity(float vel) const { physics->setXVelocity(vel); }
+void Entity::setYvelocity(float vel) const { physics->setYVelocity(vel); }
+InputContext* Entity::getInputContext() const { return input; }

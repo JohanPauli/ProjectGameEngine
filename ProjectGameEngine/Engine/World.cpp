@@ -117,7 +117,7 @@ void World::render(Renderer* renderer) {
 
 // check if entity is left of the offSet
 inline bool toTheLeft(Entity* entity, int xOffset) {
-	return (entity->physics->getXPosition() < (float)xOffset);
+	return (entity->getX() < (float)xOffset);
 }
 inline void emplaceEntity(Entity* entity, EntityCont& left, EntityCont& right, int xOffset) {
 	if (toTheLeft(entity, xOffset))
@@ -158,13 +158,13 @@ void World::setBorders(Entity* top, Entity* bot) {
 void World::setPlayer(Entity* entity) {
 	// deactivate old player's input
 	if (_player != nullptr) {
-		InputMapper::getInstance().deactivateContext(_player->input->getInputContextId());
+		InputMapper::getInstance().deactivateContext(_player->getInputContext()->getInputContextId());
 		delete _player;
 	}
 	_player = entity;
 	// activate new player's input
 	// assume the entity is already registered
-	InputMapper::getInstance().activateContext(_player->input->getInputContextId());
+	InputMapper::getInstance().activateContext(_player->getInputContext()->getInputContextId());
 }
 
 
@@ -265,8 +265,8 @@ bool World::deactivateRightEntity(EntityType type) {
 
 void World::followPlayer() {
 	_xOffset = 
-		(int)_player->physics->getXPosition() 
-		+ (int)(_player->physics->getWidth() / 2) 
+		(int)_player->getX() 
+		+ (int)(_player->getWidth() / 2) 
 		- (int)(_displayWidth / 2);
 	_yOffset = 0;
 }

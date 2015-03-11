@@ -30,5 +30,5 @@ bool PlayerInput::onNotify(const KeyboardInput& input) {
 
 void PlayerInput::flap(bool repeat) const {
 	if (repeat)
-		_entity->physics->setYVelocity(-5);
+		_entity->setYvelocity(-5);
 }

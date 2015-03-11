@@ -55,7 +55,7 @@ private:
 	bool	_upward;
 private:
 	// calculate the positions of both sprites
-	void calcPos(const Physics* physics);
+	void calcPos(const Entity& entity);
 public:
 	PipeGraphics(Sprite* top, Sprite* mid, bool upward = true);
 	virtual ~PipeGraphics();
