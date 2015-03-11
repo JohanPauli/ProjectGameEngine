@@ -1,0 +1,5 @@
+SPRITE|bird|assets\\sprites\\bird_ani_sheet.png
+SPRITE|pipebot|assets\\sprites\\pipe-bot.png
+SPRITE|pipemid|assets\\sprites\\pipe-mid.png
+SPRITE|sky|assets\\sprites\\sky.png
+SPRITE|land|assets\\sprites\\land.png
