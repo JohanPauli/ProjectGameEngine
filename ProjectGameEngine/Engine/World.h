@@ -2,6 +2,7 @@
 
 #include <deque>
 #include "Level.h"
+#include "Physics.h"
 
 class Entity;
 class Renderer;

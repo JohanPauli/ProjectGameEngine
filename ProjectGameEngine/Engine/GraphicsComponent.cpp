@@ -100,7 +100,7 @@ BackgroundGraphics::~BackgroundGraphics() {}
 void BackgroundGraphics::update(Entity &entity)
 {
 
-	pos = entity.physics->getRect();
+	pos = entity.getRect();
 }
 
 void BackgroundGraphics::render(Entity &entity, Renderer *renderer)

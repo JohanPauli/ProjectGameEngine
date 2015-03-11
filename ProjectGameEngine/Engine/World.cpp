@@ -4,7 +4,6 @@
 #include "Entity.h"
 #include "InputMapping.h"
 #include "InputComponent.h"
-#include "Physics.h"
 #include "Rendering.h"
 
 
@@ -140,7 +139,7 @@ void World::render(Renderer* renderer) {
 
 // check if entity is left of the offSet
 inline bool toTheLeft(Entity* entity, int xOffset) {
-	return (entity->_physics->getXPosition() < (float)xOffset);
+	return (entity->getX() < (float)xOffset);
 }
 inline void emplaceEntity(Entity* entity, EntityCont& left, EntityCont& right, int xOffset) {
 	if (toTheLeft(entity, xOffset))
@@ -292,4 +291,8 @@ void World::followPlayer() {
 		+ (int)(_player->getWidth() / 2) 
 		- (int)(_displayWidth / 2);
 	_yOffset = 0;
+}
+
+void World::manageScene() {
+	// TODO: add code
 }

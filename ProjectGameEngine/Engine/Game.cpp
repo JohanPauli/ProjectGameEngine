@@ -9,6 +9,8 @@
 #include "GraphicsComponent.h"
 #include "InputMapping.h"
 #include "RessourceManager.h"
+#include "Physics.h"
+#include "World.h"
 
 
 const char* Game::WINDOW_TITLE = "Flappy Bird Demo";
@@ -55,7 +57,7 @@ bool Game::init() {
 
 	auto pipePhy3 = new StaticPhysics(0.f, 0.f,
 		0.f, 0.f,
-		550.f, _windowHeight - 240.f,
+		550.f, _window.getHeight() - 240.f,
 		240.f, 130.f);
 	auto pipePhy4 = new StaticPhysics(0.f, 0.f,
 		0.f, 0.f,
@@ -112,9 +114,9 @@ bool Game::init() {
 	_world->addEntity(pipe2, EntityType::STATIC);
 	_world->setBorders(topBorder, botBorder);
 
-	Level level;
+	Level level(_window.getWidth(), _window.getHeight());
 
-	_world.init(level);
+	_world->init(level);
 	/*
 	for (auto entity : level.getPipeEntities())
 	{
@@ -132,12 +134,12 @@ bool Game::init() {
 	}
 	*/
 	// activate all static entities
-	while (_world.activateLeftEntity(EntityType::STATIC));
-	while (_world.activateRightEntity(EntityType::STATIC));
-	while (_world.activateLeftEntity(EntityType::BACKGROUND));
-	while (_world.activateRightEntity(EntityType::BACKGROUND));
-	while (_world.activateLeftEntity(EntityType::FOREGROUND));
-	while (_world.activateRightEntity(EntityType::FOREGROUND));
+	while (_world->activateLeftEntity(EntityType::STATIC));
+	while (_world->activateRightEntity(EntityType::STATIC));
+	while (_world->activateLeftEntity(EntityType::BACKGROUND));
+	while (_world->activateRightEntity(EntityType::BACKGROUND));
+	while (_world->activateLeftEntity(EntityType::FOREGROUND));
+	while (_world->activateRightEntity(EntityType::FOREGROUND));
 
 	return true;
 }

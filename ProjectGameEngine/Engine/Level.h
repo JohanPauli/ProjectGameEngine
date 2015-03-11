@@ -18,11 +18,15 @@ private:
 	std::vector < Entity* > pipes;
 	std::vector < Entity* > background;
 	std::vector < Entity* > foreground;
+	
+	// window size
+	int width;
+	int height;
 
 	bool init();
 	
 public:
-	Level();
+	Level(int width, int height);
 
 	std::vector<Entity*>& getPipeEntities();
 	std::vector<Entity*>& getBackground();
