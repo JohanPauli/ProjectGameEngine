@@ -25,6 +25,14 @@ Game::Game(int argc, char ** argv)
 
 	_windowWidth = WINDOW_WIDTH;
 	_windowHeight = WINDOW_HEIGHT;
+
+	// init timers
+	_timer = Timer();
+	_logicUpdateTimer = UpdateTimer(&_timer, MS_PER_UPDATE);
+	_renderUpdateTimer = UpdateTimer(&_timer, MS_PER_RENDER);
+
+	// init audio
+	Audio::get().init(6, 44100, 1024);
 }
 
 Game::~Game() {
@@ -32,15 +40,6 @@ Game::~Game() {
 }
 
 bool Game::init() {
-	// init audio
-	Audio::get().init(6, 44100, 1024);
-
-	// init timers
-	_timer = Timer();
-	_logicUpdateTimer = UpdateTimer(&_timer, MS_PER_UPDATE);
-	_renderUpdateTimer = UpdateTimer(&_timer, MS_PER_RENDER);
-
-
 	// test variables
 	// physics
 	auto top = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
@@ -71,9 +70,9 @@ bool Game::init() {
 	rManager.load("loadDocument.txt");
 	
 
-	bird = rManager.getByTag<Sprite*>("bird");
-	pipeMid = rManager.getByTag<Sprite*>("pipemid");
-	pipeBot = rManager.getByTag<Sprite*>("pipebot");
+	auto bird = rManager.getByTag<Sprite*>("bird");
+	auto pipeMid = rManager.getByTag<Sprite*>("pipemid");
+	auto pipeBot = rManager.getByTag<Sprite*>("pipebot");
 
 	// create bird spritesheet
 	std::vector<Rect> rector;
@@ -110,7 +109,6 @@ bool Game::init() {
 	_world.setBorders(topBorder, botBorder);
 
 
-
 	// activate all static entities
 	while (_world.activateLeftEntity(EntityType::STATIC));
 	while (_world.activateRightEntity(EntityType::STATIC));
@@ -120,11 +118,6 @@ bool Game::init() {
 
 
 void Game::cleanup() {
-
-	// test vars
-	delete bird, sound,
-		// textures
-		pipeMid, pipeBot;
 
 	// shut down low-level modules
 	Flappy::quit();

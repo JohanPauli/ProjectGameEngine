@@ -45,13 +45,6 @@ private:
 	static int	 _windowWidth;
 	static int	 _windowHeight;
 
-	//// test variables
-private:
-	Sprite*	bird = nullptr;
-	Sprite*	pipeMid = nullptr;
-	Sprite*	pipeBot = nullptr;
-	Sound*	sound = nullptr;
-
 private:
 	// release resources and stuff game ends
 	void cleanup();
