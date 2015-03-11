@@ -158,13 +158,13 @@ void World::setBorders(Entity* top, Entity* bot) {
 void World::setPlayer(Entity* entity) {
 	// deactivate old player's input
 	if (_player != nullptr) {
-		InputMapper::getInstance().deactivateContext(_player->getInputContext()->getInputContextId());
+		InputMapper::getInstance().deactivateContext(_player->getInputContext());
 		delete _player;
 	}
 	_player = entity;
 	// activate new player's input
 	// assume the entity is already registered
-	InputMapper::getInstance().activateContext(_player->getInputContext()->getInputContextId());
+	InputMapper::getInstance().activateContext(_player->getInputContext());
 }
 
 

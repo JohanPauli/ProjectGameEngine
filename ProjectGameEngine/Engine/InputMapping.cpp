@@ -33,20 +33,42 @@ void InputMapper::unregisterContext(InputContext* context) {
 }
 
 
-bool InputMapper::activateContext(int contextId) {
+/*bool InputMapper::activateContext(int contextId) {
 	auto prioContext = _inputContexts[contextId];
 	if (prioContext.context != nullptr) {
 		_activeContexts.insert(prioContext);
 		return true;
 	}
 	return false;
+}*/
+
+bool InputMapper::activateContext(InputContext* context) {
+	if (context != nullptr) {
+		if (_inputContexts.find(context->getInputContextId()) == _inputContexts.end())
+			return false;
+		_activeContexts.insert(context);
+		return true;
+	}
+	return false;
 }
 
-bool InputMapper::deactivateContext(int contextId) {
+/*bool InputMapper::deactivateContext(int contextId) {
 	auto prioContext = _inputContexts[contextId];
 	if (prioContext.context != nullptr) {
 		for (auto it : _activeContexts) {
-			if (it.context == prioContext.context) {
+			if (it.context->getInputContextId() == prioContext.context->getInputContextId()) {
+				_activeContexts.erase(it);
+				return true;
+			}
+		}
+	}
+	return false;
+}*/
+
+bool InputMapper::deactivateContext(InputContext* context) {
+	if (context != nullptr) {
+		for (auto it : _activeContexts) {
+			if (it.context->getInputContextId() == context->getInputContextId()) {
 				_activeContexts.erase(it);
 				return true;
 			}
@@ -54,7 +76,6 @@ bool InputMapper::deactivateContext(int contextId) {
 	}
 	return false;
 }
-
 
 
 void InputMapper::notify() {
