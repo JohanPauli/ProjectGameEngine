@@ -62,3 +62,19 @@ public:
 	virtual void update(Entity& entity) override;
 	virtual void render(Entity& entity, Renderer* renderer) override;
 };
+
+// Background
+
+class BackgroundGraphics : public Graphics{
+private:
+	Sprite* _sky;
+	Sprite* _land;
+	Rect skyPos;
+	Rect landPos;
+
+public:
+	BackgroundGraphics(Sprite* sky, Sprite* land);
+	virtual ~BackgroundGraphics();
+	virtual void update(Entity& entity) override;
+	virtual void render(Entity& entity, Renderer* renderer) override;
+};

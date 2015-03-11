@@ -87,3 +87,33 @@ void PipeGraphics::calcPos(const Physics* physics) {
 	_topPos = Rect(x, topY, width, topHeight);
 	_midPos = Rect(x, midY, width, midHeight);
 }
+
+
+//Background
+
+BackgroundGraphics::BackgroundGraphics(Sprite* sky, Sprite* land) : _sky(sky), _land(land)
+{}
+
+BackgroundGraphics::~BackgroundGraphics() {}
+
+void BackgroundGraphics::update(Entity &entity)
+{
+	int xPos = entity._physics->getXPosition(),
+		yPos = entity._physics->getYPosition(),
+		height = entity._physics->getHeight(),
+		width = entity._physics->getWidth();
+
+	int skyHeight = height * 0.75;
+	int landHeight = height * 0.25;
+
+	skyPos = Rect(xPos, yPos, width, skyHeight);
+	landPos = Rect(xPos, yPos + skyHeight, width, landHeight);
+
+}
+
+void BackgroundGraphics::render(Entity &entity, Renderer *renderer)
+{
+	renderer->render(_sky, &skyPos);
+	renderer->render(_land, &landPos);
+
+}
