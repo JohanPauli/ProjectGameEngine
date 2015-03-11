@@ -2,8 +2,7 @@
 
 #include <deque>
 
-#include "Entity.h"
-
+class Entity;
 class Renderer;
 
 typedef std::deque<Entity*> EntityCont;
@@ -18,7 +17,8 @@ enum class EntityType {
 	PLAYER
 };
 
-//
+
+// containers containers for all entity types
 struct EntityList {
 	EntityCont dynamicEntities;
 	EntityCont staticEntities;
@@ -30,13 +30,17 @@ struct EntityList {
 
 class World {
 private:
-	EntityList	_activeEntities;	// entities off screen
-	EntityList	_inactiveEntities;	// entities shown on screen
+	EntityList	_activeEntities;		// entities to get rendered
+	EntityList	_inactiveEntitiesLeft;	// entities to the left of the screen
+	EntityList	_inactiveEntitiesRight;	// entities to the right of the screen
 	Entity*		_player;
 	Entity*		_botBorder;
 	Entity*		_topBorder;
 	int		_xOffset = 0;
 	int		_yOffset = 0;
+
+private:
+
 
 public:
 	~World();
@@ -56,11 +60,14 @@ public:
 	void setPlayer(Entity* player);
 
 	// activate an entity
-	bool activateFrontEntity(EntityType type);
+	bool activateLeftEntity(EntityType type);
 
 	// activate an entity
-	bool activateBackEntity(EntityType type);
+	bool activateRightEntity(EntityType type); 
 
-	void deactivateFrontEntity(EntityType type);
-	void deactivateBackEntity(EntityType type);
+	// deactivate an entity
+	bool deactivateLeftEntity(EntityType type);
+
+	// deactivate an entity
+	bool deactivateRightEntity(EntityType type);
 };

@@ -111,8 +111,9 @@ bool Game::init() {
 
 
 
-
-	while (_world.activateFrontEntity(EntityType::STATIC));
+	// activate all static entities
+	while (_world.activateLeftEntity(EntityType::STATIC));
+	while (_world.activateRightEntity(EntityType::STATIC));
 
 	return true;
 }
