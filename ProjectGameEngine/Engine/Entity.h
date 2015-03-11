@@ -4,9 +4,10 @@
 
 class Graphics;
 class Input;
+class InputContext;
 class Physics;
 class Renderer;
-
+class Rect;
 
 /*
 	General component-based Entity class
@@ -15,11 +16,9 @@ class Renderer;
 	input component should be unregistered from the InputMapper before deleting the entity
 */
 class Entity {
+	friend class PhysicsEngine;
 private:
 	Graphics*	graphics;
-
-	// physics is public so Input and Graphics have access to x, y, and velocity
-public:
 	Input*		input;
 	Physics*	physics;
 
@@ -28,8 +27,21 @@ public:
 	virtual ~Entity();
 
 	// update components' logic
-	virtual void update(int xMove = 0, int yMove = 0);
+	virtual void update();
 
 	// render entity
 	virtual void render(Renderer* renderer);
+
+	// accessors
+	Rect	getRect() const;
+	double	getAngle() const;
+	int		getX() const;
+	int		getY() const;
+	int		getWidth() const;
+	int		getHeight() const;
+	float	getXvelocity() const;
+	float	getYvelocity() const;
+	void	setXvelocity(float vel) const;
+	void	setYvelocity(float vel) const;
+	InputContext* getInputContext() const;
 };

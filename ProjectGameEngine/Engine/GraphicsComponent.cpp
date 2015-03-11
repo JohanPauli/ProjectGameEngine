@@ -29,7 +29,7 @@ void BirdGraphics::update(Entity& entity) {
 
 void BirdGraphics::render(Entity& entity, Renderer* renderer) {
 	// render
-	renderer->render(_spriteSheet->getSprite(), &entity.physics->getRect(), _spriteSheet->getSpriteSrc(), entity.physics->getAngle());
+	renderer->render(_spriteSheet->getSprite(), &entity.getRect(), _spriteSheet->getSpriteSrc(), entity.getAngle());
 }
 
 
@@ -47,7 +47,7 @@ PipeGraphics::~PipeGraphics() {}
 
 void PipeGraphics::update(Entity& entity) {
 	// calculate position if not initialized or if entity's position has changed
-	calcPos(entity.physics);
+	calcPos(entity);
 
 }
 
@@ -64,24 +64,24 @@ void PipeGraphics::render(Entity& entity, Renderer* renderer) {
 
 
 // calculate the positions of both sprites
-void PipeGraphics::calcPos(const Physics* physics) {
+void PipeGraphics::calcPos(const Entity& entity) {
 	// heights
-	int topHeight = (int)(_top->getHeight() * (physics->getWidth() / _top->getWidth()));
-	int midHeight = (int)(physics->getHeight() - topHeight);
+	int topHeight = (int)(_top->getHeight() * (entity.getWidth() / _top->getWidth()));
+	int midHeight = entity.getHeight() - topHeight;
 
 	// y positions
 	int topY, midY;
 	if (_upward) {
-		topY = (int)physics->getYPosition();
+		topY = entity.getY();
 		midY = topY + topHeight;
 	}
 	else {
-		midY = (int)physics->getYPosition();
+		midY = entity.getY();
 		topY = midY + midHeight;
 	}
 
-	int x =		(int)physics->getXPosition();
-	int width =	(int)physics->getWidth();
+	int x =		entity.getX();
+	int width =	entity.getWidth();
 
 	// set positions
 	_topPos = Rect(x, topY, width, topHeight);
@@ -99,7 +99,7 @@ BackgroundGraphics::~BackgroundGraphics() {}
 
 void BackgroundGraphics::update(Entity &entity)
 {
-	
+
 	pos = entity.physics->getRect();
 }
 

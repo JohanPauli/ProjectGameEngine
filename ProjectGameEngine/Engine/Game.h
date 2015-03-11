@@ -4,16 +4,9 @@
 #include <SDL.h>
 #include "World.h"
 #include "Timer.h"
+#include "World.h"
 #include "Rendering.h"
-#include "Physics.h"
 
-
-// forward declarations
-class Entity;
-class Sprite;
-class Sound;
-class Music;
-class Graphics;
 
 
 class Game {
@@ -29,7 +22,7 @@ private:
 	// core
 private:
 	Window		_window;
-	World		_world;	// the game world
+	World*		_world;	// the game world
 	
 
 	// timers
@@ -41,8 +34,6 @@ private:
 	// settings
 private:
 	bool _running = true;
-	static int	 _windowWidth;
-	static int	 _windowHeight;
 
 private:
 	// release resources and stuff game ends
@@ -71,8 +62,5 @@ public:
 
 	// start the game loop
 	void run();
-
-	static int getWindowWidth() { return _windowWidth; }
-	static int getWindowHeight() { return _windowHeight; }
 
 };

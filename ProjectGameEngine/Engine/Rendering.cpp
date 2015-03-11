@@ -29,14 +29,24 @@ void Renderer::render(Sprite* sprite, Rect* pos, Rect* src, double angle, Point*
 		case RenderFlip::HORIZONTAL:sdlFlip = SDL_FLIP_HORIZONTAL; break;
 		case RenderFlip::VERTICAL:	sdlFlip = SDL_FLIP_VERTICAL; break;
 	}
+	SDL_Rect offset = pos->rect;
+	offset.x -= _xOffset;
+	offset.y -= _yOffset;
+
 	SDL_RenderCopyEx(
 		_renderer,
 		sprite->_texture,
 		&src->rect,
-		&pos->rect,
+		&offset,
 		angle,
 		&center->point,
 		sdlFlip);
+}
+
+
+void Renderer::setOffsets(int x, int y) {
+	_xOffset = x;
+	_yOffset = y;
 }
 
 
@@ -90,6 +100,9 @@ Window::Window(std::string title, int width, int height) {
 		LOG("Unable to create renderer: " << SDL_GetError());
 	else
 		_renderer = new Renderer(renderer);
+
+	// set width and height variables
+	SDL_GetWindowSize(_window, &_width, &_height);
 }
 
 Window::~Window() {
@@ -108,4 +121,14 @@ void Window::update() const {
 
 Renderer* Window::getRenderer() const {
 	return _renderer;
+}
+
+
+int Window::getWidth() const {
+	return _width;
+}
+
+
+int Window::getHeight() const {
+	return _height;
 }

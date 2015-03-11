@@ -1,26 +1,43 @@
 #include "World.h"
 
+#include "Debug.h"
 #include "Entity.h"
 #include "InputMapping.h"
 #include "InputComponent.h"
 #include "Physics.h"
+#include "Rendering.h"
+
+
+
+World::World(int width, int height) 
+: _displayWidth(width), _displayHeight(height) {}
+
+
+World::~World() {
+	free();
+}
 
 
 // deallocate all entities
 inline void deleteCont(EntityCont& container) {
 	for (auto entity : container) {
 		delete entity;
+		entity = nullptr;
 	}
 }
 inline void deleteEntityList(EntityList& el) {
 	deleteCont(el.backgroundEntities);
+	el.backgroundEntities.clear();
 	deleteCont(el.dynamicEntities);
+	el.dynamicEntities.clear();
 	deleteCont(el.foregroundEntities);
+	el.foregroundEntities.clear();
 	deleteCont(el.staticEntities);
+	el.staticEntities.clear();
 }
 
 
-World::~World() {
+void World::free() {
 	// delete active entities
 	deleteEntityList(_activeEntities);
 
@@ -30,38 +47,51 @@ World::~World() {
 
 
 	// borders
-	delete _botBorder;
-	delete _topBorder;
+	delete _botBorder; _botBorder = nullptr;
+	delete _topBorder; _topBorder = nullptr;
 
 	// player
-	delete _player;
+	delete _player; _player = nullptr;
+	_xOffset = 0; 
+	_yOffset = 0;
 }
+
 
 
 // update
-inline void updateContainer(EntityCont& container, int x, int y) {
+inline void updateContainer(EntityCont& container) {
 	for (auto entity : container) {
-		entity->update(x, y);
+		entity->update();
 	}
 }
-inline void updateEntityList(EntityList& el, int xOffset, int yOffset) {
-	updateContainer(el.backgroundEntities, xOffset, yOffset);
-	updateContainer(el.staticEntities, xOffset, yOffset);
-	updateContainer(el.dynamicEntities, xOffset, yOffset);
-	updateContainer(el.foregroundEntities, xOffset, yOffset);
+inline void updateEntityList(EntityList& el) {
+	updateContainer(el.backgroundEntities);
+	updateContainer(el.staticEntities);
+	updateContainer(el.dynamicEntities);
+	updateContainer(el.foregroundEntities);
 }
 
 
 void World::update() {
+	// get offsets
+	followPlayer();
 	// active
-	updateEntityList(_activeEntities, 0,0);
-	_player->update(0,0);
+	updateEntityList(_activeEntities);
+	_player->update();
 
 	// inactive
-	updateEntityList(_inactiveEntitiesLeft, 0,0);
-	updateEntityList(_inactiveEntitiesRight, 0,0);
+	updateEntityList(_inactiveEntitiesLeft);
+	updateEntityList(_inactiveEntitiesRight);
 
 	// check collision
+	_physEng.detectCollisions(_player, _activeEntities.staticEntities);
+	_physEng.detectCollisions(_player, _activeEntities.dynamicEntities);
+	_physEng.detectCollisions(_player, _botBorder);
+	_physEng.detectCollisions(_player, _topBorder);
+	_physEng.detectCollisions(_activeEntities.dynamicEntities, _activeEntities.staticEntities);
+	_physEng.detectCollisions(_activeEntities.dynamicEntities, _activeEntities.dynamicEntities);
+
+	// TODO: dynamicentities can also collide with borders, implement it!
 }
 
 
@@ -96,6 +126,9 @@ void World::init(Level level)
 
 
 void World::render(Renderer* renderer) {
+	// rendering offsets
+	renderer->setOffsets(_xOffset, _yOffset);
+
 	renderContainer(_activeEntities.backgroundEntities, renderer);
 	renderContainer(_activeEntities.dynamicEntities, renderer);
 	_player->render(renderer);
@@ -107,7 +140,7 @@ void World::render(Renderer* renderer) {
 
 // check if entity is left of the offSet
 inline bool toTheLeft(Entity* entity, int xOffset) {
-	return (entity->physics->getXPosition() < (float)xOffset);
+	return (entity->_physics->getXPosition() < (float)xOffset);
 }
 inline void emplaceEntity(Entity* entity, EntityCont& left, EntityCont& right, int xOffset) {
 	if (toTheLeft(entity, xOffset))
@@ -148,13 +181,13 @@ void World::setBorders(Entity* top, Entity* bot) {
 void World::setPlayer(Entity* entity) {
 	// deactivate old player's input
 	if (_player != nullptr) {
-		InputMapper::getInstance().deactivateContext(_player->input->getInputContextId());
+		InputMapper::getInstance().deactivateContext(_player->getInputContext());
 		delete _player;
 	}
 	_player = entity;
 	// activate new player's input
 	// assume the entity is already registered
-	InputMapper::getInstance().activateContext(_player->input->getInputContextId());
+	InputMapper::getInstance().activateContext(_player->getInputContext());
 }
 
 
@@ -241,20 +274,22 @@ bool World::deactivateLeftEntity(EntityType type) {
 bool World::deactivateRightEntity(EntityType type) {
 	switch (type) {
 	case EntityType::DYNAMIC:
-		return deactivateEntity(_activeEntities.dynamicEntities, _inactiveEntitiesLeft.dynamicEntities, true);
+		return deactivateEntity(_activeEntities.dynamicEntities, _inactiveEntitiesLeft.dynamicEntities, false);
 	case EntityType::STATIC:
-		return deactivateEntity(_activeEntities.staticEntities, _inactiveEntitiesLeft.staticEntities, true);
+		return deactivateEntity(_activeEntities.staticEntities, _inactiveEntitiesLeft.staticEntities, false);
 	case EntityType::BACKGROUND:
-		return deactivateEntity(_activeEntities.backgroundEntities, _inactiveEntitiesLeft.backgroundEntities, true);
+		return deactivateEntity(_activeEntities.backgroundEntities, _inactiveEntitiesLeft.backgroundEntities, false);
 	case EntityType::FOREGROUND:
-		return deactivateEntity(_activeEntities.foregroundEntities, _inactiveEntitiesLeft.foregroundEntities, true);
+		return deactivateEntity(_activeEntities.foregroundEntities, _inactiveEntitiesLeft.foregroundEntities, false);
 	default: return false;
 	}
 }
 
-void World::manageScene()
-{
 
-
-
+void World::followPlayer() {
+	_xOffset = 
+		(int)_player->getX() 
+		+ (int)(_player->getWidth() / 2) 
+		- (int)(_displayWidth / 2);
+	_yOffset = 0;
 }

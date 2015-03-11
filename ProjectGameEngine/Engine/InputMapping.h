@@ -65,13 +65,13 @@ public:
 		activate a context based on its id
 		return false if context doesnt exist
 	*/
-	bool activateContext(int contextId);
+	bool activateContext(InputContext* context);
 
 	/* 
 		deactivate a context based on its id
 		return false if context doesnt exist
 	*/
-	bool deactivateContext(int contextId);
+	bool deactivateContext(InputContext* context);
 
 	// notify all active contexts about a key press
 	void notify();
