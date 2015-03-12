@@ -3,6 +3,7 @@
 #include "RessourceManager.h"
 #include "Physics.h"
 #include "GraphicsComponent.h"
+#include "EntityGenerators.h"
 
 Level::Level(int width, int height) : width(width), height(height)
 {
@@ -41,20 +42,19 @@ bool Level::init()
 		StaticPhysics *top;
 		StaticPhysics *bot;
 
+		EntityGenerator *eGenerator = &EntityGenerator::getInstance();
+
 		//First draft
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> dis(100, (height*0.75-350));
+		std::uniform_int_distribution<> dis(100, (height*0.25));
 		for (float xPos = 200; xPos < 10000; xPos += 500)
 		{
 			float yPos = (float)dis(gen);
-			pipeGraphics = new PipeGraphics(pipeBot, pipeMid, false);
-			pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, true);
-			top = new StaticPhysics(0.f, 0.f, -1.f, 0.f, xPos, 0, yPos, 130.f);
-			bot = new StaticPhysics(0, 0, -1, 0, xPos, yPos + 350, height/2, 130);
-			pipes.push_back(new Entity(top, pipeGraphics));
-			pipes.push_back(new Entity(bot, pipeGraphics2));
+			
+			pipes.push_back(eGenerator->generatePipes(xPos, yPos, 350));
 
+			
 		}
 
 	}
@@ -111,7 +111,7 @@ bool Level::init()
 	return pEngine;
 }*/
 
-std::vector<Entity*>& Level::getPipeEntities()
+std::vector<std::pair<Entity*, Entity*>>& Level::getPipeEntities()
 {
 	return pipes;
 }

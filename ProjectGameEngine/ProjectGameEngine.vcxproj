@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio.cpp" />
+    <ClCompile Include="Engine\Counter.cpp" />
     <ClCompile Include="Engine\Entity.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GraphicsComponent.cpp" />
@@ -38,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h" />
+    <ClInclude Include="Engine\Counter.h" />
     <ClInclude Include="Engine\Debug.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\EntityGenerators.h" />

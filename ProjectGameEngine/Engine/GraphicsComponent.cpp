@@ -187,3 +187,50 @@ void ForegroundGraphics::render(Entity& entity, Renderer* renderer) {
 	}
 
 }
+
+//---- Counter Graphics ----
+
+CounterGraphics::CounterGraphics(SpriteSheet *numbers,  int number) : _numbers(numbers)
+{
+	setNumber(number);
+}
+
+CounterGraphics::~CounterGraphics()
+{
+	delete _numbers;
+}
+void CounterGraphics::update(Entity& entity)
+{
+	//do nothing
+}
+
+void CounterGraphics::render(Entity& entity, Renderer* renderer)
+{
+	int width = (int)entity.getWidth();
+	int height = (int)entity.getHeight();
+	int xPos = (int)entity.getX();
+	int numOfDigits = (int)digits.size();
+	Rect *pos;
+	for (int i = 0; i < (int)digits.size(); i++)
+	{
+		pos = new Rect(xPos, entity.getY(), width, height);
+		_numbers->setSprite(digits[i]);
+		renderer->render(_numbers->getSprite(), pos, _numbers->getSpriteSrc());
+		xPos += width;
+		delete pos;
+	}
+
+}
+
+void CounterGraphics::setNumber(int number)
+{
+	digits.clear();
+	int mod = 10;
+	int numofDigits = 1;
+	do{
+		digits.emplace(digits.begin(), number % mod);
+		number /= 10;
+
+	} while (number > 0);
+
+}

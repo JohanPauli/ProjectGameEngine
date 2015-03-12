@@ -10,6 +10,17 @@ class Renderer;
 class Rect;
 
 /*
+Eg havi gjørt hendan fyri skilja graphics og Entity frá hvørjum øðrum...
+eitt sindur hacky, so tað verðrur kanska broytt seinni
+*/
+class EntityInterface
+{
+public:
+	virtual void update() = 0;
+	virtual void render(Renderer* renderer) = 0;
+};
+
+/*
 	General component-based Entity class
 	
 	graphics and input components depend on a physics component existing for x,y, and acceleration

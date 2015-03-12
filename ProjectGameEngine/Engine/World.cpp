@@ -9,7 +9,8 @@
 
 
 World::World(int width, int height) 
-: _displayWidth(width), _displayHeight(height) {}
+: _displayWidth(width), _displayHeight(height) 
+{}
 
 
 World::~World() {
@@ -54,6 +55,8 @@ void World::free() {
 	delete _player; _player = nullptr;
 	_xOffset = 0; 
 	_yOffset = 0;
+
+	delete counter;
 }
 
 
@@ -102,18 +105,23 @@ void World::update() {
 inline void renderContainer(EntityCont& container, Renderer* renderer) {
 	for (auto entity : container) {
 		entity->render(renderer);
+		
 	}
 }
 
 
 void World::init(Level level)
 {
-	std::vector<Entity*> pipes = level.getPipeEntities();
-	for (auto it = pipes.begin(); it != pipes.end(); it++)
-	{
-		addEntity( *it, EntityType::STATIC);
-	}
 
+	
+	
+
+	for (auto pipePair : level.getPipeEntities())
+	{
+		addEntity( pipePair.first, EntityType::STATIC);
+		addEntity(pipePair.second, EntityType::STATIC);
+	}
+	/*
 	std::vector<Entity*> back = level.getBackground();
 	for (auto it = back.begin(); it != back.end(); it++)
 	{
@@ -125,11 +133,21 @@ void World::init(Level level)
 	{
 		addEntity(*it, EntityType::FOREGROUND);
 	}
+	*/
+
+	// activate all static entities
+
+
+	Entity* cEntity = new Entity(new StaticPhysics(0, 0, 0, 0, 0, 10, 50, 50));
+	counter = new Counter(cEntity);
+	
+	counter->setNumber(123);
 }
 
 
 void World::render(Renderer* renderer) {
 	// rendering offsets
+
 	renderer->setOffsets(_xOffset, _yOffset);
 	if (_background != nullptr)
 		_background->render(renderer);
@@ -139,7 +157,11 @@ void World::render(Renderer* renderer) {
 		_player->render(renderer);
 	renderContainer(_activeEntities.staticEntities, renderer);
 	renderContainer(_activeEntities.foregroundEntities, renderer);
-	manageScene();
+	//counter position is fixed
+	renderer->setOffsets(0, 0);
+	counter->render(renderer);
+
+	calcScore();
 }
 
 
@@ -303,4 +325,22 @@ void World::followPlayer() {
 
 void World::manageScene() {
 	// TODO: add code
+}
+
+void World::calcScore()
+{
+
+	int score = _inactiveEntitiesLeft.staticEntities.size();
+	int idx = _activeEntities.staticEntities.size()-1;
+	Entity* pipe = _activeEntities.staticEntities.at(idx);
+
+	while (_player->getX() > pipe->getX() && idx > 0)
+	{
+		score++;
+		idx--;
+		pipe = _activeEntities.staticEntities.at(idx);
+	}
+	counter->setNumber(score/2);
+	
+	
 }

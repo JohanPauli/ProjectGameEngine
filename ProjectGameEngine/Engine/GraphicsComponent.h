@@ -110,3 +110,20 @@ public:
 	virtual void update(Entity& entity) override;
 	virtual void render(Entity& entity, Renderer* renderer) override;
 };
+
+
+class CounterGraphics : Graphics
+{
+private:
+	SpriteSheet *_numbers;
+	std::vector<Rect> _numPos;
+	std::vector<int> digits;
+
+public:
+	CounterGraphics(SpriteSheet *numbers, int number = 0);
+	~CounterGraphics();
+	virtual void update(Entity&) override;
+	virtual void render(Entity&, Renderer* renderer) override;
+	void setNumber(int number);
+
+};

@@ -3,6 +3,7 @@
 #include <deque>
 #include "Level.h"
 #include "Physics.h"
+#include "Counter.h"
 
 class Entity;
 class Renderer;
@@ -44,6 +45,8 @@ private:
 	int			_displayHeight;
 	int			_xOffset = 0;
 	int			_yOffset = 0;
+
+	Counter *counter;
 
 private:
 	// move the display area to where the player is
@@ -88,4 +91,6 @@ public:
 	bool deactivateRightEntity(EntityType type);
 
 	void manageScene();
+
+	void calcScore();
 };

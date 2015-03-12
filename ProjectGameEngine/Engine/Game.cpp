@@ -12,6 +12,7 @@
 #include "Physics.h"
 #include "World.h"
 #include "EntityGenerators.h"
+#include "Counter.h"
 
 
 const char* Game::WINDOW_TITLE = "Flappy Bird Demo";
@@ -53,6 +54,7 @@ bool Game::init() {
 	rManager.load("loadDocument.txt", renderer);
 	
 
+
 	// create entities
 	auto botBorder = new Entity(bot);
 	auto topBorder = new Entity(top);
@@ -68,17 +70,17 @@ bool Game::init() {
 	_world->addEntity(fg, EntityType::FOREGROUND);
 
 	_world->setPlayer(player);
-	_world->addEntity(pipes.first, EntityType::STATIC);
-	_world->addEntity(pipes.second, EntityType::STATIC);
-	_world->addEntity(pipes2.first, EntityType::STATIC);
-	_world->addEntity(pipes2.second, EntityType::STATIC);
+	//_world->addEntity(pipes.first, EntityType::STATIC);
+	//_world->addEntity(pipes.second, EntityType::STATIC);
+	//_world->addEntity(pipes2.first, EntityType::STATIC);
+	//_world->addEntity(pipes2.second, EntityType::STATIC);
 	_world->setBorders(topBorder, botBorder);
 
 	Level level(_window.getWidth(), _window.getHeight());
 
+
 	_world->init(level);
 
-	// activate all static entities
 	while (_world->activateLeftEntity(EntityType::STATIC));
 	while (_world->activateRightEntity(EntityType::STATIC));
 	while (_world->activateLeftEntity(EntityType::BACKGROUND));
@@ -149,3 +151,4 @@ void Game::render() {
 	_world->render(_window.getRenderer());
 	_window.update();
 }
+
