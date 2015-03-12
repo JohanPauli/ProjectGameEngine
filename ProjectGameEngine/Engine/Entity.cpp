@@ -3,6 +3,7 @@
 #include "Rendering.h"
 #include "GraphicsComponent.h"
 #include "InputComponent.h"
+#include "InputMapping.h"
 #include "Physics.h"
 
 
@@ -17,6 +18,10 @@ Entity::Entity(Physics* physics, Graphics* graphics, Input* input)
 Entity::~Entity() {
 	delete physics;
 	delete graphics;
+
+	// unregister input
+	if (input != nullptr)
+		InputMapper::getInstance().unregisterContext(input);
 	delete input;
 }
 
