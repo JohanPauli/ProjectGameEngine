@@ -35,7 +35,9 @@ public:
 
 	// generates the bird player
 	Entity* generatePlayerBird() {
-		auto physics = new DynamicPhysics(0.f, 0.08f, 0.f, 0.f, 0.f, 100.f, 60.f, 90.f);
+		auto physics = new DynamicPhysics(0.f, 0.1f, 2.5f, 0.f, 
+			0.f, 200.f,  // x, y
+			50.f, 70.f); // h, w
 		
 		// graphics component
 		// create bird spritesheet

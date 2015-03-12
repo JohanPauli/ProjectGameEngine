@@ -18,6 +18,7 @@ private:
 	std::vector < std::pair<Entity*, Entity*>> pipes;
 	std::vector < Entity* > background;
 	std::vector < Entity* > foreground;
+	Entity*					player;
 	
 	// window size
 	int width;
@@ -31,7 +32,7 @@ public:
 	std::vector<std::pair<Entity*, Entity*>>& getPipeEntities();
 	std::vector<Entity*>& getBackground();
 	std::vector<Entity*>& getForeground();
-	//Entity* getPlayer() const;
+	Entity* getPlayer() const;
 
 };
 
