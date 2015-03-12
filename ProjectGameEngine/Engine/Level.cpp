@@ -69,7 +69,7 @@ bool Level::init()
 		//Make as many background entities as it takes to cover the window
 		while (xPos < width)
 		{
-			auto bgGraphics = new BackgroundGraphics2(backgroundSky, width, height);
+			auto bgGraphics = new BackgroundGraphics2(backgroundSky, width, height, 4, 8);
 			auto bgPhy = new StaticPhysics(xPos, 0.f, -0.1, 0.f, 0.f, 0.f, skyScale * backgroundSky->getHeight(), skyScale * backgroundSky->getWidth());
 			background.push_back(new Entity(bgPhy, bgGraphics));
 
@@ -83,7 +83,7 @@ bool Level::init()
 		//same as with backgroundLand
 		while (xPos < width)
 		{
-			auto bgGraphics = new BackgroundGraphics(backgroundLand);
+			auto bgGraphics = new ForegroundGraphics(backgroundLand, width, height, 1.5, 2);
 			auto bgPhy = new StaticPhysics(0.f, 0.f, -1.f, 0.f, xPos, yPos, backgroundLand->getHeight(), backgroundLand->getWidth());
 			foreground.push_back(new Entity(bgPhy, bgGraphics));
 
