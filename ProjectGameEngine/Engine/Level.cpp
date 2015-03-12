@@ -60,7 +60,7 @@ bool Level::init()
 	}
 	else
 		return false;
-	if (backgroundSky && backgroundLand){
+	/*if (backgroundSky && backgroundLand){
 		//skalera bakgrund so hon gongur frá ovast til har landbakgrund byrjar
 		float skyScale = (((float)height - backgroundLand->getHeight()) / backgroundSky->getHeight());
 
@@ -96,7 +96,7 @@ bool Level::init()
 	}
 	else
 		return false;
-
+	*/
 	return true;
 		
 }

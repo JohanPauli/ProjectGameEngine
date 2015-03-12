@@ -137,5 +137,8 @@
     <ClInclude Include="Engine\Level.h">
       <Filter>Engine\World</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\EntityGenerators.h">
+      <Filter>Engine\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

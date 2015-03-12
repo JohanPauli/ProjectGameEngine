@@ -40,6 +40,7 @@
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\Debug.h" />
     <ClInclude Include="Engine\Entity.h" />
+    <ClInclude Include="Engine\EntityGenerators.h" />
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GraphicsComponent.h" />
     <ClInclude Include="Engine\InputComponent.h" />
