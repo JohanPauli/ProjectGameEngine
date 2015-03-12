@@ -84,7 +84,6 @@ bool RessourceManager::load(std::string filename, Renderer *renderer)
 			if (loadSound != nullptr && !tag.empty())
 				soundMap[tag] = loadSound;
 			//else log error
-			
 			break;
 		}
 		//case MUSIC

@@ -90,7 +90,7 @@ void World::init(Level level) {
 	for (auto background : backgrounds)
 	{
 		addEntity(background, EntityType::BACKGROUND);
-	}
+}
 
 	// load foregrounds
 	std::vector<Entity*> foregrounds = level.getForeground();
@@ -185,7 +185,7 @@ inline void renderContainer(EntityCont& container, Renderer* renderer) {
 		entity->render(renderer);
 		
 	}
-}
+	}
 
 
 
@@ -205,7 +205,7 @@ void World::render(Renderer* renderer) {
 	//counter position is fixed
 	renderer->setOffsets(0, 0);
 	if (counter != nullptr)
-		counter->render(renderer);
+	counter->render(renderer);
 
 	calcScore();
 }
@@ -261,7 +261,7 @@ void World::setPlayer(Entity* entity) {
 	// activate new player's input
 	// assume the entity is already registered
 	if (entity != nullptr)
-		InputMapper::getInstance().activateContext(_player->getInputContext());
+	InputMapper::getInstance().activateContext(_player->getInputContext());
 }
 
 
@@ -376,15 +376,18 @@ void World::calcScore()
 	if (_activeEntities.staticEntities.empty())
 		return;
 	int score = (int)_inactiveEntitiesLeft.staticEntities.size();
-	int idx = (int)_activeEntities.staticEntities.size() - 1;
-	Entity* pipe = _activeEntities.staticEntities.at(idx);
+	int idx = (int)_activeEntities.staticEntities.size();
+	Entity* pipe;
 
-	while (_player->getX() > pipe->getX() && idx > 0)
+	do 
 	{
-		score++;
 		idx--;
 		pipe = _activeEntities.staticEntities.at(idx);
-	}
+		if (_player->getX() > pipe->getX())
+			score++;
+
+
+	} while (_player->getX() > pipe->getX() && idx > 0);
 	counter->setNumber(score/2);
 	
 	

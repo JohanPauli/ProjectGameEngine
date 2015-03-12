@@ -4,3 +4,7 @@ SPRITE|pipemid|assets\\sprites\\pipe-mid.png
 SPRITE|sky|assets\\sprites\\sky.png
 SPRITE|land|assets\\sprites\\land.png
 SPRITE|numbers|assets\\sprites\\numbers_sheet.png
+SOUND|hit|assets\\Sounds\\sfx_hit.ogg
+SOUND|point|assets\\Sounds\\sfx_point.ogg
+SOUND|swoosh|assets\\Sounds\\sfx_swooshing.ogg
+SOUND|flap|assets\\Sounds\\flap.ogg

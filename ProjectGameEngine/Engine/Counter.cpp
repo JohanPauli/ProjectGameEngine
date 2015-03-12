@@ -43,5 +43,12 @@ void Counter::update()
 
 void Counter::setNumber(int number)
 {
-	cGraphics->setNumber(number);
+	if (number != oldScore)
+	{
+		cGraphics->setNumber(number);
+		oldScore = number;
+		Audio& audio = Audio::get();
+		audio.stopSound(2);
+		audio.playSound(RessourceManager::getInstance().getByTag<Sound*>("point"), 0, 2);
+	}
 }

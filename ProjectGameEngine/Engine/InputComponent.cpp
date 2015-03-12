@@ -2,6 +2,7 @@
 
 #include "InputFetcher.h"
 #include "Entity.h"
+#include "RessourceManager.h"
 
 
 // ---- PlayerInput ----
@@ -40,6 +41,9 @@ void PlayerInput::flap(bool repeat) const {
 	float yVel = _entity->getYvelocity();
 	if (!repeat)
 		_entity->setYvelocity(-5);
+	Audio& audio = Audio::get();
+	audio.stopSound(1);
+	audio.playSound(RessourceManager::getInstance().getByTag<Sound*>("flap"), 0, 1);
 }
 
 void PlayerInput::right(bool repeat) const {
