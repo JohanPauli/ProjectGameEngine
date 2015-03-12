@@ -90,8 +90,22 @@ public:
 	Entity* generateForeground() {
 		auto fgSprite = RessourceManager::getInstance().getByTag<Sprite*>("land");
 		auto bgGraphics = new ForegroundGraphics(fgSprite, 1.5, 2);
-		auto bgPhy = new StaticPhysics(0.f, 0.f, 0.f, 0.f, 0.f, _dispHeight, _dispHeight, _dispWidth);
+		auto bgPhy = new StaticPhysics(0.f, 0.f, 0.f, 0.f, 
+			0.f, _dispHeight, _dispHeight, _dispWidth);
 
 		return new Entity(bgPhy, bgGraphics);
+	}
+
+	Entity* generateBorderBottom() {
+		auto physics = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
+			FLT_MIN, _dispHeight, FLT_MAX, FLT_MAX);
+		return new Entity(physics);
+	}
+
+
+	Entity* generateBorderTop() {
+		auto physics = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
+			FLT_MIN, FLT_MIN, -FLT_MIN, FLT_MAX);
+		return new Entity(physics);
 	}
 };
