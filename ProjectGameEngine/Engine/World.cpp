@@ -326,12 +326,14 @@ void World::calcScore()
 	int idx = _activeEntities.staticEntities.size()-1;
 	Entity* pipe = _activeEntities.staticEntities.at(idx);
 
-	while (_player->getX() > pipe->getX() && idx > 0)
+	while (_player->getX() > pipe->getX() && --idx >= 0)
 	{
-		score++;
-		idx--;
 		pipe = _activeEntities.staticEntities.at(idx);
+		score++;
+
+
 	}
+	//gevur off by one!!!!!!!
 	counter->setNumber(score/2);
 	
 	

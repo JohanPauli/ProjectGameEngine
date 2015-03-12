@@ -11,6 +11,7 @@ private:
 	Entity* _entity;
 	CounterGraphics *cGraphics;
 	void init();
+	int oldScore = 0;
 public:
 	Counter(Entity*);
 	~Counter();
