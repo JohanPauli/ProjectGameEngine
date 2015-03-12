@@ -29,6 +29,7 @@ void InputMapper::registerContext(InputContext* context, int priority) {
 
 
 void InputMapper::unregisterContext(InputContext* context) {
+	deactivateContext(context);
 	_inputContexts.erase(context->getInputContextId());
 }
 
