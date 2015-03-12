@@ -65,12 +65,11 @@ bool Level::init()
 		float skyScale = (((float)height - backgroundLand->getHeight()) / backgroundSky->getHeight());
 
 		float xPos = 0;
-		BackgroundGraphics *bgGraphics;
 
 		//Make as many background entities as it takes to cover the window
 		while (xPos < width)
 		{
-			bgGraphics = new BackgroundGraphics(backgroundSky);
+			auto bgGraphics = new BackgroundGraphics2(backgroundSky, width, height);
 			auto bgPhy = new StaticPhysics(xPos, 0.f, -0.1, 0.f, 0.f, 0.f, skyScale * backgroundSky->getHeight(), skyScale * backgroundSky->getWidth());
 			background.push_back(new Entity(bgPhy, bgGraphics));
 
@@ -84,7 +83,7 @@ bool Level::init()
 		//same as with backgroundLand
 		while (xPos < width)
 		{
-			bgGraphics = new BackgroundGraphics(backgroundLand);
+			auto bgGraphics = new BackgroundGraphics(backgroundLand);
 			auto bgPhy = new StaticPhysics(0.f, 0.f, -1.f, 0.f, xPos, yPos, backgroundLand->getHeight(), backgroundLand->getWidth());
 			foreground.push_back(new Entity(bgPhy, bgGraphics));
 

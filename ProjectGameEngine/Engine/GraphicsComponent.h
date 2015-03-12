@@ -78,3 +78,21 @@ public:
 	virtual void update(Entity& entity) override;
 	virtual void render(Entity& entity, Renderer* renderer) override;
 };
+
+// looping background
+class BackgroundGraphics2 : public Graphics {
+private:
+	Sprite* _background;
+	int		_windowWidth;
+	int		_windowHeight;
+	int		_bgWidth;
+	int		_bgHeight;
+	float	_scale;
+	int		_slowDown;
+
+public:
+	BackgroundGraphics2(Sprite* sprite, int windowWidth, int windowHeight, float scale = 4, int slowDown = 4);
+	virtual ~BackgroundGraphics2();
+	virtual void update(Entity& entity) override;
+	virtual void render(Entity& entity, Renderer* renderer) override;
+};

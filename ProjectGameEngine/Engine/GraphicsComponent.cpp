@@ -1,10 +1,11 @@
 #include "GraphicsComponent.h"
 
+#include <cmath>
+
 #include "Entity.h"
 #include "Rendering.h"
 #include "Sprites.h"
 #include "Physics.h"
-
 
 
 
@@ -28,8 +29,13 @@ void BirdGraphics::update(Entity& entity) {
 }
 
 void BirdGraphics::render(Entity& entity, Renderer* renderer) {
-	// render
-	renderer->render(_spriteSheet->getSprite(), &entity.getRect(), _spriteSheet->getSpriteSrc(), entity.getAngle());
+	double angle = entity.getAngle();
+
+	// flip the sprite depending on direction
+	if (angle < -90 || angle > 90)
+		renderer->render(_spriteSheet->getSprite(), &entity.getRect(), _spriteSheet->getSpriteSrc(), angle, nullptr, RenderFlip::VERTICAL);
+	else
+		renderer->render(_spriteSheet->getSprite(), &entity.getRect(), _spriteSheet->getSpriteSrc(), angle);
 }
 
 
@@ -106,5 +112,48 @@ void BackgroundGraphics::update(Entity &entity)
 void BackgroundGraphics::render(Entity &entity, Renderer *renderer)
 {
 	renderer->render(background, &pos);
+
+}
+
+
+
+// variation of background
+
+BackgroundGraphics2::BackgroundGraphics2(Sprite* background, int windowWidth, int windowHeight, float scale, int slowDown) 
+: _background(background), _windowWidth(windowWidth), _windowHeight(windowHeight), _scale(scale), _slowDown(slowDown) {
+	_bgWidth = (int)(_background->getWidth()*_scale);
+	_bgHeight = (int)(_background->getHeight()*_scale);
+
+}
+
+BackgroundGraphics2::~BackgroundGraphics2() {}
+
+void BackgroundGraphics2::update(Entity& entity) {
+
+}
+
+void BackgroundGraphics2::render(Entity& entity, Renderer* renderer) {
+	int xOffset = renderer->getXoffset();
+	int yOffset = renderer->getYoffset();
+	
+	// number of background renders needed
+	int n = (int)(ceil(_windowWidth / _bgHeight));
+
+	// move speed of background
+	int bgOffset = (int)(xOffset / _slowDown) % (int)_bgWidth;
+
+	for (int i = 0; i < n; i++) {
+		int x = (int)(xOffset + (i - 1)*_bgWidth) - bgOffset;
+		int y = _windowHeight - _bgHeight + yOffset;
+		Rect pos = Rect(x, y, (int)_bgWidth, (int)_bgHeight);
+		renderer->render(_background, &pos);
+
+		// extend the top 1px of the background upwards to fill in the rest
+		Rect src = Rect(0, 0, _bgWidth, 1); 
+		pos.setY(yOffset);
+		pos.setHeight(_windowHeight - _bgHeight);
+		renderer->render(_background, &pos, &src);
+
+	}
 
 }
