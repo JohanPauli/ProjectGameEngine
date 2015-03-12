@@ -3,6 +3,7 @@
 #include "RessourceManager.h"
 #include "Physics.h"
 #include "GraphicsComponent.h"
+#include "EntityGenerators.h"
 
 Level::Level(int width, int height) : width(width), height(height)
 {
@@ -21,95 +22,34 @@ read from file instead
 bool Level::init()
 {
 	RessourceManager &rManager = RessourceManager::getInstance();
-	Sprite*	bird = nullptr;
-	Sprite*	pipeTop = nullptr;
-	Sprite*	pipeMid = nullptr;
-	Sprite*	pipeBot = nullptr;
-	Sprite* backgroundSky = nullptr;
-	Sprite* backgroundLand = nullptr;
 
-	/*Sprites*/
-	bird = rManager.getByTag<Sprite*>("bird");
-	pipeMid = rManager.getByTag<Sprite*>("pipemid");
-	pipeBot = rManager.getByTag<Sprite*>("pipebot");
-	backgroundSky = rManager.getByTag<Sprite*>("sky");
-	backgroundLand = rManager.getByTag<Sprite*>("land");
-
-	if (pipeMid && pipeBot){
-		PipeGraphics* pipeGraphics;
-		PipeGraphics* pipeGraphics2;
-		StaticPhysics *top;
-		StaticPhysics *bot;
-
-		//First draft
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> dis(100, (height*0.75-350));
-		for (float xPos = 200; xPos < 10000; xPos += 500)
-		{
-			float yPos = (float)dis(gen);
-			pipeGraphics = new PipeGraphics(pipeBot, pipeMid, false);
-			pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, true);
-			top = new StaticPhysics(0.f, 0.f, -1.f, 0.f, xPos, 0, yPos, 130.f);
-			bot = new StaticPhysics(0, 0, -1, 0, xPos, yPos + 350, height/2, 130);
-			pipes.push_back(new Entity(top, pipeGraphics));
-			pipes.push_back(new Entity(bot, pipeGraphics2));
-
-		}
-
+	//second draft
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis((height*0.1), (height*0.65));
+	for (int xPos = 500; xPos < 10000; xPos += 500)
+	{
+		int yPos = dis(gen);
+		auto pipePair = EntityGenerator::getInstance().generatePipes(xPos, yPos, 230);
+		pipes.push_back(pipePair.first);
+		pipes.push_back(pipePair.second);
 	}
-	else
-		return false;
-	/*if (backgroundSky && backgroundLand){
-		//skalera bakgrund so hon gongur frá ovast til har landbakgrund byrjar
-		float skyScale = (((float)height - backgroundLand->getHeight()) / backgroundSky->getHeight());
+	auto bg = EntityGenerator::getInstance().generateBackground();
+	auto fg = EntityGenerator::getInstance().generateForeground();
 
-		float xPos = 0;
+	// order matters. first added is last rendererd
+	background.push_back(fg);
+	background.push_back(bg);
+	player = EntityGenerator::getInstance().generatePlayerBird();
 
-		//Make as many background entities as it takes to cover the window
-		while (xPos < width)
-		{
-			auto bgGraphics = new BackgroundGraphics2(backgroundSky, width, height, 4, 8);
-			auto bgPhy = new StaticPhysics(xPos, 0.f, -0.1, 0.f, 0.f, 0.f, skyScale * backgroundSky->getHeight(), skyScale * backgroundSky->getWidth());
-			background.push_back(new Entity(bgPhy, bgGraphics));
-
-			xPos += skyScale * backgroundSky->getWidth();
-
-		}
-
-		xPos = 0;
-		int yPos = skyScale * backgroundSky->getHeight();
-
-		//same as with backgroundLand
-		while (xPos < width)
-		{
-			auto bgGraphics = new ForegroundGraphics(backgroundLand, width, height, 1.5, 2);
-			auto bgPhy = new StaticPhysics(0.f, 0.f, -1.f, 0.f, xPos, yPos, backgroundLand->getHeight(), backgroundLand->getWidth());
-			foreground.push_back(new Entity(bgPhy, bgGraphics));
-
-			xPos += backgroundLand->getWidth();
-
-		}
-		
-
-
-	}
-	else
-		return false;
-	*/
 	return true;
 		
 }
 //Game world will call this to set game player
-/*PlayerEntity* Level::getPlayer() const
+Entity* Level::getPlayer() const
 {
 	return player;
-}*/
-
-/*PhysicsEngine* Level::getPhysicsEngine() const
-{
-	return pEngine;
-}*/
+}
 
 std::vector<Entity*>& Level::getPipeEntities()
 {

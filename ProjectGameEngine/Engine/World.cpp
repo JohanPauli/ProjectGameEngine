@@ -89,8 +89,10 @@ void World::update() {
 	// check collision
 	_physEng.detectCollisions(_player, _activeEntities.staticEntities);
 	_physEng.detectCollisions(_player, _activeEntities.dynamicEntities);
-	_physEng.detectCollisions(_player, _botBorder);
-	_physEng.detectCollisions(_player, _topBorder);
+	if (_botBorder != nullptr)
+		_physEng.detectCollisions(_player, _botBorder);
+	if (_topBorder != nullptr)
+		_physEng.detectCollisions(_player, _topBorder);
 	_physEng.detectCollisions(_activeEntities.dynamicEntities, _activeEntities.staticEntities);
 	_physEng.detectCollisions(_activeEntities.dynamicEntities, _activeEntities.dynamicEntities);
 
@@ -109,22 +111,23 @@ inline void renderContainer(EntityCont& container, Renderer* renderer) {
 void World::init(Level level)
 {
 	std::vector<Entity*> pipes = level.getPipeEntities();
-	for (auto it = pipes.begin(); it != pipes.end(); it++)
+	for (auto pipe : pipes)
 	{
-		addEntity( *it, EntityType::STATIC);
+		addEntity(pipe, EntityType::STATIC);
 	}
 
-	std::vector<Entity*> back = level.getBackground();
-	for (auto it = back.begin(); it != back.end(); it++)
+	std::vector<Entity*> backgrounds = level.getBackground();
+	for (auto background : backgrounds)
 	{
-		addEntity(*it, EntityType::BACKGROUND);
+		addEntity(background, EntityType::BACKGROUND);
 	}
 
-	std::vector<Entity*> foreground = level.getForeground();
-	for (auto it = foreground.begin(); it != foreground.end(); it++)
+	std::vector<Entity*> foregrounds = level.getForeground();
+	for (auto foreground : foregrounds)
 	{
-		addEntity(*it, EntityType::FOREGROUND);
+		addEntity(foreground, EntityType::FOREGROUND);
 	}
+	setPlayer(level.getPlayer());
 }
 
 

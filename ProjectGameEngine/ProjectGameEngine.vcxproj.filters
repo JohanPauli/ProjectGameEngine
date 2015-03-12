@@ -25,6 +25,9 @@
     <Filter Include="Engine\Components">
       <UniqueIdentifier>{8445c266-0410-4764-a623-92778cb14540}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Events">
+      <UniqueIdentifier>{1b37b8bf-0ac3-4351-919d-601bc8759cb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio.cpp">
