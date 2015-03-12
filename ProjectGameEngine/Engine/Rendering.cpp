@@ -50,6 +50,10 @@ void Renderer::setOffsets(int x, int y) {
 }
 
 
+int  Renderer::getXoffset() const { return _xOffset; }
+int  Renderer::getYoffset() const { return _yOffset; }
+
+
 Sprite* Renderer::loadSprite(std::string path) const {
 	SDL_Texture* sdlTexture;
 	SDL_Surface* sdlSurface;

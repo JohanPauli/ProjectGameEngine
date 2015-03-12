@@ -73,6 +73,8 @@ public:
 		RenderFlip	flip = RenderFlip::NONE) const;
 
 	void setOffsets(int x, int y);
+	int  getXoffset() const;
+	int  getYoffset() const;
 
 	// loading functions
 	Sprite* loadSprite(std::string path) const;
