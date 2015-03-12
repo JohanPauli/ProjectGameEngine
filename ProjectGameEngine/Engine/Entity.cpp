@@ -42,10 +42,10 @@ void Entity::render(Renderer* renderer) {
 
 Rect Entity::getRect() const	{ return std::move(physics->getRect()); }
 double Entity::getAngle() const { return physics->getAngle(); }
-int Entity::getX() const		{ return physics->getXPosition(); }
-int Entity::getY() const		{ return physics->getYPosition(); }
-int Entity::getWidth() const	{ return physics->getWidth(); }
-int Entity::getHeight() const	{ return physics->getHeight(); }
+int Entity::getX() const		{ return (int)physics->getXPosition(); }
+int Entity::getY() const		{ return (int)physics->getYPosition(); }
+int Entity::getWidth() const	{ return (int)physics->getWidth(); }
+int Entity::getHeight() const	{ return (int)physics->getHeight(); }
 float Entity::getXvelocity() const { return physics->getXVelocity(); }
 float Entity::getYvelocity() const { return physics->getYVelocity(); }
 void Entity::setXvelocity(float vel) const { physics->setXVelocity(vel); }
