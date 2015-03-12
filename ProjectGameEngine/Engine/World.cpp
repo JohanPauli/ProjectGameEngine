@@ -132,6 +132,8 @@ void World::init(Level level)
 		addEntity(foreground, EntityType::FOREGROUND);
 	}
 	setPlayer(level.getPlayer());
+
+	counter = new Counter(new Entity(new StaticPhysics(0, 0, 0, 0, 10, 10, 50, 50)));
 }
 
 

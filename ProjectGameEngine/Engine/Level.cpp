@@ -26,7 +26,7 @@ bool Level::init()
 	//second draft
 		std::random_device rd;
 		std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dis((height*0.1), (height*0.65));
+	std::uniform_int_distribution<> dis((height*0.1), (height*0.50));
 	for (int xPos = 500; xPos < 10000; xPos += 500)
 		{
 		int yPos = dis(gen);
@@ -51,7 +51,7 @@ Entity* Level::getPlayer() const
 	return player;
 }
 
-std::vector<std::pair<Entity*, Entity*>>& Level::getPipeEntities()
+std::vector<Entity*>& Level::getPipeEntities()
 {
 	return pipes;
 }

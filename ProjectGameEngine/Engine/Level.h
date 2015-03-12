@@ -15,7 +15,7 @@ This class will be used to initialize all game objects
 class Level
 {
 private:
-	std::vector < std::pair<Entity*, Entity*>> pipes;
+	std::vector < Entity*> pipes;
 	std::vector < Entity* > background;
 	std::vector < Entity* > foreground;
 	Entity*					player;
@@ -29,7 +29,7 @@ private:
 public:
 	Level(int width, int height);
 
-	std::vector<std::pair<Entity*, Entity*>>& getPipeEntities();
+	std::vector<Entity*>& getPipeEntities();
 	std::vector<Entity*>& getBackground();
 	std::vector<Entity*>& getForeground();
 	Entity* getPlayer() const;
