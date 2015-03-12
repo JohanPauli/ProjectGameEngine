@@ -18,7 +18,9 @@ private:
 	std::vector < Entity*> pipes;
 	std::vector < Entity* > background;
 	std::vector < Entity* > foreground;
-	Entity*					player;
+	Entity*	player;
+	Entity*	topBorder;
+	Entity*	botBorder;
 	
 	// window size
 	int width;
@@ -33,7 +35,8 @@ public:
 	std::vector<Entity*>& getBackground();
 	std::vector<Entity*>& getForeground();
 	Entity* getPlayer() const;
-
+	Entity* getBorderTop() const;
+	Entity* getBorderBottom() const;
 };
 
 #endif

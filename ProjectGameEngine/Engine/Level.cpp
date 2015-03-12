@@ -42,6 +42,10 @@ bool Level::init()
 	background.push_back(bg);
 	player = EntityGenerator::getInstance().generatePlayerBird();
 
+	// borders
+	topBorder = EntityGenerator::getInstance().generateBorderTop();
+	botBorder = EntityGenerator::getInstance().generateBorderBottom();
+
 	return true;
 		
 }
@@ -49,6 +53,14 @@ bool Level::init()
 Entity* Level::getPlayer() const
 {
 	return player;
+}
+
+Entity* Level::getBorderTop() const {
+	return topBorder;
+}
+
+Entity* Level::getBorderBottom() const {
+	return botBorder;
 }
 
 std::vector<Entity*>& Level::getPipeEntities()
