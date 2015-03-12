@@ -105,8 +105,8 @@ public:
 	~PhysicsEngine();
 	//void update(std::vector<Entity*> entities);
 	void detectCollisions(const std::deque<Entity*>& entities1, const std::deque<Entity*>& entities2);
-	void detectCollisions(Entity* entity, const std::deque<Entity*>& entities2);
-	void detectCollisions(Entity* entity, Entity* entity2);
+	bool detectCollisions(Entity* entity, const std::deque<Entity*>& entities2);
+	bool detectCollisions(Entity* entity, Entity* entity2);
 
 	void collision(Physics* phy, Physics* phy2);
 	//void detectColissions(std::vector<Entity*> entities1);

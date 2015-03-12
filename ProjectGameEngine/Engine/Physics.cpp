@@ -180,12 +180,15 @@ void PhysicsEngine::detectCollisions(const std::deque<Entity*>& dynamicEntities,
 	}
 }
 
-void PhysicsEngine::detectCollisions(Entity* entity, const std::deque<Entity*>& entities2) {
+bool PhysicsEngine::detectCollisions(Entity* entity, const std::deque<Entity*>& entities2) {
+	bool collisionFlag = false;
 	for (auto ent2 : entities2) {
-		detectCollisions(entity, ent2);
+		if (detectCollisions(entity, ent2))
+			collisionFlag = true;
 	}
+	return collisionFlag;
 }
-void PhysicsEngine::detectCollisions(Entity* entity, Entity* entity2) {
+bool PhysicsEngine::detectCollisions(Entity* entity, Entity* entity2) {
 	Physics* phys = entity->physics;
 	Physics* phys2 = entity2->physics;
 
@@ -203,7 +206,11 @@ void PhysicsEngine::detectCollisions(Entity* entity, Entity* entity2) {
 
 	if (dpYhigh < pYlow || dpYlow > pYhigh) {}		// entity is below or above entity2
 	else if (dpXhigh < pXlow || dpXlow > pXhigh) {} // entity is to the left or right of entity2
-	else collision(phys, phys2);					// they collide
+	else {
+		collision(phys, phys2);
+		return true;
+	}
+	return false;
 }
 
 /*
