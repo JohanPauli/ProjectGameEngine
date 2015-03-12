@@ -3,3 +3,4 @@ SPRITE|pipebot|assets\\sprites\\pipe-bot.png
 SPRITE|pipemid|assets\\sprites\\pipe-mid.png
 SPRITE|sky|assets\\sprites\\sky.png
 SPRITE|land|assets\\sprites\\land.png
+SPRITE|numbers|assets\\sprites\\numbers_sheet.png
