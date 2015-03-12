@@ -36,6 +36,7 @@ private:
 	EntityList	_activeEntities;		// entities to get rendered
 	EntityList	_inactiveEntitiesLeft;	// entities to the left of the screen
 	EntityList	_inactiveEntitiesRight;	// entities to the right of the screen
+	Entity*		_background = nullptr;	// backmost background
 	Entity*		_player = nullptr;
 	Entity*		_botBorder = nullptr;
 	Entity*		_topBorder = nullptr;

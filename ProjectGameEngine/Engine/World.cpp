@@ -44,6 +44,7 @@ void World::free() {
 	deleteEntityList(_inactiveEntitiesLeft);
 	deleteEntityList(_inactiveEntitiesRight);
 
+	delete _background; _background = nullptr;
 
 	// borders
 	delete _botBorder; _botBorder = nullptr;
@@ -76,7 +77,10 @@ void World::update() {
 	followPlayer();
 	// active
 	updateEntityList(_activeEntities);
-	_player->update();
+	if (_player != nullptr)
+		_player->update();
+	if (_background != nullptr)
+		_background->update();
 
 	// inactive
 	updateEntityList(_inactiveEntitiesLeft);
@@ -127,10 +131,12 @@ void World::init(Level level)
 void World::render(Renderer* renderer) {
 	// rendering offsets
 	renderer->setOffsets(_xOffset, _yOffset);
-
+	if (_background != nullptr)
+		_background->render(renderer);
 	renderContainer(_activeEntities.backgroundEntities, renderer);
 	renderContainer(_activeEntities.dynamicEntities, renderer);
-	_player->render(renderer);
+	if (_player != nullptr)
+		_player->render(renderer);
 	renderContainer(_activeEntities.staticEntities, renderer);
 	renderContainer(_activeEntities.foregroundEntities, renderer);
 	manageScene();
@@ -286,6 +292,8 @@ bool World::deactivateRightEntity(EntityType type) {
 
 
 void World::followPlayer() {
+	if (_player == nullptr)
+		return;
 	_xOffset = 
 		(int)_player->getX() 
 		+ (int)(_player->getWidth() / 2) 

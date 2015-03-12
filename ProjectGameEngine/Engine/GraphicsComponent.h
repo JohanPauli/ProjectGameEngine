@@ -83,15 +83,16 @@ public:
 class BackgroundGraphics2 : public Graphics {
 private:
 	Sprite* _background;
-	int		_windowWidth;
-	int		_windowHeight;
+	int		_width;
+	int		_yPos;
 	int		_bgWidth;
 	int		_bgHeight;
 	float	_scale;
 	int		_slowDown;
+	int		_numberOfRenders;
 
 public:
-	BackgroundGraphics2(Sprite* sprite, int windowWidth, int windowHeight, float scale = 4, int slowDown = 4);
+	BackgroundGraphics2(Sprite* sprite, int screenWidth, int yPos, float scale = 4, int slowDown = 4);
 	virtual ~BackgroundGraphics2();
 	virtual void update(Entity& entity) override;
 	virtual void render(Entity& entity, Renderer* renderer) override;
