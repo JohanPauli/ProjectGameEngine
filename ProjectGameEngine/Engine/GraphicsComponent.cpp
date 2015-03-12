@@ -119,11 +119,10 @@ void BackgroundGraphics::render(Entity &entity, Renderer *renderer)
 
 // variation of background
 
-BackgroundGraphics2::BackgroundGraphics2(Sprite* background, int width, int yPos, float scale, int slowDown) 
-: _background(background), _width(width), _yPos(yPos), _scale(scale), _slowDown(slowDown) {
+BackgroundGraphics2::BackgroundGraphics2(Sprite* background, float scale, int slowDown) 
+: _background(background), _scale(scale), _slowDown(slowDown) {
 	_bgWidth = (int)(_background->getWidth()*_scale);
 	_bgHeight = (int)(_background->getHeight()*_scale);
-	_numberOfRenders = (int)(ceil(_width / _bgHeight));
 }
 
 BackgroundGraphics2::~BackgroundGraphics2() {}
@@ -135,20 +134,22 @@ void BackgroundGraphics2::update(Entity& entity) {
 void BackgroundGraphics2::render(Entity& entity, Renderer* renderer) {
 	int xOffset = renderer->getXoffset();
 	int yOffset = renderer->getYoffset();
+
+	int numberOfRenders = (int)(ceil(entity.getWidth() / _bgHeight));
 	
 
 	// move speed of background
 	int bgOffset = (int)(xOffset / _slowDown) % (int)_bgWidth;
 
-	for (int i = 0; i < _numberOfRenders; i++) {
+	for (int i = 0; i < numberOfRenders; i++) {
 		int x = (int)(xOffset + (i - 1)*_bgWidth) - bgOffset;
-		int y = _yPos - _bgHeight + yOffset;
+		int y = entity.getHeight() - _bgHeight + yOffset;
 		Rect pos = Rect(x, y, (int)_bgWidth, (int)_bgHeight);
 		renderer->render(_background, &pos);
 		// extend the top 1px of the background upwards to fill in the rest
 		Rect src = Rect(0, 0, _bgWidth, 1);
 		pos.setY(yOffset);
-		pos.setHeight(_yPos - _bgHeight);
+		pos.setHeight(entity.getHeight() - _bgHeight);
 		renderer->render(_background, &pos, &src);
 	}
 
@@ -157,11 +158,10 @@ void BackgroundGraphics2::render(Entity& entity, Renderer* renderer) {
 
 // --- foreground ---
 
-ForegroundGraphics::ForegroundGraphics(Sprite* background, int width, int yPos, float scale, int slowDown)
-	: _background(background), _width(width), _yPos(yPos), _scale(scale), _slowDown(slowDown) {
+ForegroundGraphics::ForegroundGraphics(Sprite* background, float scale, int slowDown)
+	: _background(background), _scale(scale), _slowDown(slowDown) {
 	_bgWidth = (int)(_background->getWidth()*_scale);
 	_bgHeight = (int)(_background->getHeight()*_scale);
-	_numberOfRenders = (int)(ceil(_width / _bgHeight));
 }
 
 ForegroundGraphics::~ForegroundGraphics() {}
@@ -174,13 +174,14 @@ void ForegroundGraphics::render(Entity& entity, Renderer* renderer) {
 	int xOffset = renderer->getXoffset();
 	int yOffset = renderer->getYoffset();
 
+	int numberOfRenders = (int)(ceil(entity.getWidth() / _bgHeight));
 
 	// move speed of background
 	int bgOffset = (int)(xOffset / _slowDown) % (int)_bgWidth;
 
-	for (int i = 0; i < _numberOfRenders; i++) {
+	for (int i = 0; i < numberOfRenders; i++) {
 		int x = (int)(xOffset + (i - 1)*_bgWidth) - bgOffset;
-		int y = _yPos - _bgHeight + yOffset;
+		int y = entity.getHeight() + yOffset - _bgHeight;
 		Rect pos = Rect(x, y, (int)_bgWidth, (int)_bgHeight);
 		renderer->render(_background, &pos);
 	}

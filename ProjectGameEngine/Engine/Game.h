@@ -27,7 +27,7 @@ private:
 
 	// timers
 private:
-	Timer		_timer;			// general timer for the game
+	Timer*		_timer;			// general timer for the game
 	UpdateTimer _logicUpdateTimer;	// game logic timer
 	UpdateTimer _renderUpdateTimer;
 
@@ -62,5 +62,4 @@ public:
 
 	// start the game loop
 	void run();
-
 };

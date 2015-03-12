@@ -11,6 +11,7 @@
 #include "RessourceManager.h"
 #include "Physics.h"
 #include "World.h"
+#include "EntityGenerators.h"
 
 
 const char* Game::WINDOW_TITLE = "Flappy Bird Demo";
@@ -21,9 +22,9 @@ Game::Game(int argc, char ** argv)
 	// use arguments for some settings maybe
 
 	// init timers
-	_timer = Timer();
-	_logicUpdateTimer = UpdateTimer(&_timer, MS_PER_UPDATE);
-	_renderUpdateTimer = UpdateTimer(&_timer, MS_PER_RENDER);
+	_timer = new Timer();
+	_logicUpdateTimer = UpdateTimer(_timer, MS_PER_UPDATE);
+	_renderUpdateTimer = UpdateTimer(_timer, MS_PER_RENDER);
 
 	// init audio
 	Audio::get().init(6, 44100, 1024);
@@ -44,26 +45,6 @@ bool Game::init() {
 		-100.f, (float)_window.getHeight(), // x, y
 		10000.f, 10000.f);			  // height, width
 
-	auto playerPhy = new DynamicPhysics(0.f, 0.08f, 
-										0.f, 0.f, 
-										0.f, 100.f, 
-										60.f, 90.f);
-	auto pipePhy = new StaticPhysics(0.f, 0.f, 0.f, 0.f, 
-									 250.f, _window.getHeight()-240.f, // x, y
-									 240.f, 130.f); // h, w
-	auto pipePhy2 = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
-									  250.f, 0.f, // x, y
-									  240.f, 130.f); // h, w
-
-	auto pipePhy3 = new StaticPhysics(0.f, 0.f,
-		0.f, 0.f,
-		550.f, _window.getHeight() - 240.f,
-		240.f, 130.f);
-	auto pipePhy4 = new StaticPhysics(0.f, 0.f,
-		0.f, 0.f,
-		550.f, 0.f,
-		240.f, 130.f);
-
 	// init textures
 
 	auto renderer = _window.getRenderer();
@@ -72,67 +53,31 @@ bool Game::init() {
 	rManager.load("loadDocument.txt", renderer);
 	
 
-	auto bird = rManager.getByTag<Sprite*>("bird");
-	auto pipeMid = rManager.getByTag<Sprite*>("pipemid");
-	auto pipeBot = rManager.getByTag<Sprite*>("pipebot");
-
-	// create bird spritesheet
-	std::vector<Rect> rector;
-	rector.emplace_back(Rect(0, 0, 18, 12));
-	rector.emplace_back(Rect(0, 0, 18, 12));
-	rector.emplace_back(Rect(18, 0, 18, 12));
-	rector.emplace_back(Rect(36, 0, 18, 12));
-	rector.emplace_back(Rect(36, 0, 18, 12));
-	rector.emplace_back(Rect(18, 0, 18, 12));
-	auto birdSheet = new SpriteSheet(rector, bird);
-
-	// components
-	auto input = new PlayerInput();
-	auto pipeGraphics = new PipeGraphics(pipeBot, pipeMid, true);
-	auto pipeGraphics2 = new PipeGraphics(pipeBot, pipeMid, false);
-	auto pipeGraphics3 = new PipeGraphics(pipeBot, pipeMid, true);
-	auto pipeGraphics4 = new PipeGraphics(pipeBot, pipeMid, false);
-	auto birdGraphics = new BirdGraphics(birdSheet, UpdateTimer(&_timer, 20));
-
-	// register
-	InputMapper::getInstance().registerContext(input, 10);
-
-
 	// create entities
 	auto botBorder = new Entity(bot);
 	auto topBorder = new Entity(top);
 
+	EntityGenerator::getInstance().init(_window.getWidth(), _window.getHeight(), _timer);
 
-	auto player = new Entity(playerPhy, birdGraphics, input);
-	auto pipe = new Entity(pipePhy, pipeGraphics);
-	auto pipe2 = new Entity(pipePhy2, pipeGraphics2);
-	auto pipe3 = new Entity(pipePhy3, pipeGraphics3);
-	auto pipe4 = new Entity(pipePhy4, pipeGraphics4);
+	auto player = EntityGenerator::getInstance().generatePlayerBird();
+	auto pipes = EntityGenerator::getInstance().generatePipes(100, 100, 200);
+	auto pipes2 = EntityGenerator::getInstance().generatePipes(500, 500, 200);
+	auto bg = EntityGenerator::getInstance().generateBackground();
+	auto fg = EntityGenerator::getInstance().generateForeground();
+	_world->addEntity(bg, EntityType::BACKGROUND);
+	_world->addEntity(fg, EntityType::FOREGROUND);
 
 	_world->setPlayer(player);
-	_world->addEntity(pipe, EntityType::STATIC);
-	_world->addEntity(pipe2, EntityType::STATIC);
+	_world->addEntity(pipes.first, EntityType::STATIC);
+	_world->addEntity(pipes.second, EntityType::STATIC);
+	_world->addEntity(pipes2.first, EntityType::STATIC);
+	_world->addEntity(pipes2.second, EntityType::STATIC);
 	_world->setBorders(topBorder, botBorder);
 
 	Level level(_window.getWidth(), _window.getHeight());
 
 	_world->init(level);
-	/*
-	for (auto entity : level.getPipeEntities())
-	{
-		_world.addEntity(entity, EntityType::STATIC);
-	}
 
-	for (auto entity : level.getBackground())
-	{
-		_world.addEntity(entity, EntityType::BACKGROUND);
-	}
-
-	for (auto entity : level.getForeground())
-	{
-		_world.addEntity(entity, EntityType::FOREGROUND);
-	}
-	*/
 	// activate all static entities
 	while (_world->activateLeftEntity(EntityType::STATIC));
 	while (_world->activateRightEntity(EntityType::STATIC));
@@ -154,11 +99,11 @@ void Game::cleanup() {
 
 
 void Game::run() {
-	_timer.start();
+	_timer->start();
 
 	// main game loop
 	while (_running) {
-		_timer.update(); // update the game's timers
+		_timer->update(); // update the game's timers
 
 		handleUserInput();
 
