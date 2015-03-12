@@ -322,18 +322,19 @@ void World::manageScene() {
 void World::calcScore()
 {
 
-	int score = _inactiveEntitiesLeft.staticEntities.size();
-	int idx = _activeEntities.staticEntities.size()-1;
-	Entity* pipe = _activeEntities.staticEntities.at(idx);
+	int score = (int)_inactiveEntitiesLeft.staticEntities.size();
+	int idx = (int)_activeEntities.staticEntities.size();
+	Entity* pipe;
 
-	while (_player->getX() > pipe->getX() && --idx >= 0)
+	do 
 	{
+		idx--;
 		pipe = _activeEntities.staticEntities.at(idx);
-		score++;
+		if (_player->getX() > pipe->getX())
+			score++;
 
 
-	}
-	//gevur off by one!!!!!!!
+	} while (_player->getX() > pipe->getX() && idx > 0);
 	counter->setNumber(score/2);
 	
 	
