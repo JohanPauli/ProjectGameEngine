@@ -5,16 +5,19 @@
 #include "InputMapping.h"
 #include "InputComponent.h"
 #include "Rendering.h"
+#include "Events.h"
 
 
 
 World::World(int width, int height) 
-: _displayWidth(width), _displayHeight(height) 
-{}
+: _displayWidth(width), _displayHeight(height) {
+	InputMapper::getInstance().registerContext(this);
+}
 
 
 World::~World() {
 	free();
+	InputMapper::getInstance().unregisterContext(this);
 }
 
 
@@ -34,6 +37,16 @@ inline void deleteEntityList(EntityList& el) {
 	el.foregroundEntities.clear();
 	deleteCont(el.staticEntities);
 	el.staticEntities.clear();
+}
+
+bool World::onNotify(const KeyboardInput& input) {
+	switch (input.key) {
+	case KeyboardKey::SPACE:
+		if (_paused)
+			unpause();
+		return true;
+	}
+	return false;
 }
 
 
@@ -56,9 +69,60 @@ void World::free() {
 	_xOffset = 0; 
 	_yOffset = 0;
 
-	delete counter;
+	delete counter; counter = nullptr;
 }
 
+
+
+void World::init(Level level) {
+	// deallocate previous run if any
+	free();
+
+	// load pipes
+	std::vector<Entity*> pipes = level.getPipeEntities();
+	for (auto pipe : pipes)
+	{
+		addEntity(pipe, EntityType::STATIC);
+	}
+
+	// load backgrounds
+	std::vector<Entity*> backgrounds = level.getBackground();
+	for (auto background : backgrounds)
+	{
+		addEntity(background, EntityType::BACKGROUND);
+	}
+
+	// load foregrounds
+	std::vector<Entity*> foregrounds = level.getForeground();
+	for (auto foreground : foregrounds)
+	{
+		addEntity(foreground, EntityType::FOREGROUND);
+	}
+	setPlayer(level.getPlayer());
+	setBorders(level.getBorderTop(), level.getBorderBottom());
+
+	counter = new Counter(new Entity(new StaticPhysics(0, 0, 0, 0, 10, 10, 50, 50)));
+}
+
+// freeze the game world
+void World::pause() {
+	EventQueue::getInstance().add(GameEvent(EventType::GAME_LOGIC_PAUSE));
+	_paused = true;
+	if (_player != nullptr)
+		InputMapper::getInstance().deactivateContext(_player->getInputContext());
+	InputMapper::getInstance().activateContext(this);
+}
+
+// unfreeze the game world
+void World::unpause() {
+	EventQueue::getInstance().add(GameEvent(EventType::GAME_LOGIC_UNPAUSE));
+	_paused = false;
+	if (_player != nullptr)
+		InputMapper::getInstance().activateContext(_player->getInputContext());
+	if (_gameOver)
+		EventQueue::getInstance().add(GameEvent(EventType::GAME_NEW));
+	InputMapper::getInstance().deactivateContext(this);
+}
 
 
 // update
@@ -76,29 +140,41 @@ inline void updateEntityList(EntityList& el) {
 
 
 void World::update() {
+	if (_paused) return;
+
 	// get offsets
 	followPlayer();
-	// active
+
+	// update active
 	updateEntityList(_activeEntities);
 	if (_player != nullptr)
 		_player->update();
 	if (_background != nullptr)
 		_background->update();
 
-	// inactive
+	// update inactive
 	updateEntityList(_inactiveEntitiesLeft);
 	updateEntityList(_inactiveEntitiesRight);
 
-	// check collision
-	_physEng.detectCollisions(_player, _activeEntities.staticEntities);
-	_physEng.detectCollisions(_player, _activeEntities.dynamicEntities);
+
+	if (_physEng.detectCollisions(_player, _activeEntities.staticEntities))
+		_gameOver = true;
+	if (_physEng.detectCollisions(_player, _activeEntities.dynamicEntities))
+		_gameOver = true;
 	if (_botBorder != nullptr)
-	_physEng.detectCollisions(_player, _botBorder);
+		if (_physEng.detectCollisions(_player, _botBorder))
+			_gameOver = true;
 	if (_topBorder != nullptr)
-	_physEng.detectCollisions(_player, _topBorder);
+		if (_physEng.detectCollisions(_player, _topBorder))
+			_gameOver = true;
+	
+	// check other collisions
 	_physEng.detectCollisions(_activeEntities.dynamicEntities, _activeEntities.staticEntities);
 	_physEng.detectCollisions(_activeEntities.dynamicEntities, _activeEntities.dynamicEntities);
 
+	// end game if player collided
+	if (_gameOver)
+		pause();
 	// TODO: dynamicentities can also collide with borders, implement it!
 }
 
@@ -111,30 +187,6 @@ inline void renderContainer(EntityCont& container, Renderer* renderer) {
 	}
 }
 
-
-void World::init(Level level)
-{
-	std::vector<Entity*> pipes = level.getPipeEntities();
-	for (auto pipe : pipes)
-	{
-		addEntity(pipe, EntityType::STATIC);
-	}
-
-	std::vector<Entity*> backgrounds = level.getBackground();
-	for (auto background : backgrounds)
-	{
-		addEntity(background, EntityType::BACKGROUND);
-	}
-
-	std::vector<Entity*> foregrounds = level.getForeground();
-	for (auto foreground : foregrounds)
-	{
-		addEntity(foreground, EntityType::FOREGROUND);
-	}
-	setPlayer(level.getPlayer());
-
-	counter = new Counter(new Entity(new StaticPhysics(0, 0, 0, 0, 10, 10, 50, 50)));
-}
 
 
 void World::render(Renderer* renderer) {
@@ -149,9 +201,11 @@ void World::render(Renderer* renderer) {
 		_player->render(renderer);
 	renderContainer(_activeEntities.staticEntities, renderer);
 	renderContainer(_activeEntities.foregroundEntities, renderer);
+
 	//counter position is fixed
 	renderer->setOffsets(0, 0);
-	counter->render(renderer);
+	if (counter != nullptr)
+		counter->render(renderer);
 
 	calcScore();
 }
@@ -206,7 +260,8 @@ void World::setPlayer(Entity* entity) {
 	_player = entity;
 	// activate new player's input
 	// assume the entity is already registered
-	InputMapper::getInstance().activateContext(_player->getInputContext());
+	if (entity != nullptr)
+		InputMapper::getInstance().activateContext(_player->getInputContext());
 }
 
 
@@ -315,15 +370,13 @@ void World::followPlayer() {
 	_yOffset = 0;
 }
 
-void World::manageScene() {
-	// TODO: add code
-}
 
 void World::calcScore()
 {
-
-	int score = _inactiveEntitiesLeft.staticEntities.size();
-	int idx = _activeEntities.staticEntities.size()-1;
+	if (_activeEntities.staticEntities.empty())
+		return;
+	int score = (int)_inactiveEntitiesLeft.staticEntities.size();
+	int idx = (int)_activeEntities.staticEntities.size() - 1;
 	Entity* pipe = _activeEntities.staticEntities.at(idx);
 
 	while (_player->getX() > pipe->getX() && idx > 0)

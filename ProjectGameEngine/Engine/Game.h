@@ -28,6 +28,7 @@ private:
 	// timers
 private:
 	Timer*		_timer;			// general timer for the game
+	Timer		_renderTimer;	// seperate timer for rendering
 	UpdateTimer _logicUpdateTimer;	// game logic timer
 	UpdateTimer _renderUpdateTimer;
 
@@ -38,6 +39,9 @@ private:
 private:
 	// release resources and stuff game ends
 	void cleanup();
+
+	// handle game events
+	void handleEvents();
 
 	// handle input
 	void handleUserInput();

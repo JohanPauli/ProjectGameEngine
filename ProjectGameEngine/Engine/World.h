@@ -4,6 +4,7 @@
 #include "Level.h"
 #include "Physics.h"
 #include "Counter.h"
+#include "InputContext.h"
 
 class Entity;
 class Renderer;
@@ -31,7 +32,7 @@ struct EntityList {
 
 
 
-class World {
+class World : InputContext {
 private:
 	PhysicsEngine _physEng;
 	EntityList	_activeEntities;		// entities to get rendered
@@ -45,20 +46,30 @@ private:
 	int			_displayHeight;
 	int			_xOffset = 0;
 	int			_yOffset = 0;
+	bool		_gameOver = false;
+	bool		_paused = false;
 
 	Counter *counter;
 
 private:
 	// move the display area to where the player is
 	void followPlayer();
+	void endGame();
 
 public:
 	World(int width, int height);
 	~World();
 
+	virtual bool onNotify(const KeyboardInput&);
+
 	// deallocate all objects and resets the world state
 	void free();
 
+	// freeze the game world
+	void pause();
+	
+	// unfreeze the game world
+	void unpause();
 
 	//Load world
 	void init(Level level);
@@ -89,8 +100,6 @@ public:
 
 	// deactivate an entity
 	bool deactivateRightEntity(EntityType type);
-
-	void manageScene();
 
 	void calcScore();
 };

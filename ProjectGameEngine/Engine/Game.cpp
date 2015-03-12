@@ -13,6 +13,7 @@
 #include "World.h"
 #include "EntityGenerators.h"
 #include "Counter.h"
+#include "Events.h"
 
 
 const char* Game::WINDOW_TITLE = "Flappy Bird Demo";
@@ -24,13 +25,17 @@ Game::Game(int argc, char ** argv)
 
 	// init timers
 	_timer = new Timer();
+	_renderTimer = Timer();
 	_logicUpdateTimer = UpdateTimer(_timer, MS_PER_UPDATE);
-	_renderUpdateTimer = UpdateTimer(_timer, MS_PER_RENDER);
+	_renderUpdateTimer = UpdateTimer(&_renderTimer, MS_PER_RENDER);
 
 	// init singletons
 	Audio::get().init(6, 44100, 1024);
 	EntityGenerator::getInstance().init(_window.getWidth(), _window.getHeight(), _timer);
 	RessourceManager::getInstance();
+
+	// load resources
+	RessourceManager::getInstance().load("loadDocument.txt", _window.getRenderer());
 }
 
 Game::~Game() {
@@ -38,9 +43,7 @@ Game::~Game() {
 }
 
 bool Game::init() {
-	// load resources
-	RessourceManager::getInstance().load("loadDocument.txt", _window.getRenderer());
-
+	_timer->reset();
 	// initialize game world
 	Level level(_window.getWidth(), _window.getHeight());
 	_world = new World(_window.getWidth(), _window.getHeight());
@@ -67,12 +70,17 @@ void Game::cleanup() {
 
 void Game::run() {
 	_timer->start();
+	_renderTimer.start();
 
 	// main game loop
 	while (_running) {
-		_timer->update(); // update the game's timers
+		// update the logic and rendering timers
+		_timer->update();
+		_renderTimer.update();
+
 
 		handleUserInput();
+		handleEvents();
 
 		tryUpdate(); // updating is bound by MS_PER_UPDATE
 
@@ -80,6 +88,25 @@ void Game::run() {
 	}
 }
 
+// handle game events
+void Game::handleEvents() {
+	auto ev = EventQueue::getInstance().poll(EventType::GAME_NEW);
+	if (ev.type == EventType::GAME_NEW) {
+		// reinitialize world
+		_world->free();
+		init();
+	}
+
+	ev = EventQueue::getInstance().poll(EventType::GAME_LOGIC_PAUSE);
+	if (ev.type == EventType::GAME_LOGIC_PAUSE) {
+		_timer->pause();
+	}
+
+	ev = EventQueue::getInstance().poll(EventType::GAME_LOGIC_UNPAUSE);
+	if (ev.type == EventType::GAME_LOGIC_UNPAUSE) {
+		_timer->resume();
+	}
+}
 
 void Game::handleUserInput() {
 	Flappy::pollEvents(_running);
