@@ -34,11 +34,8 @@ void ScoreScreen::setScore(int score) {
 	_scoreboard = EntityGenerator::getInstance().createScoreboard(sbX, sbY, scale);
 
 	// init Counters
-	_gameScore = new Counter(scoreX, scoreY, scoreScale);
-	_gameScore->setNumber(score);
-
-	_highScore = new Counter(scoreX, hscoreY, scoreScale);
-	_highScore->setNumber(highScore);
+	_gameScore = new Counter(scoreX, scoreY, scoreScale, score);
+	_highScore = new Counter(scoreX, hscoreY, scoreScale, highScore);
 
 	// set medal
 	if (score <= 1)

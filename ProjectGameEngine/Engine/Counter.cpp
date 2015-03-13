@@ -3,7 +3,7 @@
 #include "RessourceManager.h"
 #include "EntityGenerators.h"
 
-Counter::Counter(int x, int y, double scale) : x(x), y(y), scale(scale)
+Counter::Counter(int x, int y, double scale, int n) : x(x), y(y), scale(scale)
 {
 	std::vector<Rect> digitsPos;
 	Sprite *numbers = RessourceManager::getInstance().getByTag<Sprite*>("numbers");
@@ -15,7 +15,7 @@ Counter::Counter(int x, int y, double scale) : x(x), y(y), scale(scale)
 		digitsPos.emplace_back(Rect(xPos, 1, width - 1, height));
 		xPos = width*i + 1;
 	}
-	_entity = EntityGenerator::getInstance().createCounterEntity(0, x, y, scale);
+	_entity = EntityGenerator::getInstance().createCounterEntity(n, x, y, scale);
 }
 
 Counter::~Counter()

@@ -238,6 +238,9 @@ void World::update() {
 	_physEng.detectCollisions(_activeEntities.dynamicEntities, _activeEntities.staticEntities);
 	_physEng.detectCollisions(_activeEntities.dynamicEntities, _activeEntities.dynamicEntities);
 
+	// calculate score
+	calcScore();
+
 	// end game if player collided
 	if (_gameOver)
 		gameOver();
@@ -264,7 +267,6 @@ void World::render(Renderer* renderer) {
 		_counter->render(renderer);
 	if (_scoreScreen != nullptr)
 		_scoreScreen->render(renderer);
-	calcScore();
 }
 
 

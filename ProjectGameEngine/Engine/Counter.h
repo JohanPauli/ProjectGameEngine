@@ -14,7 +14,7 @@ private:
 	int y;
 	double scale;
 public:
-	Counter(int x, int y, double scale);
+	Counter(int x, int y, double scale, int n = 0);
 	~Counter();
 	void update();
 	void render(Renderer* renderer);
