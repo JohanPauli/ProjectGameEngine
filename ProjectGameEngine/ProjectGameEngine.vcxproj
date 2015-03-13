@@ -34,6 +34,7 @@
     <ClCompile Include="Engine\Rendering.cpp" />
     <ClCompile Include="Engine\Resolver.cpp" />
     <ClCompile Include="Engine\RessourceManager.cpp" />
+    <ClCompile Include="Engine\ScoreScreen.cpp" />
     <ClCompile Include="Engine\Sprites.cpp" />
     <ClCompile Include="Engine\World.cpp" />
   </ItemGroup>
@@ -55,6 +56,7 @@
     <ClInclude Include="Engine\Misc.h" />
     <ClInclude Include="Engine\Rect.h" />
     <ClInclude Include="Engine\RessourceManager.h" />
+    <ClInclude Include="Engine\ScoreScreen.h" />
     <ClInclude Include="Engine\Sprites.h" />
     <ClInclude Include="Engine\Physics.h" />
     <ClInclude Include="Engine\Rendering.h" />

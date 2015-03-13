@@ -4,6 +4,11 @@ SPRITE|pipemid|assets\\sprites\\pipe-mid.png
 SPRITE|sky|assets\\sprites\\sky.png
 SPRITE|land|assets\\sprites\\land.png
 SPRITE|numbers|assets\\sprites\\numbers_sheet.png
+SPRITE|scoreboard|assets\\sprites\\scoreboard.png
+SPRITE|medal_platinum|assets\\sprites\\medal_platinum.png
+SPRITE|medal_gold|assets\\sprites\\medal_gold.png
+SPRITE|medal_silver|assets\\sprites\\medal_silver.png
+SPRITE|medal_bronze|assets\\sprites\\medal_bronze.png
 SOUND|hit|assets\\Sounds\\sfx_hit.ogg
 SOUND|point|assets\\Sounds\\sfx_point.ogg
 SOUND|swoosh|assets\\Sounds\\sfx_swooshing.ogg

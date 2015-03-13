@@ -81,6 +81,9 @@
     <ClCompile Include="Engine\Counter.cpp">
       <Filter>Engine\World</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\ScoreScreen.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h">
@@ -151,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Events.h">
       <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ScoreScreen.h">
+      <Filter>Engine\World</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

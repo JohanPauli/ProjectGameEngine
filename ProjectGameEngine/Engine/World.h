@@ -5,6 +5,7 @@
 #include "Physics.h"
 #include "Counter.h"
 #include "InputContext.h"
+#include "ScoreScreen.h"
 
 class Entity;
 class Renderer;
@@ -48,7 +49,8 @@ private:
 	int			_yOffset = 0;
 	bool		_gameOver = false;
 
-	Counter *counter;
+	Counter*	_counter;
+	ScoreScreen* _scoreScreen;
 
 private:
 	// move the display area to where the player is
@@ -69,6 +71,9 @@ public:
 	
 	// unfreeze the game world
 	void unpause();
+
+	// end game
+	void gameOver();
 
 	//Load world
 	void init(Level level);

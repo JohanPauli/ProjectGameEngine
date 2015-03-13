@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 
 #include "Entity.h"
 #include "Physics.h"
@@ -8,6 +9,7 @@
 #include "InputMapping.h"
 #include "RessourceManager.h"
 #include "Timer.h"
+#include "Sprites.h"
 
 class EntityGenerator {
 private:
@@ -20,6 +22,15 @@ private:
 	EntityGenerator() {}
 	EntityGenerator(const EntityGenerator&) = delete;
 	EntityGenerator& operator= (const EntityGenerator&) = delete;
+
+private:
+	inline Entity* createBasicEntity(int x, int y, double scale, std::string spriteTag) {
+		auto sprite = RessourceManager::getInstance().getByTag<Sprite*>(spriteTag);
+		auto graphics = new BasicGraphics(sprite);
+		auto physics = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
+			x, y, (int)(sprite->getHeight()*scale), (int)(sprite->getWidth()*scale));
+		return new Entity(physics, graphics);
+	}
 
 public:
 	static EntityGenerator& getInstance() {
@@ -107,5 +118,42 @@ public:
 		auto physics = new StaticPhysics(0.f, 0.f, 0.f, 0.f,
 			FLT_MIN, FLT_MIN, -FLT_MIN, FLT_MAX);
 		return new Entity(physics);
+	}
+
+	Entity* createMedalPlatinum(int x, int y, double scale) {
+		return createBasicEntity(x, y, scale, "medal_platinum");
+	}
+
+	Entity* createMedalGold(int x, int y, double scale) {
+		return createBasicEntity(x, y, scale, "medal_gold");
+	}
+
+	Entity* createMedalSilver(int x, int y, double scale) {
+		return createBasicEntity(x, y, scale, "medal_silver");
+	}
+
+	Entity* createMedalBronze(int x, int y, double scale) {
+		return createBasicEntity(x, y, scale, "medal_bronze");
+	}
+
+	Entity* createScoreboard(int x, int y, double scale) {
+		return createBasicEntity(x, y, scale, "scoreboard");
+	}
+
+	Entity* createCounterEntity(int n, int x, int y, double scale) {
+		std::vector<Rect> digitsPos;
+		Sprite *numbers = RessourceManager::getInstance().getByTag<Sprite*>("numbers");
+		float width = ((float)numbers->getWidth() / 10);
+		float xPos = 1;
+		int height = 18;
+		for (int i = 1; i < 11; i++)
+		{
+			digitsPos.emplace_back(Rect(xPos, 1, width - 1, height));
+			xPos = width*i + 1;
+		}
+		auto graphics = new CounterGraphics(new SpriteSheet(digitsPos, numbers), n); 
+		auto physics = new StaticPhysics(0, 0, 0, 0, 
+			x, y, (int)(height*scale), (int)((width-1)*scale));
+		return new Entity(physics, graphics);
 	}
 };

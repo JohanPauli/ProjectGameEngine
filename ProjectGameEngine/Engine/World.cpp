@@ -69,7 +69,8 @@ void World::free() {
 	_xOffset = 0; 
 	_yOffset = 0;
 
-	delete counter; counter = nullptr;
+	delete _counter; _counter = nullptr;
+	delete _scoreScreen; _scoreScreen = nullptr;
 }
 
 
@@ -101,7 +102,8 @@ void World::init(Level level) {
 	setPlayer(level.getPlayer());
 	setBorders(level.getBorderTop(), level.getBorderBottom());
 
-	counter = new Counter(new Entity(new StaticPhysics(0, 0, 0, 0, 10, 10, 50, 50)));
+	_counter = new Counter(10, 10, 4);
+	_scoreScreen = new ScoreScreen();
 
 	// activate entities
 	while (activateLeftEntity(EntityType::STATIC));
@@ -130,6 +132,14 @@ void World::unpause() {
 	if (_gameOver)
 		EventQueue::getInstance().add(GameEvent(EventType::GAME_NEW));
 }
+
+
+// end game
+void World::gameOver() {
+	pause();
+	_scoreScreen->setScore(_counter->getNumber());
+}
+
 
 
 // update
@@ -179,7 +189,7 @@ void World::update() {
 
 	// end game if player collided
 	if (_gameOver)
-		pause();
+		gameOver();
 	// TODO: make dynamicentities able to collide with borders, 
 	// need to overload detectcollision with dequeue as first param and entity as second
 }
@@ -191,7 +201,7 @@ inline void renderContainer(EntityCont& container, Renderer* renderer) {
 		entity->render(renderer);
 		
 	}
-	}
+}
 
 
 
@@ -210,9 +220,10 @@ void World::render(Renderer* renderer) {
 
 	//counter position is fixed
 	renderer->setOffsets(0, 0);
-	if (counter != nullptr)
-	counter->render(renderer);
-
+	if (_counter != nullptr)
+		_counter->render(renderer);
+	if (_scoreScreen != nullptr)
+		_scoreScreen->render(renderer);
 	calcScore();
 }
 
@@ -394,7 +405,7 @@ void World::calcScore()
 
 
 	} while (_player->getX() > pipe->getX() && idx > 0);
-	counter->setNumber(score/2);
+	_counter->setNumber(score/2);
 	
 	
 }
