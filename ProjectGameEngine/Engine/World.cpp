@@ -40,10 +40,10 @@ inline void deleteEntityList(EntityList& el) {
 }
 
 bool World::onNotify(const KeyboardInput& input) {
+	// this context should only be active when the game is paused
 	switch (input.key) {
 	case KeyboardKey::SPACE:
-		if (_paused)
-			unpause();
+		unpause();
 		return true;
 	}
 	return false;
@@ -102,12 +102,20 @@ void World::init(Level level) {
 	setBorders(level.getBorderTop(), level.getBorderBottom());
 
 	counter = new Counter(new Entity(new StaticPhysics(0, 0, 0, 0, 10, 10, 50, 50)));
+
+	// activate entities
+	while (activateLeftEntity(EntityType::STATIC));
+	while (activateRightEntity(EntityType::STATIC));
+	while (activateLeftEntity(EntityType::BACKGROUND));
+	while (activateRightEntity(EntityType::BACKGROUND));
+	while (activateLeftEntity(EntityType::FOREGROUND));
+	while (activateRightEntity(EntityType::FOREGROUND));
+
 }
 
 // freeze the game world
 void World::pause() {
 	EventQueue::getInstance().add(GameEvent(EventType::GAME_LOGIC_PAUSE));
-	_paused = true;
 	if (_player != nullptr)
 		InputMapper::getInstance().deactivateContext(_player->getInputContext());
 	InputMapper::getInstance().activateContext(this);
@@ -116,12 +124,11 @@ void World::pause() {
 // unfreeze the game world
 void World::unpause() {
 	EventQueue::getInstance().add(GameEvent(EventType::GAME_LOGIC_UNPAUSE));
-	_paused = false;
+	InputMapper::getInstance().deactivateContext(this);
 	if (_player != nullptr)
 		InputMapper::getInstance().activateContext(_player->getInputContext());
 	if (_gameOver)
 		EventQueue::getInstance().add(GameEvent(EventType::GAME_NEW));
-	InputMapper::getInstance().deactivateContext(this);
 }
 
 
@@ -140,8 +147,6 @@ inline void updateEntityList(EntityList& el) {
 
 
 void World::update() {
-	if (_paused) return;
-
 	// get offsets
 	followPlayer();
 
@@ -175,7 +180,8 @@ void World::update() {
 	// end game if player collided
 	if (_gameOver)
 		pause();
-	// TODO: dynamicentities can also collide with borders, implement it!
+	// TODO: make dynamicentities able to collide with borders, 
+	// need to overload detectcollision with dequeue as first param and entity as second
 }
 
 

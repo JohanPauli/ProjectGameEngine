@@ -49,13 +49,6 @@ bool Game::init() {
 	_world = new World(_window.getWidth(), _window.getHeight());
 	_world->init(level);
 
-	while (_world->activateLeftEntity(EntityType::STATIC));
-	while (_world->activateRightEntity(EntityType::STATIC));
-	while (_world->activateLeftEntity(EntityType::BACKGROUND));
-	while (_world->activateRightEntity(EntityType::BACKGROUND));
-	while (_world->activateLeftEntity(EntityType::FOREGROUND));
-	while (_world->activateRightEntity(EntityType::FOREGROUND));
-
 	return true;
 }
 

@@ -47,7 +47,6 @@ private:
 	int			_xOffset = 0;
 	int			_yOffset = 0;
 	bool		_gameOver = false;
-	bool		_paused = false;
 
 	Counter *counter;
 
