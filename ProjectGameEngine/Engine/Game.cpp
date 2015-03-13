@@ -30,7 +30,7 @@ Game::Game(int argc, char ** argv)
 	_renderUpdateTimer = UpdateTimer(&_renderTimer, MS_PER_RENDER);
 
 	// init singletons
-	Audio::get().init(6, 44100, 1024);
+	Audio::get().init(2, 44100, 1024);
 	EntityGenerator::getInstance().init(_window.getWidth(), _window.getHeight(), _timer);
 	RessourceManager::getInstance();
 

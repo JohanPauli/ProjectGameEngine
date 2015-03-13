@@ -42,7 +42,7 @@ Audio& Audio::get() {
 
 
 bool Audio::init(int channels, int frequency, int chunkSize) {
-	if (SDL_Init(SDL_INIT_AUDIO < 0)) {
+	if (SDL_Init(SDL_INIT_AUDIO) != 0) {
 		LOG("SDL_Init failed on SDL_INIT_AUDIO: " << SDL_GetError());
 		return false;
 	}
