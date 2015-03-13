@@ -56,3 +56,5 @@ float Entity::getYvelocity() const { return physics == nullptr ? 0 : physics->ge
 void Entity::setXvelocity(float vel) const { if (physics != nullptr) physics->setXVelocity(vel); }
 void Entity::setYvelocity(float vel) const { if (physics != nullptr) physics->setYVelocity(vel); }
 InputContext* Entity::getInputContext() const { return input; }
+
+void Entity::setGraphics(Graphics*) { graphics = graphics; }

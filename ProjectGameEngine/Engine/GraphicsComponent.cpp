@@ -8,6 +8,20 @@
 #include "Physics.h"
 
 
+// ---- BasicGraphics ----
+
+
+BasicGraphics::BasicGraphics(Sprite* sprite) : _sprite(sprite) {}
+BasicGraphics::~BasicGraphics() {}
+
+
+void BasicGraphics::update(Entity& entity) {}
+
+
+void BasicGraphics::render(Entity& entity, Renderer* renderer) {
+	renderer->render(_sprite, &entity.getRect());
+}
+
 
 
 // ---- BirdGraphics ----

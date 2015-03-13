@@ -5,18 +5,19 @@
 #include "Physics.h"
 #include "GraphicsComponent.h"
 
-class Counter : public EntityInterface
+class Counter
 {
 private:
 	Entity* _entity;
-	CounterGraphics *cGraphics;
-	void init();
 	int oldScore = 0;
+	int x;
+	int y;
+	double scale;
 public:
-	Counter(Entity*);
+	Counter(int x, int y, double scale);
 	~Counter();
-	virtual void update();
-	virtual void render(Renderer* renderer);
+	void update();
+	void render(Renderer* renderer);
 	void setNumber(int);
 	int getNumber() const;
 	

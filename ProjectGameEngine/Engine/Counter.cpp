@@ -1,24 +1,13 @@
 #include "Counter.h"
 #include "Sprites.h"
 #include "RessourceManager.h"
+#include "EntityGenerators.h"
 
-Counter::Counter(Entity* entity) : _entity(entity)
-{
-	init();
-}
-
-Counter::~Counter()
-{
-	delete _entity,
-		cGraphics;
-	
-}
-
-void Counter::init()
+Counter::Counter(int x, int y, double scale) : x(x), y(y), scale(scale)
 {
 	std::vector<Rect> digitsPos;
 	Sprite *numbers = RessourceManager::getInstance().getByTag<Sprite*>("numbers");
-	float width = ((float) numbers->getWidth() / 10);
+	float width = ((float)numbers->getWidth() / 10);
 	float xPos = 1;
 	int height = 18;
 	for (int i = 1; i < 11; i++)
@@ -26,14 +15,18 @@ void Counter::init()
 		digitsPos.emplace_back(Rect(xPos, 1, width - 1, height));
 		xPos = width*i + 1;
 	}
-	cGraphics = new CounterGraphics(new SpriteSheet(digitsPos, numbers));
-	
+	_entity = EntityGenerator::getInstance().createCounterEntity(0, x, y, scale);
+}
 
+Counter::~Counter()
+{
+	delete _entity;
+	
 }
 
 void Counter::render(Renderer* renderer)
 {
-	cGraphics->render(*_entity, renderer );
+	_entity->render(renderer );
 }
 
 void Counter::update()
@@ -45,7 +38,7 @@ void Counter::setNumber(int number)
 {
 	if (number != oldScore)
 	{
-		cGraphics->setNumber(number);
+		_entity = EntityGenerator::getInstance().createCounterEntity(number, x, y, scale);
 		oldScore = number;
 		Audio& audio = Audio::get();
 		audio.stopSound(2);

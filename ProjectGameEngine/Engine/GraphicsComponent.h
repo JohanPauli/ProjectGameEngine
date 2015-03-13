@@ -32,6 +32,22 @@ public:
 
 // concrete classes
 
+// display a sprite
+class BasicGraphics : public Graphics {
+private:
+	Sprite* _sprite;
+
+public:
+	BasicGraphics(Sprite* sprite);
+
+	virtual ~BasicGraphics();
+	virtual void update(Entity& entity) override;
+	virtual void render(Entity& entity, Renderer* renderer) override;
+
+};
+
+
+
 // player/bird 
 
 class BirdGraphics : public Graphics {
@@ -112,18 +128,20 @@ public:
 };
 
 
-class CounterGraphics : Graphics
+class CounterGraphics : public Graphics
 {
 private:
 	SpriteSheet *_numbers;
 	std::vector<Rect> _numPos;
 	std::vector<int> digits;
 
+private:
+	void setNumber(int number);
+
 public:
 	CounterGraphics(SpriteSheet *numbers, int number = 0);
 	~CounterGraphics();
 	virtual void update(Entity&) override;
 	virtual void render(Entity&, Renderer* renderer) override;
-	void setNumber(int number);
 
 };
