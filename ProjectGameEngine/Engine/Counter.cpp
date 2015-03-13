@@ -20,7 +20,7 @@ void Counter::init()
 	Sprite *numbers = RessourceManager::getInstance().getByTag<Sprite*>("numbers");
 	float width = ((float) numbers->getWidth() / 10);
 	float xPos = 1;
-	int height = numbers->getHeight()-10;
+	int height = 18;
 	for (int i = 1; i < 11; i++)
 	{
 		digitsPos.emplace_back(Rect(xPos, 1, width - 1, height));
@@ -51,4 +51,8 @@ void Counter::setNumber(int number)
 		audio.stopSound(2);
 		audio.playSound(RessourceManager::getInstance().getByTag<Sound*>("point"), 0, 2);
 	}
+}
+
+int Counter::getNumber() const {
+	return oldScore;
 }

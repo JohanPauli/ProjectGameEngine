@@ -18,6 +18,7 @@ public:
 	virtual void update();
 	virtual void render(Renderer* renderer);
 	void setNumber(int);
+	int getNumber() const;
 	
 
 };
