@@ -19,7 +19,7 @@ void Counter::init()
 	std::vector<Rect> digitsPos;
 	Sprite *numbers = RessourceManager::getInstance().getByTag<Sprite*>("numbers");
 	float width = ((float) numbers->getWidth() / 10);
-	float xPos = 0;
+	float xPos = 1;
 	int height = numbers->getHeight()-10;
 	for (int i = 1; i < 11; i++)
 	{
