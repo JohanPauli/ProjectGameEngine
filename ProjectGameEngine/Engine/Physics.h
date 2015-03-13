@@ -109,25 +109,9 @@ public:
 	bool detectCollisions(Entity* entity, Entity* entity2);
 
 	void collision(Physics* phy, Physics* phy2);
-	//void detectColissions(std::vector<Entity*> entities1);
-	/*
-	void addDynamicPhysics(DynamicPhysics *de);
-	void addStaticPhysics(StaticPhysics *se);
-	*/
 	void setResolver(Resolver *res);
 
-	/*
-	Used when a single physics element has to be deleted
-	*/
-	/*
-	bool deletePhysics(StaticPhysics *staticPhysics);
-	bool deletePhysics(DynamicPhysics *dynamicPhysics);
-	*/
 private:
-	/*
-	list<DynamicPhysics*> dEntities;
-	list<StaticPhysics*> sEntities;
-	*/
 	ResolverFactory rFactory;
 	Resolver *resolver;
 

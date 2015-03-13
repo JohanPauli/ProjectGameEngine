@@ -57,6 +57,6 @@ public:
 
 		auto ev = evit->second;
 		_eventCollection.erase(evit);
-		return ev;
+		return std::move(ev);
 	}
 };

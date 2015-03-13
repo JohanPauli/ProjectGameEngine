@@ -81,77 +81,9 @@ Rect StaticPhysics::getRect()
 /*
 Physics engine__
 */
-PhysicsEngine::~PhysicsEngine()
-{
-	/*
-	while (dEntities.size() > 0)
-	{
-		DynamicPhysics *dynamicPhysics = dEntities.back();
-		dEntities.pop_back();
-		delete dynamicPhysics;
-	}
-	while (sEntities.size() > 0)
-	{
-		StaticPhysics *staticPhysics = sEntities.back();
-		sEntities.pop_back();
-		delete staticPhysics;
-	}
-	*/
+PhysicsEngine::~PhysicsEngine() {
+	delete resolver;
 }
-/*
-void PhysicsEngine::addDynamicPhysics(DynamicPhysics *dynamicPhysics)
-{
-	dEntities.push_back(dynamicPhysics);
-}
-
-void PhysicsEngine::addStaticPhysics(StaticPhysics *staticPhysics)
-{
-	sEntities.push_back(staticPhysics);
-}
-
-void PhysicsEngine::update(std::vector<Entity*> entities)
-{
-	for (auto it : entities)
-	{
-		it->physics->update(0);
-	}
-	for (auto it : sEntities)
-	{
-		it->update(0);
-	}
-}
-
-bool PhysicsEngine::deletePhysics(StaticPhysics *staticPhysics)
-{
-	std::list<StaticPhysics*>::iterator found = std::find(sEntities.begin(), sEntities.end(), staticPhysics);
-
-	if (found != sEntities.end())
-	{
-		StaticPhysics *sPhysics = *found;
-		sEntities.erase(found);
-		delete sPhysics;
-		sPhysics = nullptr;
-		return true;
-	}
-	return false;
-}
-
-bool PhysicsEngine::deletePhysics(DynamicPhysics *dynamicPhysics)
-{
-	std::list<DynamicPhysics*>::iterator found = std::find(dEntities.begin(), dEntities.end(), dynamicPhysics);
-
-	if (found != dEntities.end())
-	{
-		DynamicPhysics *dPhysics = *found;
-		dEntities.erase(found);
-		delete dPhysics;
-		dPhysics = nullptr;
-		return true;
-	}
-	return false;
-}
-*/
-
 
 void PhysicsEngine::setResolver(Resolver *res)
 {
@@ -207,37 +139,13 @@ bool PhysicsEngine::detectCollisions(Entity* entity, Entity* entity2) {
 	if (dpYhigh < pYlow || dpYlow > pYhigh) {}		// entity is below or above entity2
 	else if (dpXhigh < pXlow || dpXlow > pXhigh) {} // entity is to the left or right of entity2
 	else {
-		collision(phys, phys2);
+		// collisions in flappy bird all result in game ending, dont need to detect where collision occured
+
+		//collision(phys, phys2);
 		return true;
 	}
 	return false;
 }
-
-/*
-void PhysicsEngine::detectColissions(std::vector<Entity*> entities)
-{
-	/*
-	Collision between dynamic objects
-	to be implemented later...
-	*//*
-	list<DynamicPhysics*>::iterator first, second, firstEnd, secondEnd;
-	second = first = dEntities.begin();
-	firstEnd = dEntities.end();
-	advance(second, 1);
-	advance(firstEnd, -1);
-	if (dEntities.size() > 1)
-	{
-		for (auto first = dEntities.begin(); first != firstEnd; first++)
-			for (second; second != dEntities.end(); second++)
-			{
-
-			}
-
-	}
-
-	
-}
-*/
 
 
 void PhysicsEngine::collision(Physics *phys, Physics *phys2)

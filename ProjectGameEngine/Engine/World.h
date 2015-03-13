@@ -19,7 +19,9 @@ enum class EntityType {
 	STATIC,
 	BACKGROUND,
 	FOREGROUND,
-	PLAYER
+	PLAYER,
+	BORDER_BOTTOM,
+	BORDER_TOP
 };
 
 
@@ -39,7 +41,6 @@ private:
 	EntityList	_activeEntities;		// entities to get rendered
 	EntityList	_inactiveEntitiesLeft;	// entities to the left of the screen
 	EntityList	_inactiveEntitiesRight;	// entities to the right of the screen
-	Entity*		_background = nullptr;	// backmost background
 	Entity*		_player = nullptr;
 	Entity*		_botBorder = nullptr;
 	Entity*		_topBorder = nullptr;
@@ -54,13 +55,16 @@ private:
 
 private:
 	// move the display area to where the player is
+	void setPlayer(Entity* player);
 	void followPlayer();
 	void endGame();
+	void calcScore();
 
 public:
 	World(int width, int height);
 	~World();
 
+	// get input when world is paused
 	virtual bool onNotify(const KeyboardInput&);
 
 	// deallocate all objects and resets the world state
@@ -87,12 +91,6 @@ public:
 	// add non-player non-border entities
 	void addEntity(Entity* entity, EntityType type);
 
-	// set top and bottom borders
-	void setBorders(Entity* top, Entity* bottom);
-
-	// set player
-	void setPlayer(Entity* player);
-
 	// activate an entity
 	bool activateLeftEntity(EntityType type);
 
@@ -104,6 +102,4 @@ public:
 
 	// deactivate an entity
 	bool deactivateRightEntity(EntityType type);
-
-	void calcScore();
 };

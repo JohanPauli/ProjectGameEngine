@@ -54,7 +54,7 @@ bool Game::init() {
 
 
 void Game::cleanup() {
-	delete _world;
+	delete _world, _timer;
 
 	// shut down low-level modules
 	Flappy::quit();

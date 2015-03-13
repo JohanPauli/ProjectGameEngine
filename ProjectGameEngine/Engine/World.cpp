@@ -9,17 +9,6 @@
 
 
 
-World::World(int width, int height) 
-: _displayWidth(width), _displayHeight(height) {
-	InputMapper::getInstance().registerContext(this);
-}
-
-
-World::~World() {
-	free();
-	InputMapper::getInstance().unregisterContext(this);
-}
-
 
 // deallocate all entities
 inline void deleteCont(EntityCont& container) {
@@ -37,6 +26,85 @@ inline void deleteEntityList(EntityList& el) {
 	el.foregroundEntities.clear();
 	deleteCont(el.staticEntities);
 	el.staticEntities.clear();
+}
+
+
+// update
+inline void updateContainer(EntityCont& container) {
+	for (auto entity : container) {
+		entity->update();
+	}
+}
+inline void updateEntityList(EntityList& el) {
+	updateContainer(el.backgroundEntities);
+	updateContainer(el.staticEntities);
+	updateContainer(el.dynamicEntities);
+	updateContainer(el.foregroundEntities);
+}
+
+
+// render an EntityCont
+inline void renderContainer(EntityCont& container, Renderer* renderer) {
+	for (auto entity : container) {
+		entity->render(renderer);
+
+	}
+}
+
+
+// check if entity is left of the offSet
+inline bool toTheLeft(Entity* entity, int xOffset) {
+	return (entity->getX() < (float)xOffset);
+}
+inline void emplaceEntity(Entity* entity, EntityCont& left, EntityCont& right, int xOffset) {
+	if (toTheLeft(entity, xOffset))
+		left.emplace_back(entity);
+	else
+		right.emplace_back(entity);
+}
+
+inline bool activateEntity(EntityCont& inactive, EntityCont& active, bool left) {
+	if (inactive.empty())
+		return false;
+	auto entity = inactive.back();
+	inactive.pop_back();
+	if (left)
+		active.emplace_front(entity);
+	else
+		active.emplace_back(entity);
+	return true;
+}
+
+
+inline bool deactivateEntity(EntityCont& active, EntityCont& inactive, bool left) {
+	if (active.empty())
+		return false;
+	Entity* entity;
+	if (left) {
+		entity = active.front();
+		active.pop_front();
+	}
+	else {
+		entity = active.back();
+		active.pop_back();
+	}
+	inactive.emplace_front(entity);
+	return true;
+}
+
+
+// ---- World ----
+
+
+World::World(int width, int height) 
+: _displayWidth(width), _displayHeight(height) {
+	InputMapper::getInstance().registerContext(this);
+}
+
+
+World::~World() {
+	free();
+	InputMapper::getInstance().unregisterContext(this);
 }
 
 bool World::onNotify(const KeyboardInput& input) {
@@ -57,8 +125,6 @@ void World::free() {
 	// delete inactive entities	
 	deleteEntityList(_inactiveEntitiesLeft);
 	deleteEntityList(_inactiveEntitiesRight);
-
-	delete _background; _background = nullptr;
 
 	// borders
 	delete _botBorder; _botBorder = nullptr;
@@ -99,8 +165,9 @@ void World::init(Level level) {
 	{
 		addEntity(foreground, EntityType::FOREGROUND);
 	}
-	setPlayer(level.getPlayer());
-	setBorders(level.getBorderTop(), level.getBorderBottom());
+	addEntity(level.getPlayer(), EntityType::PLAYER);
+	addEntity(level.getBorderTop(), EntityType::BORDER_TOP);
+	addEntity(level.getBorderBottom(), EntityType::BORDER_BOTTOM);
 
 	_counter = new Counter(10, 10, 4);
 	_scoreScreen = new ScoreScreen();
@@ -142,20 +209,6 @@ void World::gameOver() {
 
 
 
-// update
-inline void updateContainer(EntityCont& container) {
-	for (auto entity : container) {
-		entity->update();
-	}
-}
-inline void updateEntityList(EntityList& el) {
-	updateContainer(el.backgroundEntities);
-	updateContainer(el.staticEntities);
-	updateContainer(el.dynamicEntities);
-	updateContainer(el.foregroundEntities);
-}
-
-
 void World::update() {
 	// get offsets
 	followPlayer();
@@ -164,8 +217,6 @@ void World::update() {
 	updateEntityList(_activeEntities);
 	if (_player != nullptr)
 		_player->update();
-	if (_background != nullptr)
-		_background->update();
 
 	// update inactive
 	updateEntityList(_inactiveEntitiesLeft);
@@ -195,22 +246,11 @@ void World::update() {
 }
 
 
-// render an EntityCont
-inline void renderContainer(EntityCont& container, Renderer* renderer) {
-	for (auto entity : container) {
-		entity->render(renderer);
-		
-	}
-}
-
-
 
 void World::render(Renderer* renderer) {
 	// rendering offsets
 
 	renderer->setOffsets(_xOffset, _yOffset);
-	if (_background != nullptr)
-		_background->render(renderer);
 	renderContainer(_activeEntities.backgroundEntities, renderer);
 	renderContainer(_activeEntities.dynamicEntities, renderer);
 	if (_player != nullptr)
@@ -227,17 +267,6 @@ void World::render(Renderer* renderer) {
 	calcScore();
 }
 
-
-// check if entity is left of the offSet
-inline bool toTheLeft(Entity* entity, int xOffset) {
-	return (entity->getX() < (float)xOffset);
-}
-inline void emplaceEntity(Entity* entity, EntityCont& left, EntityCont& right, int xOffset) {
-	if (toTheLeft(entity, xOffset))
-		left.emplace_back(entity);
-	else
-		right.emplace_back(entity);
-}
 
 
 void World::addEntity(Entity* entity, EntityType eType) {
@@ -257,59 +286,16 @@ void World::addEntity(Entity* entity, EntityType eType) {
 	case EntityType::PLAYER:
 		setPlayer(entity);
 		break;
+	case EntityType::BORDER_TOP:
+		_topBorder = entity;
+		break;
+	case EntityType::BORDER_BOTTOM:
+		_botBorder = entity;
+		break;
 	default:break;
 	}
 }
 
-
-void World::setBorders(Entity* top, Entity* bot) {
-	_topBorder = top;
-	_botBorder = bot;
-}
-
-
-void World::setPlayer(Entity* entity) {
-	// deactivate old player's input
-	if (_player != nullptr) {
-		InputMapper::getInstance().deactivateContext(_player->getInputContext());
-		delete _player;
-	}
-	_player = entity;
-	// activate new player's input
-	// assume the entity is already registered
-	if (entity != nullptr)
-	InputMapper::getInstance().activateContext(_player->getInputContext());
-}
-
-
-inline bool activateEntity(EntityCont& inactive, EntityCont& active, bool left) {
-	if (inactive.empty())
-		return false;
-	auto entity = inactive.back();
-	inactive.pop_back();
-	if (left)
-		active.emplace_front(entity);
-	else
-		active.emplace_back(entity);
-	return true;
-}
-
-
-inline bool deactivateEntity(EntityCont& active, EntityCont& inactive, bool left) {
-	if (active.empty())
-		return false;
-	Entity* entity;
-	if (left) {
-		entity = active.front();
-		active.pop_front();
-	}
-	else {
-		entity = active.back();
-		active.pop_back();
-	}
-	inactive.emplace_front(entity);
-	return true;
-}
 
 
 
@@ -374,6 +360,21 @@ bool World::deactivateRightEntity(EntityType type) {
 		return deactivateEntity(_activeEntities.foregroundEntities, _inactiveEntitiesLeft.foregroundEntities, false);
 	default: return false;
 	}
+}
+
+
+
+void World::setPlayer(Entity* entity) {
+	// deactivate old player's input
+	if (_player != nullptr) {
+		InputMapper::getInstance().deactivateContext(_player->getInputContext());
+		delete _player;
+	}
+	_player = entity;
+	// activate new player's input
+	// assume the entity is already registered
+	if (entity != nullptr)
+		InputMapper::getInstance().activateContext(_player->getInputContext());
 }
 
 

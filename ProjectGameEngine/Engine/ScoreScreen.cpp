@@ -11,6 +11,8 @@ int ScoreScreen::highScore = 0;
 ScoreScreen::ScoreScreen() {}
 
 ScoreScreen::~ScoreScreen() {
+	delete _gameScore;
+	delete _highScore;
 	delete _scoreboard;
 	delete _medal;
 }

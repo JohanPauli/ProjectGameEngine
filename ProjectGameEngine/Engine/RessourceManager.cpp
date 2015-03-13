@@ -11,30 +11,15 @@ RessourceManager::RessourceManager()
 //
 RessourceManager::~RessourceManager()
 {
-	/*auto spriteIt = spriteMap.begin();
-	while (spriteIt != spriteMap.end())
-	{
-		Sprite *sprite = spriteIt->second;
-		delete sprite;
-		sprite = nullptr;
-		spriteIt++;
+	for (auto sprite : spriteMap) {
+		delete sprite.second;
 	}
-	auto soundIt = soundMap.begin();
-	while (soundIt != soundMap.end())
-	{
-		Sound *sound = soundIt->second;
-		delete sound;
-		sound = nullptr;
-		soundIt++;
+	for (auto sound : soundMap) {
+		delete sound.second;
 	}
-	auto musicIt = musicMap.begin();
-	while (musicIt != musicMap.end())
-	{
-		Music *music = musicIt->second;
-		delete music;
-		music = nullptr;
-		musicIt++;
-	}*/
+	for (auto music : musicMap) {
+		delete music.second;
+	}
 	spriteMap.clear();
 	soundMap.clear();
 	musicMap.clear();
