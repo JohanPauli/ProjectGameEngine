@@ -38,6 +38,7 @@ void Counter::setNumber(int number)
 {
 	if (number != oldScore)
 	{
+		delete _entity;
 		_entity = EntityGenerator::getInstance().createCounterEntity(number, x, y, scale);
 		oldScore = number;
 		Audio& audio = Audio::get();
